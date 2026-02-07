@@ -1,6 +1,6 @@
 # sudo-overclock
 
-Engineering blog of @mimshins (Mostafa Shamsitabar).
+Engineering blog of [@mimshins (Mostafa Shamsitabar)](https://github.com/mimshins).
 
 ## Tech Stack
 
