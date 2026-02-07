@@ -1,2 +1,3 @@
 # sudo-overclock
-Personal engineering blog of @mimshins (Mostafa Shamsitabar). 
+
+Engineering blog of @mimshins (Mostafa Shamsitabar).
