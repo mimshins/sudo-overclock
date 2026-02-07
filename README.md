@@ -1,6 +1,15 @@
-# sudo-overclock
+<div align="center">
 
-Engineering blog of @mimshins (Mostafa Shamsitabar).
+<img width="256" alt="Logo" src="https://raw.githubusercontent.com/mimshins/sudo-overclock/refs/heads/main/soc-assembled-logo.svg" />
+
+# Sudo: Overclock
+
+Engineering blog of
+[@mimshins (Mostafa Shamsitabar)](https://github.com/mimshins).
+
+</div>
+
+<hr />
 
 ## Tech Stack
 
