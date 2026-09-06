@@ -5,7 +5,7 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
 ## Phase 1: Foundation Setup
 
 - [ ] Configure Tailwind CSS for token/variable management only
-  - [ ] Set up `tailwind.config.js` with design tokens
+  - [ ] Set up `tailwind` with design tokens
   - [ ] Create CSS variables from Tailwind tokens
   - [ ] Disable utility class generation
 - [ ] Configure Next.js for SSG
@@ -94,7 +94,7 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
   - [ ] Fix ARIA labels and roles
   - [ ] Ensure keyboard navigation
   - [ ] Test with screen readers
-- [ ] Dark mode (optional)
+- [ ] Dark mode
   - [ ] Implement theme toggle
   - [ ] Create dark mode color tokens
   - [ ] Update all components for dark mode
