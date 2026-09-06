@@ -178,8 +178,8 @@ pnpm clear:all          # Remove everything (dist, cache, node_modules)
 
 ### Coding style
 
-Please follow the coding style of the project. We use `prettier` and `eslint`,
-so if possible, enable linting in your editor to get real-time feedback.
+Please follow the coding style of the project. We use `oxfmt` and `oxlint`, so
+if possible, enable linting in your editor to get real-time feedback.
 
 ### Git Commit Messages
 

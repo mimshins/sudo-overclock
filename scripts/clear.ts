@@ -1,5 +1,6 @@
-import { deleteAsync } from "del";
 import { argv } from "node:process";
+
+import { deleteAsync } from "del";
 
 console.time("clear");
 

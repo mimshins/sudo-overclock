@@ -38,8 +38,8 @@ pre-rendered at build time.
 
 ### Code Quality
 
-- Run `pnpm check:lint` before committing to verify TypeScript types, ESLint
-  rules, and formatting
+- Run `pnpm check:lint` before committing to verify TypeScript types, oxlint
+  rules, and oxfmt formatting
 - Run `pnpm test` to execute the test suite
 - Use `pnpm format` to auto-fix formatting issues
 
@@ -54,8 +54,8 @@ The project enforces strict module boundaries:
 
 ### Circular Dependencies
 
-The project uses `madge` to detect circular dependencies. Run
-`pnpm check:cycles` to verify.
+The project uses oxlint's `import/no-cycle` rule to detect circular dependencies
+as part of `pnpm check:lint`.
 
 ## Common Tasks
 

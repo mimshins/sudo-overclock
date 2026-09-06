@@ -50,12 +50,6 @@ web_modules/
 # Optional npm cache directory
 .npm
 
-# Optional prettier cache
-.prettiercache
-
-# Optional eslint cache
-.eslintcache
-
 # Optional stylelint cache
 .stylelintcache
 
