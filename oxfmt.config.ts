@@ -2,6 +2,8 @@ import { defineConfig } from "oxfmt";
 
 export default defineConfig({
   printWidth: 80,
+  insertFinalNewline: true,
+  jsdoc: true,
   proseWrap: "always",
   semi: true,
   singleQuote: false,
