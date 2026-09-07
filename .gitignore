@@ -137,3 +137,7 @@ vite.config.ts.timestamp-*
 
 # Misc
 .DS_Store
+
+# Blog compiler output (generated at build time)
+src/modules/blog/content/compiled/
+public/posts/

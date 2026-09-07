@@ -92,6 +92,14 @@ export default defineConfig({
       },
     },
 
+    {
+      files: ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+      rules: {
+        // `node:test`'s `it`/`test`/`describe` return promises by design.
+        "no-floating-promises": "off",
+      },
+    },
+
     /* ------------------------------------------------------------------
        DDD / CLEAN ARCHITECTURE BOUNDARIES
        ------------------------------------------------------------------

@@ -156,7 +156,7 @@ pnpm test:unit:internals   # Test internals only
 Check code quality:
 
 ```sh
-pnpm check:lint     # Run all checks (TypeScript, ESLint, Prettier, circular dependencies)
+pnpm check:lint     # Run all checks
 pnpm check:format   # Check formatting only
 ```
 
@@ -164,16 +164,6 @@ Auto-fix formatting:
 
 ```sh
 pnpm format
-```
-
-### Cleaning
-
-Clean build artifacts and caches:
-
-```sh
-pnpm clear:dist         # Remove dist folders
-pnpm clear:cache        # Remove cache files
-pnpm clear:all          # Remove everything (dist, cache, node_modules)
 ```
 
 ### Coding style

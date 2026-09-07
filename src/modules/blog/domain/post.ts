@@ -16,11 +16,18 @@ type PostFrontmatter = {
   readonly author?: string;
 };
 
+type PostTocItem = {
+  readonly id: string;
+  readonly text: string;
+  readonly depth: number;
+};
+
 type Post = {
   readonly id: PostId;
   readonly frontmatter: PostFrontmatter;
   readonly body: string;
   readonly readingTimeMinutes: number;
+  readonly toc: readonly PostTocItem[];
 };
 
 type PostSummary = {
@@ -33,4 +40,4 @@ type PostSummary = {
   readonly readingTimeMinutes: number;
 };
 
-export type { PostId, PostFrontmatter, Post, PostSummary };
+export type { PostId, PostFrontmatter, PostTocItem, Post, PostSummary };

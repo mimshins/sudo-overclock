@@ -282,6 +282,38 @@
   --color-border-tertiary: var(--color-neutral-400);
   --color-border-focus: var(--color-phosphor-500);
 
+  /* Shiki code highlighting (green-mono palette, theme-aware via semantics) */
+  --shiki-background: var(--color-background-elevated);
+  --shiki-foreground: var(--color-foreground);
+  --shiki-token-comment: var(--color-foreground-tertiary);
+  --shiki-token-constant: var(--color-foreground-secondary);
+  --shiki-token-function: var(--color-phosphor);
+  --shiki-token-keyword: var(--color-phosphor);
+  --shiki-token-parameter: var(--color-foreground-secondary);
+  --shiki-token-punctuation: var(--color-foreground-secondary);
+  --shiki-token-string: var(--color-foreground-secondary);
+  --shiki-token-string-expression: var(--color-phosphor-hover);
+  --shiki-token-link: var(--color-phosphor);
+  --shiki-token-inserted: var(--color-positive);
+  --shiki-token-deleted: var(--color-negative);
+  --shiki-token-changed: var(--color-warn);
+  --shiki-ansi-black: var(--color-neutral-900);
+  --shiki-ansi-red: var(--color-negative);
+  --shiki-ansi-green: var(--color-positive);
+  --shiki-ansi-yellow: var(--color-warn);
+  --shiki-ansi-blue: var(--color-info);
+  --shiki-ansi-magenta: var(--color-phosphor);
+  --shiki-ansi-cyan: var(--color-info);
+  --shiki-ansi-white: var(--color-neutral-200);
+  --shiki-ansi-bright-black: var(--color-neutral-600);
+  --shiki-ansi-bright-red: var(--color-negative-hover);
+  --shiki-ansi-bright-green: var(--color-positive-hover);
+  --shiki-ansi-bright-yellow: var(--color-warn-hover);
+  --shiki-ansi-bright-blue: var(--color-info-hover);
+  --shiki-ansi-bright-magenta: var(--color-phosphor-hover);
+  --shiki-ansi-bright-cyan: var(--color-info-hover);
+  --shiki-ansi-bright-white: var(--color-neutral-50);
+
   /* Phosphor (the accent — used for headings, links, focus, primary CTAs) */
   --color-phosphor: var(--color-phosphor-500);
   --color-phosphor-hover: var(--color-phosphor-400);
@@ -373,6 +405,7 @@
   --color-border-primary: var(--color-neutral-700);
   --color-border-secondary: var(--color-neutral-800);
   --color-border-tertiary: var(--color-neutral-900);
+  --color-border-focus: var(--color-phosphor-500);
 
   --color-neutral: var(--color-neutral-50);
   --color-neutral-hover: var(--color-neutral-200);

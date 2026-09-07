@@ -68,9 +68,6 @@ src/
   - `@repo/app/*` → `./src/app/*`
   - `@repo/shared/*` → `./src/shared/*`
   - `@repo/modules/*` → `./src/modules/*`
-  - `@repo/compiler` → `./src/modules/blog/infrastructure/compiler/index.ts`
-    (preserved for back-compat with the old contract; eventually points at the
-    compiled content module.)
 - **Inside a module, use relative imports** (`./types`, `../domain/post.ts`).
   This makes refactors and module extraction trivial — moving the folder keeps
   inner imports intact.
@@ -103,7 +100,7 @@ The compiler lives at `modules/blog/infrastructure/compiler/` and uses
 Unified.js, Rehype, and Remark plugins. It is invoked from `app/` or from a
 build-time script and writes to `modules/blog/content/compiled/`.
 
-### Assets, Code Blocks, and Mermaid
+### Assets and Code Blocks
 
 **Images, fonts, and any binary asset** the markdown needs are co-located with
 the post:
@@ -132,22 +129,6 @@ directly — the compiler owns that.
 **Code blocks** are highlighted at build time by **Shiki**, with a custom theme
 derived from our token palette (green-mono). Output is static HTML — zero
 runtime JS for the highlight itself.
-
-**Mermaid diagrams** are written inside a fenced code block:
-
-````md
-```mermaid
-flowchart LR
-  A --> B
-```
-````
-
-The compiler detects `mermaid` (and `mermaid-v2`) languages, renders them to
-inline SVG at build time, and embeds `<title>` / `<desc>` for accessibility. No
-runtime mermaid library, no client-side hydration.
-
-If a renderer cannot produce SVG (e.g. malformed syntax), the compiler falls
-back to a `<pre><code>` block so the author can still debug the source.
 
 ### Token Naming
 
@@ -196,6 +177,7 @@ belong in `globals.css` only.
     --heading-color: var(--color-phosphor);
   }
   ```
+
 - **Every HTML layer that exposes a `className` hook carries a
   `data-slot="<name>"` attribute.** Selectors in CSS Modules use that attribute
   (e.g. `&[data-slot="leader"]`). Slots make it possible for consumers to reach

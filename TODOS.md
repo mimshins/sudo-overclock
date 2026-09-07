@@ -4,38 +4,39 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
 
 ## Phase 1: Foundation Setup
 
-- [ ] Configure Tailwind CSS for token/variable management only
-  - [ ] Set up `tailwind` with design tokens
-  - [ ] Create CSS variables from Tailwind tokens
-  - [ ] Disable utility class generation
-- [ ] Configure Next.js for SSG
-  - [ ] Set up `next.config.js` with static export settings
-  - [ ] Configure TypeScript paths for clean imports
-  - [ ] Set up app directory structure
-- [ ] Set up BaseUI
-  - [ ] Install and configure BaseUI
-  - [ ] Create base component wrappers if needed
-  - [ ] Set up theming integration with Tailwind tokens
+- [x] Configure Tailwind CSS for token/variable management only
+  - [x] Set up `tailwind` with design tokens
+  - [x] Create CSS variables from Tailwind tokens
+  - [x] Disable utility class generation
+- [x] Configure Next.js for SSG
+  - [x] Set up `next.config.js` with static export settings
+  - [x] Configure TypeScript paths for clean imports
+  - [x] Set up app directory structure
+- [x] Set up BaseUI
+  - [x] Install and configure BaseUI
+  - [x] Create base component wrappers if needed
+  - [x] Set up theming integration with Tailwind tokens
 
 ## Phase 2: Content Compiler
 
-- [ ] Design content schema
-  - [ ] Define frontmatter structure (title, date, tags, etc.)
-  - [ ] Define compiled output format (JSON/TypeScript types)
-  - [ ] Create TypeScript interfaces for content types
-- [ ] Implement markdown compiler
-  - [ ] Set up Unified.js pipeline
-  - [ ] Configure Remark plugins (parsing, frontmatter extraction)
-  - [ ] Configure Rehype plugins (HTML transformation, syntax highlighting)
-  - [ ] Add custom plugins as needed (reading time, TOC generation, etc.)
-- [ ] Create compiler CLI/script
-  - [ ] Build script to process `/content/raw/**/*.md`
-  - [ ] Output structured data to `/content/compiled`
+- [x] Design content schema
+  - [x] Define frontmatter structure (title, date, tags, etc.)
+  - [x] Define compiled output format (JSON/TypeScript types)
+  - [x] Create TypeScript interfaces for content types
+- [x] Implement markdown compiler
+  - [x] Set up Unified.js pipeline
+  - [x] Configure Remark plugins (parsing, frontmatter extraction)
+  - [x] Configure Rehype plugins (HTML transformation, syntax highlighting)
+  - [x] Add custom plugins as needed (reading time, heading anchors, TOC)
+- [x] Create compiler CLI/script
+  - [x] Build script to process `/content/raw/**/*.md`
+  - [x] Output structured data to `/content/compiled`
   - [ ] Add file watching for development
-  - [ ] Integrate with build process
-- [ ] Write compiler tests
-  - [ ] Unit tests for individual plugins
-  - [ ] Integration tests for full pipeline
+  - [x] Integrate with build process (`prebuild`)
+- [x] Write compiler tests
+  - [x] Unit tests for individual plugins (slug, reading time)
+  - [x] Integration tests for full pipeline
+  - [x] Heading anchors + table of contents
   - [ ] Snapshot tests for output format
 
 ## Phase 3: Core Application
