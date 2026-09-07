@@ -1,8 +1,10 @@
-import { BlogModuleProvider } from "@repo/modules/blog/presentation/blog-module-provider";
+import type { ReactNode } from "react";
+
+import { SiteFooter } from "./site-footer.tsx";
 
 import "./globals.css";
 
-import type { ReactNode } from "react";
+import { SiteHeader } from "./site-header.tsx";
 
 export const metadata = {
   title: "sudo-overclock",
@@ -35,22 +37,18 @@ const RootLayout = (props: RootLayoutProps): ReactNode => {
     <html lang="en">
       <head>
         <script dangerouslySetInnerHTML={themeScriptProp} />
-        <link
-          rel="preconnect"
-          href="https://fonts.googleapis.com"
-        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin=""
         />
-        <link
-          rel="stylesheet"
-          href={fontLinkHref}
-        />
+        <link rel="stylesheet" href={fontLinkHref} />
       </head>
       <body>
-        <BlogModuleProvider>{children}</BlogModuleProvider>
+        <SiteHeader />
+        {children}
+        <SiteFooter />
       </body>
     </html>
   );

@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   min-height: 100vh;
   padding: var(--spacing-xl);
   gap: var(--spacing-md);
@@ -27,13 +26,12 @@
 }
 
 .title {
-  text-align: center;
   margin: 0;
+  text-align: center;
 }
 
-.subtitle {
-  font-size: var(--typography-body2-size);
-  color: var(--color-foreground-secondary);
-  margin: 0;
-  letter-spacing: 0.05em;
+.list {
+  width: 100%;
+  max-width: var(--container-narrow);
+  margin-top: var(--spacing-md);
 }

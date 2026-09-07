@@ -1,0 +1,36 @@
+.main {
+  --aside-width: 16rem;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--aside-width);
+  gap: var(--spacing-xl);
+  max-width: var(--container-wide);
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+.article {
+  min-width: 0;
+}
+
+.aside {
+  position: sticky;
+  top: var(--spacing-lg);
+  align-self: start;
+}
+
+.tocTitle {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+}
+
+@media (max-width: 64rem) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .aside {
+    position: static;
+    order: -1;
+  }
+}

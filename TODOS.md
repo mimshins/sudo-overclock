@@ -41,38 +41,43 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
 
 ## Phase 3: Core Application
 
-- [ ] Create layout components
-  - [ ] Main layout with header/footer
-  - [ ] Blog post layout
-  - [ ] CSS Modules for each component
-- [ ] Implement homepage
-  - [ ] List all blog posts
-  - [ ] Display post metadata (title, date, excerpt)
+- [x] Create layout components
+  - [x] Main layout with header/footer
+  - [x] Blog post layout
+  - [x] CSS Modules for each component
+- [x] Implement homepage
+  - [x] List all blog posts (blog index at `/blog`)
+  - [x] Display post metadata (title, date, excerpt)
   - [ ] Add filtering/sorting functionality
-- [ ] Implement blog post page
-  - [ ] Dynamic route for `[slug]`
-  - [ ] Render compiled markdown content
-  - [ ] Add metadata (SEO, Open Graph)
-  - [ ] Style prose content with CSS Modules
-- [ ] Create shared components
-  - [ ] Navigation component
-  - [ ] Footer component
-  - [ ] Post card component
+- [x] Implement blog post page
+  - [x] Dynamic route for `[slug]` (`/blog/posts/[slug]`)
+  - [x] Render compiled markdown content
+  - [x] Add metadata (SEO, Open Graph)
+  - [x] Style prose content with CSS Modules
+- [x] Create shared components
+  - [x] Navigation component (site header)
+  - [x] Footer component
+  - [x] Post card component (post list)
   - [ ] Tag/category components
+- [ ] Additional pages
+  - [x] `/blog` index
+  - [ ] `/about` bio + resume
+  - [ ] `/reading` reading list
+  - [ ] `/` home (to design)
 
 ## Phase 4: Content Features
 
-- [ ] Syntax highlighting
-  - [ ] Configure code block styling
+- [x] Syntax highlighting
+  - [x] Configure code block styling
   - [ ] Add language-specific themes
   - [ ] Add copy-to-clipboard functionality
-- [ ] Table of contents
-  - [ ] Generate TOC from headings
+- [x] Table of contents
+  - [x] Generate TOC from headings
   - [ ] Add smooth scroll navigation
-  - [ ] Highlight active section
-- [ ] Reading time estimation
-  - [ ] Calculate during compilation
-  - [ ] Display on post pages
+  - [x] Highlight active section
+- [x] Reading time estimation
+  - [x] Calculate during compilation
+  - [x] Display on post pages
 - [ ] Tag/category system
   - [ ] Extract tags from frontmatter
   - [ ] Create tag index pages
