@@ -1,0 +1,41 @@
+.lead {
+  --lead-line-height: 1.4;
+  --lead-font-weight: 400;
+  --lead-color: var(--color-foreground);
+  --lead-text-transform: none;
+  --lead-letter-spacing: normal;
+
+  margin: 0;
+  color: var(--lead-color);
+  font-family: var(--font-ltr);
+  font-weight: var(--lead-font-weight);
+  line-height: var(--lead-line-height);
+  letter-spacing: var(--lead-letter-spacing);
+  text-transform: var(--lead-text-transform);
+}
+
+.sizeSubheading1 {
+  --lead-size: var(--text-subheading1);
+  --lead-line-height: var(--leading-subheading1);
+  --lead-font-weight: var(--font-weight-subheading1);
+}
+
+.sizeSubheading2 {
+  --lead-size: var(--text-subheading2);
+  --lead-line-height: var(--leading-subheading2);
+  --lead-font-weight: var(--font-weight-subheading2);
+  --lead-text-transform: uppercase;
+  --lead-letter-spacing: 0.1em;
+}
+
+.variantDefault {
+  --lead-color: var(--color-foreground);
+}
+
+.variantMuted {
+  --lead-color: var(--color-foreground-secondary);
+}
+
+.variantPhosphor {
+  --lead-color: var(--color-phosphor);
+}

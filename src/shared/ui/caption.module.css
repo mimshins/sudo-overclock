@@ -1,0 +1,24 @@
+.caption {
+  --caption-size: var(--text-caption);
+  --caption-line-height: var(--leading-caption);
+  --caption-font-weight: var(--font-weight-caption);
+  --caption-color: var(--color-foreground-tertiary);
+  --caption-text-transform: uppercase;
+  --caption-letter-spacing: 0.1em;
+
+  color: var(--caption-color);
+  font-family: var(--font-mono);
+  font-size: var(--caption-size);
+  font-weight: var(--caption-font-weight);
+  letter-spacing: var(--caption-letter-spacing);
+  line-height: var(--caption-line-height);
+  text-transform: var(--caption-text-transform);
+}
+
+.variantDefault {
+  --caption-color: var(--color-foreground-tertiary);
+}
+
+.variantMuted {
+  --caption-color: var(--color-foreground-muted);
+}

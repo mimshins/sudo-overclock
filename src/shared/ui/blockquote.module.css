@@ -1,0 +1,35 @@
+.blockquote {
+  --quote-border: 2px solid var(--color-phosphor);
+  --quote-background: var(--color-background-elevated);
+  --quote-size: var(--text-body1);
+  --quote-line-height: var(--leading-body1);
+  --quote-color: var(--color-foreground);
+  --quote-font-family: var(--font-ltr);
+
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  margin: 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-left: var(--quote-border);
+  background-color: var(--quote-background);
+  font-family: var(--quote-font-family);
+  font-size: var(--quote-size);
+  line-height: var(--quote-line-height);
+  color: var(--quote-color);
+}
+
+.marker {
+  --marker-size: var(--text-h3);
+  --marker-color: var(--color-phosphor);
+
+  font-size: var(--marker-size);
+  line-height: 1;
+  color: var(--marker-color);
+  user-select: none;
+}
+
+.body {
+  flex: 1;
+}

@@ -1,0 +1,43 @@
+.list {
+  --list-marker: "›";
+  --list-marker-color: var(--color-phosphor);
+  --list-gap: var(--spacing-sm);
+  --list-size: var(--text-body1);
+  --list-line-height: var(--leading-body1);
+  --list-color: var(--color-foreground);
+  --list-font-family: var(--font-ltr);
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--list-gap);
+  font-family: var(--list-font-family);
+  font-size: var(--list-size);
+  line-height: var(--list-line-height);
+  color: var(--list-color);
+}
+
+.tight {
+  --list-gap: var(--spacing-xs);
+}
+
+.list :global(.list) {
+  margin-top: var(--spacing-xs);
+  padding-left: var(--spacing-md);
+}
+
+.item {
+  --item-padding-left: var(--spacing-md);
+
+  position: relative;
+  padding-left: var(--item-padding-left);
+}
+
+.item::before {
+  content: var(--list-marker);
+  position: absolute;
+  left: 0;
+  color: var(--list-marker-color);
+}

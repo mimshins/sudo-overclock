@@ -28,8 +28,8 @@
     "changesets:status": "changeset status --since=main",
     "release": "pnpm build && changeset publish --tag latest",
     "test": "echo 'TODO: run all the tests'",
-    "build": "echo 'TODO: run the app in prod mode'",
-    "dev": "echo 'TODO: run the app in dev mode'",
+    "build": "next build",
+    "dev": "next dev",
     "format:fmt": "oxfmt --write",
     "format:lint": "oxlint --fix",
     "format": "run-p format:fmt format:lint",
@@ -46,23 +46,23 @@
     "@types/node": "^26.4.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
-    "@vitejs/plugin-react": "^6.1.1",
-    "@vitest/coverage-v8": "^5.0.0",
     "del": "^8.0.1",
-    "jsdom": "^30.0.1",
     "npm-run-all": "^4.1.5",
     "oxfmt": "^0.66.0",
     "oxlint": "^1.81.0",
     "oxlint-tsgolint": "^7.0.2001",
     "shx": "^0.4.0",
     "tsx": "^4.23.13",
-    "typescript": "^7.0.2",
-    "vite": "^8.2.2",
-    "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^5.0.0"
+    "typescript": "^7.0.2"
   },
   "dependencies": {
+    "@base-ui/react": "^1.8.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "clsx": "^2.1.1",
+    "next": "^16.3.4",
+    "postcss": "^8.5.28",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3"
   }
 }

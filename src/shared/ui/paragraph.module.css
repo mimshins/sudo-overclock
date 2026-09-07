@@ -1,0 +1,33 @@
+.paragraph {
+  --paragraph-size: var(--text-body1);
+  --paragraph-line-height: var(--leading-body1);
+  --paragraph-font-weight: var(--font-weight-body1);
+  --paragraph-color: var(--color-foreground);
+
+  margin: 0;
+  color: var(--paragraph-color);
+  font-family: var(--font-ltr);
+  font-size: var(--paragraph-size);
+  font-weight: var(--paragraph-font-weight);
+  line-height: var(--paragraph-line-height);
+}
+
+.sizeBody1 {
+  --paragraph-size: var(--text-body1);
+  --paragraph-line-height: var(--leading-body1);
+  --paragraph-font-weight: var(--font-weight-body1);
+}
+
+.sizeBody2 {
+  --paragraph-size: var(--text-body2);
+  --paragraph-line-height: var(--leading-body2);
+  --paragraph-font-weight: var(--font-weight-body2);
+}
+
+.variantDefault {
+  --paragraph-color: var(--color-foreground);
+}
+
+.variantMuted {
+  --paragraph-color: var(--color-foreground-secondary);
+}

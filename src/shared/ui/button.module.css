@@ -1,0 +1,118 @@
+.button {
+  --button-color: var(--color-foreground);
+  --button-background: transparent;
+  --button-border-color: var(--color-border-primary);
+  --button-hover-background: var(--color-background-elevated);
+  --button-hover-color: var(--color-foreground);
+  --button-hover-border-color: var(--color-foreground-tertiary);
+  --button-hover-shadow: none;
+  --button-active-background: var(--color-border-primary);
+  --button-active-color: var(--button-color);
+  --button-active-border-color: var(--button-border-color);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  font-family: var(--typography-typeface-mono);
+  font-weight: 500;
+  border-radius: var(--radius-none);
+  border: 1px solid var(--button-border-color);
+  background-color: var(--button-background);
+  cursor: pointer;
+  color: var(--button-color);
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  transition:
+    background-color var(--duration-fast) var(--easing-standard),
+    border-color var(--duration-fast) var(--easing-standard),
+    color var(--duration-fast) var(--easing-standard),
+    box-shadow var(--duration-normal) var(--easing-standard);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.button:hover:not(:disabled) {
+  background-color: var(--button-hover-background);
+  border-color: var(--button-hover-border-color);
+  box-shadow: var(--button-hover-shadow);
+  color: var(--button-hover-color);
+}
+
+.button:active:not(:disabled) {
+  background-color: var(--button-active-background);
+  border-color: var(--button-active-border-color);
+  color: var(--button-active-color);
+}
+
+/* === SIZES ============================================================= */
+
+.sizeSm {
+  --button-padding-y: var(--spacing-xxs);
+  --button-padding-x: var(--spacing-sm);
+  --button-font-size: var(--typography-caption-size);
+  --button-line-height: var(--typography-caption-leading);
+}
+
+.sizeMd {
+  --button-padding-y: var(--spacing-xs);
+  --button-padding-x: var(--spacing-md);
+  --button-font-size: var(--typography-body2-size);
+  --button-line-height: var(--typography-body2-leading);
+}
+
+.sizeLg {
+  --button-padding-y: var(--spacing-sm);
+  --button-padding-x: var(--spacing-lg);
+  --button-font-size: var(--typography-body1-size);
+  --button-line-height: var(--typography-body1-leading);
+}
+
+/* === VARIANTS =========================================================== */
+
+.variantPhosphor {
+  --button-color: var(--color-phosphor);
+  --button-border-color: var(--color-phosphor);
+  --button-hover-background: var(--color-phosphor-muted);
+  --button-hover-color: var(--color-on-phosphor);
+  --button-hover-shadow: 0 0 12px var(--color-phosphor-shadow);
+  --button-active-background: var(--color-phosphor);
+  --button-active-border-color: var(--color-phosphor);
+}
+
+.variantNeutral {
+  --button-color: var(--color-foreground);
+  --button-border-color: var(--color-border-primary);
+  --button-hover-background: var(--color-background-elevated);
+  --button-hover-border-color: var(--color-foreground-tertiary);
+  --button-active-background: var(--color-border-primary);
+}
+
+.variantGhost {
+  --button-color: var(--color-foreground-secondary);
+  --button-border-color: transparent;
+  --button-hover-background: var(--color-background-elevated);
+  --button-hover-color: var(--color-foreground);
+  --button-active-background: var(--color-background-elevated);
+}
+
+.variantPositive {
+  --button-color: var(--color-positive-text);
+  --button-border-color: var(--color-positive);
+  --button-hover-background: var(--color-positive-muted);
+  --button-hover-color: var(--color-on-positive);
+  --button-active-background: var(--color-positive);
+  --button-active-border-color: var(--color-positive);
+}
+
+.variantNegative {
+  --button-color: var(--color-negative-text);
+  --button-border-color: var(--color-negative);
+  --button-hover-background: var(--color-negative-muted);
+  --button-hover-color: var(--color-on-negative);
+  --button-active-background: var(--color-negative);
+  --button-active-border-color: var(--color-negative);
+}

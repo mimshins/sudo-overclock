@@ -1,0 +1,885 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   THREE-LAYER TOKEN SYSTEM
+   ----------------------------------------------------------------------------
+   1. PRIMITIVES  — raw values (colors, type sizes, durations). Theme-aware
+                    variants override same-named primitives at the [data-theme]
+                    selector level. NEVER reference semantic names.
+   2. SEMANTICS   — purpose-named aliases (--color-foreground,
+                    --color-phosphor). Reference primitives. Do NOT
+                    hardcode hex values.
+   3. TAILWIND    — @theme inline exposes selected semantics as Tailwind v4
+                    utility values (--color-*, --text-*, --font-*). Components
+                    in src/app reference var(--*) directly in CSS
+                    Modules for full theming power.
+
+   Rule of thumb: components read `--color-*` or class names that
+   resolve through `--color-*`. Never inline hex.
+
+   Design language: CRT-phosphor, ASCII-chrome, monospace, cyberpunk.
+   Single typeface (JetBrains Mono), monochrome palette, single phosphor
+   accent (#00ff9c), pixel-precise layout, snap motion. See AGENTS.md.
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   LAYER 1 — PRIMITIVES
+   Light mode defaults. Override per-theme below.
+   ---------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+
+  /* === NEUTRALS (FOUNDATION) ============================================== */
+  --color-neutral-50: #f6f6f6;
+  --color-neutral-100: #ebebeb;
+  --color-neutral-200: #dedede;
+  --color-neutral-300: #cacaca;
+  --color-neutral-400: #a4a4a4;
+  --color-neutral-500: #838383;
+  --color-neutral-600: #5c5c5c;
+  --color-neutral-700: #494949;
+  --color-neutral-800: #2c2c2c;
+  --color-neutral-900: #0a0a0a;
+
+  /* === PHOSPHOR (THE ACCENT — CRT green) ================================== */
+  --color-phosphor-50: #e6fff4;
+  --color-phosphor-100: #b3ffdf;
+  --color-phosphor-200: #80ffca;
+  --color-phosphor-300: #4dffb5;
+  --color-phosphor-400: #26ffa3;
+  --color-phosphor-500: #00ff9c;
+  --color-phosphor-600: #00e68d;
+  --color-phosphor-700: #00cc7e;
+  --color-phosphor-800: #00b36f;
+  --color-phosphor-900: #008855;
+
+  --color-phosphor-glow: rgb(0 255 156 / 0.55);
+  --color-phosphor-shadow: rgb(0 255 156 / 0.18);
+
+  /* === SEMANTIC HUE RAMPS (mapped to monochrome CRT roles) ============== */
+  /* Positive → deep phosphor (success/ok semantics) */
+  --color-positive-50: #e6fff4;
+  --color-positive-100: #b3ffdf;
+  --color-positive-200: #80ffca;
+  --color-positive-300: #4dffb5;
+  --color-positive-400: #26ffa3;
+  --color-positive-500: #00e68d;
+  --color-positive-600: #00cc7e;
+  --color-positive-700: #00b36f;
+  --color-positive-800: #008855;
+  --color-positive-900: #005c3a;
+
+  /* Negative → rust red (errors/destructive) — only warm hue in the palette */
+  --color-negative-50: #fdebe8;
+  --color-negative-100: #f9c8bf;
+  --color-negative-200: #f4a394;
+  --color-negative-300: #ee7b67;
+  --color-negative-400: #e85540;
+  --color-negative-500: #d63a26;
+  --color-negative-600: #c23221;
+  --color-negative-700: #a52a1d;
+  --color-negative-800: #88221a;
+  --color-negative-900: #5e1812;
+
+  /* Warn → amber (warnings/cautions) */
+  --color-warn-50: #fff5e1;
+  --color-warn-100: #ffe2b0;
+  --color-warn-200: #ffcf7c;
+  --color-warn-300: #ffbb48;
+  --color-warn-400: #ffa91d;
+  --color-warn-500: #f59500;
+  --color-warn-600: #dc8300;
+  --color-warn-700: #bf7100;
+  --color-warn-800: #a35f00;
+  --color-warn-900: #754500;
+
+  /* Info → cyan (informational, paired with phosphor) */
+  --color-info-50: #e0faff;
+  --color-info-100: #b3f1ff;
+  --color-info-200: #80e6ff;
+  --color-info-300: #4dd9ff;
+  --color-info-400: #26cdff;
+  --color-info-500: #00c0ff;
+  --color-info-600: #00a8e0;
+  --color-info-700: #0090c2;
+  --color-info-800: #0078a3;
+  --color-info-900: #005575;
+
+  /* === COLORS (SURFACE) ==================================================== */
+  --color-surface-base: #f6f6f6;
+  --color-surface-secondary: #ffffff;
+  --color-surface-tertiary: #ebebeb;
+  --color-backdrop-overlay: rgb(10 10 10 / 0.55);
+
+  /* === TYPOGRAPHY (TYPEFACES) ============================================= */
+  /* Single family: JetBrains Mono everywhere (prose + UI). */
+  --typography-typeface-rtl:
+    "JetBrains Mono", "Vazirmatn", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, monospace;
+  --typography-typeface-ltr:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+  --typography-typeface-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+
+  /* === TYPOGRAPHY (SCALE) ================================================= */
+  /* Smaller than the original — body 0.875rem reads sharper in CRT context. */
+  --typography-h1-size: 3rem;
+  --typography-h1-leading: 1.1666666667;
+  --typography-h1-weight: 600;
+
+  --typography-h2-size: 2.25rem;
+  --typography-h2-leading: 1.2222222222;
+  --typography-h2-weight: 600;
+
+  --typography-h3-size: 1.75rem;
+  --typography-h3-leading: 1.2857142857;
+  --typography-h3-weight: 500;
+
+  --typography-h4-size: 1.375rem;
+  --typography-h4-leading: 1.3636363636;
+  --typography-h4-weight: 500;
+
+  --typography-h5-size: 1.125rem;
+  --typography-h5-leading: 1.4444444444;
+  --typography-h5-weight: 500;
+
+  --typography-h6-size: 1rem;
+  --typography-h6-leading: 1.5;
+  --typography-h6-weight: 500;
+
+  --typography-subheading1-size: 0.9375rem;
+  --typography-subheading1-leading: 1.6;
+  --typography-subheading1-weight: 500;
+
+  --typography-subheading2-size: 0.8125rem;
+  --typography-subheading2-leading: 1.6923076923;
+  --typography-subheading2-weight: 500;
+
+  --typography-body1-size: 0.9375rem;
+  --typography-body1-leading: 1.6;
+  --typography-body1-weight: 400;
+
+  --typography-body2-size: 0.8125rem;
+  --typography-body2-leading: 1.6923076923;
+  --typography-body2-weight: 400;
+
+  --typography-caption-size: 0.6875rem;
+  --typography-caption-leading: 1.6363636364;
+  --typography-caption-weight: 400;
+
+  /* === FOCUS RING ========================================================= */
+  --focus-ring-stroke: 1px;
+  --focus-ring-color: var(--color-phosphor-500);
+  --focus-ring-offset: 2px;
+  --focus-ring-glow: 0 0 0 3px var(--color-phosphor-shadow);
+
+  /* === TRANSITIONS ======================================================== */
+  --duration-instant: 0ms;
+  --duration-fast: 80ms;
+  --duration-normal: 120ms;
+  --duration-slow: 150ms;
+  --easing-standard: ease-out;
+  --easing-emphasized: ease-out;
+
+  /* === SHADOWS (subtle phosphor-tinted only) ============================== */
+  --shadow-sm: 0 0 0 1px var(--color-phosphor-shadow);
+  --shadow-md:
+    0 0 0 1px var(--color-phosphor-shadow),
+    0 0 12px -2px var(--color-phosphor-shadow);
+  --shadow-lg:
+    0 0 0 1px var(--color-phosphor-shadow),
+    0 0 24px -4px var(--color-phosphor-shadow);
+
+  /* === CRT EFFECTS ======================================================== */
+  /* Strengths are 0..1; 0 = off. Tune per surface. */
+  --noise-strength: 0.04;
+  --scanline-strength: 0.06;
+  --scanline-spacing: 2px;
+  --phosphor-glow-strength: 0.55;
+
+  /* === Z-INDEX (Tailwind-compatible) ====================================== */
+  --z-0: 0;
+  --z-10: 10;
+  --z-20: 20;
+  --z-30: 30;
+  --z-40: 40;
+  --z-50: 50;
+
+  /* === CONTAINER ========================================================== */
+  --container-prose: 65ch;
+  --container-narrow: 42rem;
+  --container-base: 56rem;
+  --container-wide: 72rem;
+}
+
+/* ----------------------------------------------------------------------------
+   DARK THEME — overrides for surface + glow strength only. The monochrome
+   ramp stays; dark mode just swaps the surface and dims the glow.
+   ---------------------------------------------------------------------------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-surface-base: #0a0a0a;
+  --color-surface-secondary: #121212;
+  --color-surface-tertiary: #1c1c1c;
+  --color-backdrop-overlay: rgb(0 0 0 / 0.7);
+
+  --color-phosphor-glow: rgb(0 255 156 / 0.4);
+  --color-phosphor-shadow: rgb(0 255 156 / 0.18);
+
+  --shadow-sm: 0 0 0 1px rgb(255 255 255 / 0.06);
+  --shadow-md:
+    0 0 0 1px rgb(255 255 255 / 0.08), 0 0 24px -4px rgb(0 255 156 / 0.08);
+  --shadow-lg:
+    0 0 0 1px rgb(255 255 255 / 0.1), 0 0 48px -8px rgb(0 255 156 / 0.1);
+
+  --noise-strength: 0.05;
+  --scanline-strength: 0.08;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+
+    --color-surface-base: #0a0a0a;
+    --color-surface-secondary: #121212;
+    --color-surface-tertiary: #1c1c1c;
+    --color-backdrop-overlay: rgb(0 0 0 / 0.7);
+
+    --color-phosphor-glow: rgb(0 255 156 / 0.4);
+    --color-phosphor-shadow: rgb(0 255 156 / 0.18);
+
+    --shadow-sm: 0 0 0 1px rgb(255 255 255 / 0.06);
+    --shadow-md:
+      0 0 0 1px rgb(255 255 255 / 0.08), 0 0 24px -4px rgb(0 255 156 / 0.08);
+    --shadow-lg:
+      0 0 0 1px rgb(255 255 255 / 0.1), 0 0 48px -8px rgb(0 255 156 / 0.1);
+
+    --noise-strength: 0.05;
+    --scanline-strength: 0.08;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   LAYER 2 — SEMANTIC TOKENS
+   Monochrome mappings: brand/positive use phosphor, others are dim/saturated
+   counterparts so the entire screen reads as one phosphor-tinted display.
+   ---------------------------------------------------------------------------- */
+:root {
+  /* Foreground / Background */
+  --color-foreground: var(--color-neutral-900);
+  --color-foreground-secondary: var(--color-neutral-700);
+  --color-foreground-tertiary: var(--color-neutral-500);
+  --color-foreground-muted: var(--color-neutral-400);
+  --color-background: var(--color-surface-base);
+  --color-background-elevated: var(--color-surface-secondary);
+
+  /* Border */
+  --color-border-primary: var(--color-neutral-200);
+  --color-border-secondary: var(--color-neutral-300);
+  --color-border-tertiary: var(--color-neutral-400);
+  --color-border-focus: var(--color-phosphor-500);
+
+  /* Phosphor (the accent — used for headings, links, focus, primary CTAs) */
+  --color-phosphor: var(--color-phosphor-500);
+  --color-phosphor-hover: var(--color-phosphor-400);
+  --color-phosphor-active: var(--color-phosphor-300);
+  --color-phosphor-muted: var(--color-phosphor-700);
+  --color-phosphor-text: var(--color-phosphor-700);
+  --color-phosphor-text-secondary: var(--color-phosphor-600);
+  --color-phosphor-text-tertiary: var(--color-phosphor-500);
+  --color-phosphor-text-muted: var(--color-phosphor-800);
+
+  /* On-X: text/icon color when sitting on a colored surface */
+  --color-on-neutral: var(--color-neutral-50);
+  --color-on-phosphor: var(--color-neutral-900);
+  --color-on-positive: var(--color-neutral-900);
+  --color-on-negative: var(--color-neutral-50);
+  --color-on-warn: var(--color-neutral-900);
+  --color-on-info: var(--color-neutral-900);
+
+  /* Neutral */
+  --color-neutral: var(--color-neutral-900);
+  --color-neutral-hover: var(--color-neutral-700);
+  --color-neutral-active: var(--color-neutral-500);
+  --color-neutral-muted: var(--color-neutral-200);
+  --color-neutral-text: var(--color-neutral-50);
+  --color-neutral-text-secondary: var(--color-neutral-200);
+  --color-neutral-text-tertiary: var(--color-neutral-400);
+  --color-neutral-text-muted: var(--color-neutral-700);
+
+  /* Positive (deep phosphor) */
+  --color-positive: var(--color-positive-500);
+  --color-positive-hover: var(--color-positive-600);
+  --color-positive-active: var(--color-positive-700);
+  --color-positive-muted: var(--color-positive-100);
+  --color-positive-text: var(--color-positive-700);
+  --color-positive-text-secondary: var(--color-positive-500);
+  --color-positive-text-tertiary: var(--color-positive-400);
+  --color-positive-text-muted: var(--color-positive-200);
+
+  /* Negative (rust red — the only warm hue) */
+  --color-negative: var(--color-negative-500);
+  --color-negative-hover: var(--color-negative-600);
+  --color-negative-active: var(--color-negative-700);
+  --color-negative-muted: var(--color-negative-100);
+  --color-negative-text: var(--color-negative-600);
+  --color-negative-text-secondary: var(--color-negative-500);
+  --color-negative-text-tertiary: var(--color-negative-400);
+  --color-negative-text-muted: var(--color-negative-200);
+
+  /* Warn (amber) */
+  --color-warn: var(--color-warn-500);
+  --color-warn-hover: var(--color-warn-600);
+  --color-warn-active: var(--color-warn-700);
+  --color-warn-muted: var(--color-warn-100);
+  --color-warn-text: var(--color-warn-600);
+  --color-warn-text-secondary: var(--color-warn-500);
+  --color-warn-text-tertiary: var(--color-warn-400);
+  --color-warn-text-muted: var(--color-warn-200);
+
+  /* Info (cyan) */
+  --color-info: var(--color-info-500);
+  --color-info-hover: var(--color-info-600);
+  --color-info-active: var(--color-info-700);
+  --color-info-muted: var(--color-info-100);
+  --color-info-text: var(--color-info-600);
+  --color-info-text-secondary: var(--color-info-500);
+  --color-info-text-tertiary: var(--color-info-400);
+  --color-info-text-muted: var(--color-info-200);
+
+  /* Brand → phosphor (back-compat alias for token names like "brand" used in
+     existing CSS). New code should reference `--color-phosphor-*`. */
+  --color-brand: var(--color-phosphor-500);
+  --color-brand-hover: var(--color-phosphor-400);
+  --color-brand-active: var(--color-phosphor-300);
+  --color-brand-muted: var(--color-phosphor-100);
+  --color-brand-text: var(--color-phosphor-700);
+  --color-brand-text-secondary: var(--color-phosphor-600);
+  --color-brand-text-tertiary: var(--color-phosphor-500);
+  --color-brand-text-muted: var(--color-phosphor-800);
+}
+
+:root[data-theme="dark"] {
+  --color-foreground: var(--color-neutral-50);
+  --color-foreground-secondary: var(--color-neutral-300);
+  --color-foreground-tertiary: var(--color-neutral-400);
+  --color-foreground-muted: var(--color-neutral-700);
+  --color-background: var(--color-surface-base);
+  --color-background-elevated: var(--color-surface-secondary);
+
+  --color-border-primary: var(--color-neutral-700);
+  --color-border-secondary: var(--color-neutral-800);
+  --color-border-tertiary: var(--color-neutral-900);
+
+  --color-neutral: var(--color-neutral-50);
+  --color-neutral-hover: var(--color-neutral-200);
+  --color-neutral-active: var(--color-neutral-400);
+  --color-neutral-muted: var(--color-neutral-800);
+
+  --color-phosphor-text: var(--color-phosphor-300);
+  --color-phosphor-text-secondary: var(--color-phosphor-200);
+  --color-phosphor-text-tertiary: var(--color-phosphor-100);
+  --color-phosphor-text-muted: var(--color-phosphor-800);
+
+  --color-positive-text: var(--color-positive-300);
+  --color-positive-text-secondary: var(--color-positive-200);
+  --color-positive-text-tertiary: var(--color-positive-100);
+  --color-positive-text-muted: var(--color-positive-800);
+
+  --color-negative-text: var(--color-negative-300);
+  --color-negative-text-secondary: var(--color-negative-200);
+  --color-negative-text-tertiary: var(--color-negative-100);
+  --color-negative-text-muted: var(--color-negative-800);
+
+  --color-warn-text: var(--color-warn-300);
+  --color-warn-text-secondary: var(--color-warn-200);
+  --color-warn-text-tertiary: var(--color-warn-100);
+  --color-warn-text-muted: var(--color-warn-800);
+
+  --color-info-text: var(--color-info-300);
+  --color-info-text-secondary: var(--color-info-200);
+  --color-info-text-tertiary: var(--color-info-100);
+  --color-info-text-muted: var(--color-info-800);
+
+  --color-brand-text: var(--color-phosphor-300);
+  --color-brand-text-secondary: var(--color-phosphor-200);
+  --color-brand-text-tertiary: var(--color-phosphor-100);
+  --color-brand-text-muted: var(--color-phosphor-800);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-foreground: var(--color-neutral-50);
+    --color-foreground-secondary: var(--color-neutral-300);
+    --color-foreground-tertiary: var(--color-neutral-400);
+    --color-foreground-muted: var(--color-neutral-700);
+    --color-background: var(--color-surface-base);
+    --color-background-elevated: var(--color-surface-secondary);
+
+    --color-border-primary: var(--color-neutral-700);
+    --color-border-secondary: var(--color-neutral-800);
+    --color-border-tertiary: var(--color-neutral-900);
+
+    --color-neutral: var(--color-neutral-50);
+    --color-neutral-hover: var(--color-neutral-200);
+    --color-neutral-active: var(--color-neutral-400);
+    --color-neutral-muted: var(--color-neutral-800);
+
+    --color-phosphor-text: var(--color-phosphor-300);
+    --color-phosphor-text-secondary: var(--color-phosphor-200);
+    --color-phosphor-text-tertiary: var(--color-phosphor-100);
+    --color-phosphor-text-muted: var(--color-phosphor-800);
+
+    --color-positive-text: var(--color-positive-300);
+    --color-positive-text-secondary: var(--color-positive-200);
+    --color-positive-text-tertiary: var(--color-positive-100);
+    --color-positive-text-muted: var(--color-positive-800);
+
+    --color-negative-text: var(--color-negative-300);
+    --color-negative-text-secondary: var(--color-negative-200);
+    --color-negative-text-tertiary: var(--color-negative-100);
+    --color-negative-text-muted: var(--color-negative-800);
+
+    --color-warn-text: var(--color-warn-300);
+    --color-warn-text-secondary: var(--color-warn-200);
+    --color-warn-text-tertiary: var(--color-warn-100);
+    --color-warn-text-muted: var(--color-warn-800);
+
+    --color-info-text: var(--color-info-300);
+    --color-info-text-secondary: var(--color-info-200);
+    --color-info-text-tertiary: var(--color-info-100);
+    --color-info-text-muted: var(--color-info-800);
+
+    --color-brand-text: var(--color-phosphor-300);
+    --color-brand-text-secondary: var(--color-phosphor-200);
+    --color-brand-text-tertiary: var(--color-phosphor-100);
+    --color-brand-text-muted: var(--color-phosphor-800);
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   LAYER 3 — TAILWIND @theme
+   Surfaces primitive scales + semantic aliases. Components consume via
+   var(--color-*); Tailwind utilities remain available for prototyping.
+   ---------------------------------------------------------------------------- */
+@theme inline {
+  /* COLORS — primitive ramps */
+  --color-neutral-50: var(--color-neutral-50);
+  --color-neutral-100: var(--color-neutral-100);
+  --color-neutral-200: var(--color-neutral-200);
+  --color-neutral-300: var(--color-neutral-300);
+  --color-neutral-400: var(--color-neutral-400);
+  --color-neutral-500: var(--color-neutral-500);
+  --color-neutral-600: var(--color-neutral-600);
+  --color-neutral-700: var(--color-neutral-700);
+  --color-neutral-800: var(--color-neutral-800);
+  --color-neutral-900: var(--color-neutral-900);
+
+  --color-phosphor-50: var(--color-phosphor-50);
+  --color-phosphor-100: var(--color-phosphor-100);
+  --color-phosphor-200: var(--color-phosphor-200);
+  --color-phosphor-300: var(--color-phosphor-300);
+  --color-phosphor-400: var(--color-phosphor-400);
+  --color-phosphor-500: var(--color-phosphor-500);
+  --color-phosphor-600: var(--color-phosphor-600);
+  --color-phosphor-700: var(--color-phosphor-700);
+  --color-phosphor-800: var(--color-phosphor-800);
+  --color-phosphor-900: var(--color-phosphor-900);
+
+  --color-positive-50: var(--color-positive-50);
+  --color-positive-100: var(--color-positive-100);
+  --color-positive-200: var(--color-positive-200);
+  --color-positive-300: var(--color-positive-300);
+  --color-positive-400: var(--color-positive-400);
+  --color-positive-500: var(--color-positive-500);
+  --color-positive-600: var(--color-positive-600);
+  --color-positive-700: var(--color-positive-700);
+  --color-positive-800: var(--color-positive-800);
+  --color-positive-900: var(--color-positive-900);
+
+  --color-negative-50: var(--color-negative-50);
+  --color-negative-100: var(--color-negative-100);
+  --color-negative-200: var(--color-negative-200);
+  --color-negative-300: var(--color-negative-300);
+  --color-negative-400: var(--color-negative-400);
+  --color-negative-500: var(--color-negative-500);
+  --color-negative-600: var(--color-negative-600);
+  --color-negative-700: var(--color-negative-700);
+  --color-negative-800: var(--color-negative-800);
+  --color-negative-900: var(--color-negative-900);
+
+  --color-warn-50: var(--color-warn-50);
+  --color-warn-100: var(--color-warn-100);
+  --color-warn-200: var(--color-warn-200);
+  --color-warn-300: var(--color-warn-300);
+  --color-warn-400: var(--color-warn-400);
+  --color-warn-500: var(--color-warn-500);
+  --color-warn-600: var(--color-warn-600);
+  --color-warn-700: var(--color-warn-700);
+  --color-warn-800: var(--color-warn-800);
+  --color-warn-900: var(--color-warn-900);
+
+  --color-info-50: var(--color-info-50);
+  --color-info-100: var(--color-info-100);
+  --color-info-200: var(--color-info-200);
+  --color-info-300: var(--color-info-300);
+  --color-info-400: var(--color-info-400);
+  --color-info-500: var(--color-info-500);
+  --color-info-600: var(--color-info-600);
+  --color-info-700: var(--color-info-700);
+  --color-info-800: var(--color-info-800);
+  --color-info-900: var(--color-info-900);
+
+  /* COLORS — semantic */
+  --color-foreground: var(--color-foreground);
+  --color-foreground-secondary: var(--color-foreground-secondary);
+  --color-foreground-tertiary: var(--color-foreground-tertiary);
+  --color-foreground-muted: var(--color-foreground-muted);
+  --color-background: var(--color-background);
+  --color-background-elevated: var(--color-background-elevated);
+
+  --color-border-primary: var(--color-border-primary);
+  --color-border-secondary: var(--color-border-secondary);
+  --color-border-tertiary: var(--color-border-tertiary);
+  --color-border-focus: var(--color-border-focus);
+
+  --color-phosphor: var(--color-phosphor);
+  --color-phosphor-hover: var(--color-phosphor-hover);
+  --color-phosphor-active: var(--color-phosphor-active);
+  --color-phosphor-muted: var(--color-phosphor-muted);
+  --color-phosphor-text: var(--color-phosphor-text);
+  --color-phosphor-text-secondary: var(--color-phosphor-text-secondary);
+  --color-phosphor-text-tertiary: var(--color-phosphor-text-tertiary);
+  --color-phosphor-text-muted: var(--color-phosphor-text-muted);
+
+  --color-neutral-text: var(--color-neutral-text);
+  --color-neutral-text-secondary: var(--color-neutral-text-secondary);
+  --color-neutral-text-tertiary: var(--color-neutral-text-tertiary);
+  --color-neutral-text-muted: var(--color-neutral-text-muted);
+
+  --color-neutral: var(--color-neutral);
+  --color-neutral-hover: var(--color-neutral-hover);
+  --color-neutral-active: var(--color-neutral-active);
+  --color-neutral-muted: var(--color-neutral-muted);
+
+  --color-brand-text: var(--color-brand-text);
+  --color-brand-text-secondary: var(--color-brand-text-secondary);
+  --color-brand-text-tertiary: var(--color-brand-text-tertiary);
+  --color-brand-text-muted: var(--color-brand-text-muted);
+
+  --color-brand: var(--color-brand);
+  --color-brand-hover: var(--color-brand-hover);
+  --color-brand-active: var(--color-brand-active);
+  --color-brand-muted: var(--color-brand-muted);
+
+  --color-positive-text: var(--color-positive-text);
+  --color-positive-text-secondary: var(--color-positive-text-secondary);
+  --color-positive-text-tertiary: var(--color-positive-text-tertiary);
+  --color-positive-text-muted: var(--color-positive-text-muted);
+
+  --color-positive: var(--color-positive);
+  --color-positive-hover: var(--color-positive-hover);
+  --color-positive-active: var(--color-positive-active);
+  --color-positive-muted: var(--color-positive-muted);
+
+  --color-negative-text: var(--color-negative-text);
+  --color-negative-text-secondary: var(--color-negative-text-secondary);
+  --color-negative-text-tertiary: var(--color-negative-text-tertiary);
+  --color-negative-text-muted: var(--color-negative-text-muted);
+
+  --color-negative: var(--color-negative);
+  --color-negative-hover: var(--color-negative-hover);
+  --color-negative-active: var(--color-negative-active);
+  --color-negative-muted: var(--color-negative-muted);
+
+  --color-warn-text: var(--color-warn-text);
+  --color-warn-text-secondary: var(--color-warn-text-secondary);
+  --color-warn-text-tertiary: var(--color-warn-text-tertiary);
+  --color-warn-text-muted: var(--color-warn-text-muted);
+
+  --color-warn: var(--color-warn);
+  --color-warn-hover: var(--color-warn-hover);
+  --color-warn-active: var(--color-warn-active);
+  --color-warn-muted: var(--color-warn-muted);
+
+  --color-info-text: var(--color-info-text);
+  --color-info-text-secondary: var(--color-info-text-secondary);
+  --color-info-text-tertiary: var(--color-info-text-tertiary);
+  --color-info-text-muted: var(--color-info-text-muted);
+
+  --color-info: var(--color-info);
+  --color-info-hover: var(--color-info-hover);
+  --color-info-active: var(--color-info-active);
+  --color-info-muted: var(--color-info-muted);
+
+  --color-on-neutral: var(--color-on-neutral);
+  --color-on-phosphor: var(--color-on-phosphor);
+  --color-on-positive: var(--color-on-positive);
+  --color-on-negative: var(--color-on-negative);
+  --color-on-warn: var(--color-on-warn);
+  --color-on-info: var(--color-on-info);
+
+  --color-surface-base: var(--color-surface-base);
+  --color-surface-secondary: var(--color-surface-secondary);
+  --color-surface-tertiary: var(--color-surface-tertiary);
+  --color-backdrop-overlay: var(--color-backdrop-overlay);
+
+  /* TYPOGRAPHY */
+  --font-rtl: var(--typography-typeface-rtl);
+  --font-ltr: var(--typography-typeface-ltr);
+  --font-mono: var(--typography-typeface-mono);
+
+  --text-h1: var(--typography-h1-size);
+  --text-h2: var(--typography-h2-size);
+  --text-h3: var(--typography-h3-size);
+  --text-h4: var(--typography-h4-size);
+  --text-h5: var(--typography-h5-size);
+  --text-h6: var(--typography-h6-size);
+  --text-subheading1: var(--typography-subheading1-size);
+  --text-subheading2: var(--typography-subheading2-size);
+  --text-body1: var(--typography-body1-size);
+  --text-body2: var(--typography-body2-size);
+  --text-caption: var(--typography-caption-size);
+
+  --leading-h1: var(--typography-h1-leading);
+  --leading-h2: var(--typography-h2-leading);
+  --leading-h3: var(--typography-h3-leading);
+  --leading-h4: var(--typography-h4-leading);
+  --leading-h5: var(--typography-h5-leading);
+  --leading-h6: var(--typography-h6-leading);
+  --leading-subheading1: var(--typography-subheading1-leading);
+  --leading-subheading2: var(--typography-subheading2-leading);
+  --leading-body1: var(--typography-body1-leading);
+  --leading-body2: var(--typography-body2-leading);
+  --leading-caption: var(--typography-caption-leading);
+
+  --font-weight-h1: var(--typography-h1-weight);
+  --font-weight-h2: var(--typography-h2-weight);
+  --font-weight-h3: var(--typography-h3-weight);
+  --font-weight-h4: var(--typography-h4-weight);
+  --font-weight-h5: var(--typography-h5-weight);
+  --font-weight-h6: var(--typography-h6-weight);
+  --font-weight-subheading1: var(--typography-subheading1-weight);
+  --font-weight-subheading2: var(--typography-subheading2-weight);
+  --font-weight-body1: var(--typography-body1-weight);
+  --font-weight-body2: var(--typography-body2-weight);
+  --font-weight-caption: var(--typography-caption-weight);
+
+  /* BREAKPOINTS */
+  --breakpoint-xs: 40rem;
+  --breakpoint-sm: 48rem;
+  --breakpoint-md: 64rem;
+  --breakpoint-lg: 80rem;
+  --breakpoint-xl: 96rem;
+
+  /* SPACING */
+  --spacing-xxs: calc(var(--spacing) / 2);
+  --spacing-xs: var(--spacing);
+  --spacing-sm: calc(var(--spacing) * 2);
+  --spacing-md: calc(var(--spacing) * 4);
+  --spacing-lg: calc(var(--spacing) * 4.5);
+  --spacing-xl: calc(var(--spacing) * 6);
+  --spacing-xxl: calc(var(--spacing) * 8);
+
+  /* RADIUS */
+  --radius-none: 0;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* SHADOWS */
+  --shadow-sm-elev: var(--shadow-sm);
+  --shadow-md-elev: var(--shadow-md);
+  --shadow-lg-elev: var(--shadow-lg);
+
+  /* Z-INDEX */
+  --z-0: var(--z-0);
+  --z-10: var(--z-10);
+  --z-20: var(--z-20);
+  --z-30: var(--z-30);
+  --z-40: var(--z-40);
+  --z-50: var(--z-50);
+
+  /* CONTAINER */
+  --container-prose: var(--container-prose);
+  --container-narrow: var(--container-narrow);
+  --container-base: var(--container-base);
+  --container-wide: var(--container-wide);
+}
+
+/* ----------------------------------------------------------------------------
+   BASE — minimal reset + theme-correct defaults
+   ---------------------------------------------------------------------------- */
+@layer base {
+  html {
+    font-family: var(--typography-typeface-ltr);
+    font-size: var(--typography-body1-size);
+    line-height: var(--typography-body1-leading);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html[dir="rtl"] {
+    font-family: var(--typography-typeface-rtl);
+  }
+
+  html,
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    min-height: 100%;
+  }
+
+  body {
+    position: relative;
+  }
+
+  a {
+    color: var(--color-phosphor-text);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color var(--duration-fast) var(--easing-standard);
+  }
+
+  a:hover {
+    color: var(--color-phosphor);
+  }
+
+  :focus-visible {
+    outline: var(--focus-ring-stroke) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    box-shadow: var(--focus-ring-glow);
+  }
+
+  ::selection {
+    background-color: var(--color-phosphor-500);
+    color: var(--color-on-phosphor);
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: var(--typography-typeface-mono);
+  }
+
+  /* Reduced motion: kill phosphor-glow text-shadow, glitch, scanline drift. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   CRT UTILITIES — applied via class on any container.
+
+   .scanlines   — repeating-linear-gradient overlay, fixed to viewport.
+                  Use on hero/header surfaces for the 'tube' feel.
+
+   .noise       — inline SVG turbulence rendered as background-image.
+                  Use on hero or entire app shell for film-grain texture.
+
+   .phosphor-glow — text-shadow with phosphor glow. Use sparingly on
+                  h1/h2 and accent copy.
+
+   .glitch      — one-shot clip-path displacement (~120ms). Triggered
+                  explicitly via class addition (e.g. on hover). Never
+                  used as a looping animation.
+   ---------------------------------------------------------------------------- */
+@layer utilities {
+  .scanlines {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .scanlines::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: var(--z-50);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent var(--scanline-spacing),
+      rgb(0 0 0 / var(--scanline-strength)) var(--scanline-spacing),
+      rgb(0 0 0 / var(--scanline-strength)) calc(var(--scanline-spacing) + 1px)
+    );
+    mix-blend-mode: multiply;
+  }
+
+  .noise {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .noise::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: var(--z-40);
+    opacity: var(--noise-strength);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-size: 200px 200px;
+    background-repeat: repeat;
+    mix-blend-mode: overlay;
+  }
+
+  .phosphor-glow {
+    text-shadow:
+      0 0 calc(4px * var(--phosphor-glow-strength)) var(--color-phosphor-glow),
+      0 0 calc(10px * var(--phosphor-glow-strength))
+        var(--color-phosphor-shadow);
+  }
+
+  .phosphor-glow-strong {
+    text-shadow:
+      0 0 calc(6px * var(--phosphor-glow-strength)) var(--color-phosphor-glow),
+      0 0 calc(18px * var(--phosphor-glow-strength)) var(--color-phosphor-glow),
+      0 0 calc(28px * var(--phosphor-glow-strength))
+        var(--color-phosphor-shadow);
+  }
+
+  @keyframes glitch {
+    0%,
+    100% {
+      clip-path: inset(0 0 0 0);
+      transform: translate(0, 0);
+    }
+    20% {
+      clip-path: inset(20% 0 60% 0);
+      transform: translate(-2px, 1px);
+    }
+    40% {
+      clip-path: inset(60% 0 10% 0);
+      transform: translate(2px, -1px);
+    }
+    60% {
+      clip-path: inset(40% 0 40% 0);
+      transform: translate(-1px, 0);
+    }
+    80% {
+      clip-path: inset(10% 0 70% 0);
+      transform: translate(1px, 1px);
+    }
+  }
+
+  .glitch-on-hover:hover {
+    animation: glitch 120ms steps(2, end) 1;
+  }
+}

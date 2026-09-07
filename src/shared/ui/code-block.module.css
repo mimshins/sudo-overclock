@@ -1,0 +1,57 @@
+.frame {
+  --block-border: 1px solid var(--color-border-primary);
+  --block-background: var(--color-surface-secondary);
+
+  border: var(--block-border);
+  background-color: var(--block-background);
+  overflow: hidden;
+}
+
+.header {
+  --header-size: var(--text-caption);
+  --header-line-height: var(--leading-caption);
+  --header-background: var(--color-surface-tertiary);
+  --header-color: var(--color-foreground-tertiary);
+  --header-font-family: var(--font-mono);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border-primary);
+  background-color: var(--header-background);
+  font-size: var(--header-size);
+  line-height: var(--header-line-height);
+  font-family: var(--header-font-family);
+  color: var(--header-color);
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+}
+
+.filename {
+  --filename-color: var(--color-foreground-secondary);
+  color: var(--filename-color);
+}
+
+.language {
+  --language-color: var(--color-phosphor);
+  color: var(--language-color);
+}
+
+.pre {
+  --pre-padding-x: var(--spacing-sm);
+  --pre-padding-y: var(--spacing-md);
+  --pre-font-family: var(--font-mono);
+  --pre-font-size: 0.875rem;
+  --pre-line-height: 1.55;
+  --pre-color: var(--color-foreground);
+
+  margin: 0;
+  padding: var(--pre-padding-y) var(--pre-padding-x);
+  overflow-x: auto;
+  font-family: var(--pre-font-family);
+  font-size: var(--pre-font-size);
+  line-height: var(--pre-line-height);
+  color: var(--pre-color);
+}

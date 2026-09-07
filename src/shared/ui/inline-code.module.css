@@ -1,0 +1,27 @@
+.inlineCode {
+  --code-padding-x: 0.35em;
+  --code-padding-y: 0.1em;
+  --code-border: 1px solid var(--color-border-primary);
+  --code-background: var(--color-background-elevated);
+  --code-color: var(--color-foreground);
+  --code-font-size: 0.875em;
+
+  font-family: var(--font-mono);
+  font-size: var(--code-font-size);
+  padding: var(--code-padding-y) var(--code-padding-x);
+  border-radius: var(--radius-sm);
+  border: var(--code-border);
+  background-color: var(--code-background);
+  color: var(--code-color);
+  white-space: nowrap;
+}
+
+.variantDefault {
+  --code-color: var(--color-foreground);
+  --code-border: 1px solid var(--color-border-primary);
+}
+
+.variantPhosphor {
+  --code-color: var(--color-phosphor);
+  --code-border: 1px solid var(--color-phosphor);
+}
