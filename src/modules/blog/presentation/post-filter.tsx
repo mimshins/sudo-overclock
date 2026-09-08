@@ -58,7 +58,9 @@ const Toolbar = ({
     </div>
     <Button
       variant="ghost"
+      color="neutral"
       size="sm"
+      className={styles.sort}
       onClick={onToggleOrder}
       aria-label="toggle sort order"
     >

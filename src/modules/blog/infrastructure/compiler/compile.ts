@@ -119,6 +119,7 @@ const compileOnePost = async ({
   const compile = createMarkdownCompiler({
     highlighter,
     assets: { postDir: dirname(absolutePath), slug, publicDir },
+    stripTitleHeading: true,
   });
   const { html, toc } = await compile(content);
 

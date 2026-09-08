@@ -34,7 +34,10 @@ type RootLayoutProps = {
 const RootLayout = (props: RootLayoutProps): ReactNode => {
   const { children } = props;
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={themeScriptProp} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

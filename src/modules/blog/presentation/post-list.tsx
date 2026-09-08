@@ -7,6 +7,8 @@
  */
 
 import { cx } from "@repo/shared/lib/cx";
+import { Tag } from "@repo/shared/ui/tag";
+import Link from "next/link";
 
 import type { PostSummary } from "../domain/post.ts";
 
@@ -30,12 +32,27 @@ const PostList = ({ posts, className }: PostListProps) => {
     <ul className={cx(styles.list, className)} data-slot="post-list">
       {posts.map((post) => (
         <li key={post.id} className={styles.item} data-slot="post-list-item">
-          <a href={`/blog/posts/${post.slug}/`} className={styles.link}>
-            <span className={styles.title}>{post.title}</span>
-            <span className={styles.meta}>
-              {post.date} &middot; {post.readingTimeMinutes} min
-            </span>
-          </a>
+          <Link
+            href={`/blog/posts/${post.slug}/`}
+            className={styles.link}
+          >
+            <div className={styles.header} data-slot="post-card-header">
+              <h2 className={styles.title}>{post.title}</h2>
+              <span className={styles.meta}>
+                {post.date} &middot; {post.readingTimeMinutes} min
+              </span>
+            </div>
+            {post.description.length > 0 && (
+              <span className={styles.description}>{post.description}</span>
+            )}
+            {post.tags.length > 0 && (
+              <span className={styles.tags} data-slot="post-card-tags">
+                {post.tags.map((tag) => (
+                  <Tag key={tag}>{tag}</Tag>
+                ))}
+              </span>
+            )}
+          </Link>
         </li>
       ))}
     </ul>

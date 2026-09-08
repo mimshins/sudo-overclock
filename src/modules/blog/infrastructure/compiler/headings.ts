@@ -50,6 +50,35 @@ const uniqueId = (slug: string, used: ReadonlySet<string>): string => {
   return candidate;
 };
 
+/**
+ * Drops a redundant leading `h1` from the article body. Blog pages render the
+ * post title as the page's single `h1` in the header block, so an `h1` at the
+ * top of the markdown body only duplicates it — remove it (and, because this
+ * runs before `rehypeHeadings`, it never reaches the TOC or gets an anchor).
+ */
+const rehypeStripTitleHeading = () => {
+  return (tree: Root): void => {
+    const firstElement = tree.children.find(
+      (child): child is Element => child.type === "element",
+    );
+
+    if (firstElement === undefined || firstElement.tagName !== "h1") return;
+
+    tree.children.splice(tree.children.indexOf(firstElement), 1);
+  };
+};
+
+const permalink = (id: string): Element => ({
+  type: "element",
+  tagName: "a",
+  properties: {
+    href: `#${id}`,
+    className: ["heading-permalink"],
+    "aria-label": "permalink",
+  },
+  children: [{ type: "text", value: "#" }],
+});
+
 const rehypeHeadings = (toc: TocItem[]) => {
   const used = new Set<string>();
 
@@ -67,8 +96,10 @@ const rehypeHeadings = (toc: TocItem[]) => {
 
       node.properties = { ...node.properties, id };
       toc.push({ id, text, depth });
+
+      node.children.unshift(permalink(id));
     });
   };
 };
 
-export { rehypeHeadings };
+export { rehypeHeadings, rehypeStripTitleHeading };

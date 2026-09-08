@@ -1,8 +1,7 @@
 .prose {
   --prose-color: var(--color-foreground);
-  --prose-max-width: var(--container-prose);
 
-  max-width: var(--prose-max-width);
+  width: 100%;
   color: var(--prose-color);
   font-family: var(--font-ltr);
   font-size: var(--text-body1);
@@ -16,6 +15,7 @@
 .prose :global(h4),
 .prose :global(h5),
 .prose :global(h6) {
+  position: relative;
   margin: var(--spacing-xl) 0 var(--spacing-sm);
   color: var(--color-foreground);
   font-family: var(--font-ltr);
@@ -64,6 +64,27 @@
   font-weight: var(--typography-h6-weight);
 }
 
+/* --- Heading permalinks -------------------------------------------------- */
+.prose :global(.heading-permalink) {
+  position: absolute;
+  right: calc(100% + var(--spacing-md));
+  color: var(--color-phosphor);
+  opacity: 0;
+  text-decoration: none;
+  user-select: none;
+  transition: opacity var(--duration-fast) var(--easing-standard);
+}
+
+.prose :global(h1):hover :global(.heading-permalink),
+.prose :global(h2):hover :global(.heading-permalink),
+.prose :global(h3):hover :global(.heading-permalink),
+.prose :global(h4):hover :global(.heading-permalink),
+.prose :global(h5):hover :global(.heading-permalink),
+.prose :global(h6):hover :global(.heading-permalink),
+.prose :global(.heading-permalink):focus-visible {
+  opacity: 1;
+}
+
 /* --- Paragraphs & inline ------------------------------------------------ */
 .prose :global(p) {
   margin: 0 0 var(--spacing-md);
@@ -105,17 +126,23 @@
 .prose :global(ol) {
   margin: 0 0 var(--spacing-md);
   padding-left: var(--spacing-lg);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+}
+
+.prose :global(ul) {
+  list-style: disc;
+}
+
+.prose :global(ol) {
+  list-style: decimal;
 }
 
 .prose :global(li) {
-  margin: 0;
+  margin: 0 0 var(--spacing-xs);
 }
 
 .prose :global(li)::marker {
   color: var(--color-phosphor);
+  font-weight: 600;
 }
 
 .prose :global(ul) :global(ul),
@@ -129,14 +156,29 @@
 /* --- Blockquote --------------------------------------------------------- */
 .prose :global(blockquote) {
   position: relative;
-  margin: 0 0 var(--spacing-md);
+  margin: var(--spacing-sm) 0 var(--spacing-md);
   padding: var(--spacing-sm) var(--spacing-md);
   border-left: 2px solid var(--color-phosphor);
   background-color: var(--color-background-elevated);
 }
 
 .prose :global(blockquote) :global(p) {
-  margin: 0;
+  margin: 0 0 var(--spacing-xs);
+}
+
+.prose :global(blockquote) :global(p):last-child {
+  margin-bottom: 0;
+}
+
+.prose :global(blockquote) :global(ul),
+.prose :global(blockquote) :global(ol) {
+  margin-bottom: 0;
+}
+
+.prose :global(blockquote) :global(blockquote) {
+  margin-top: var(--spacing-xs);
+  border-left-color: var(--color-foreground-tertiary);
+  background-color: transparent;
 }
 
 /* --- Tables (GFM) ------------------------------------------------------- */

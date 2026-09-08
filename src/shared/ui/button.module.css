@@ -4,11 +4,13 @@
   --button-border-color: var(--color-border-primary);
   --button-hover-background: var(--color-background-elevated);
   --button-hover-color: var(--color-foreground);
-  --button-hover-border-color: var(--color-foreground-tertiary);
+  --button-hover-border-color: var(--color-border-primary);
   --button-hover-shadow: none;
   --button-active-background: var(--color-border-primary);
-  --button-active-color: var(--button-color);
-  --button-active-border-color: var(--button-border-color);
+  --button-active-color: var(--color-foreground);
+  --button-active-border-color: var(--color-border-primary);
+  --button-glitch-a: var(--color-phosphor);
+  --button-glitch-b: var(--color-on-neutral);
 
   display: inline-flex;
   align-items: center;
@@ -22,6 +24,7 @@
   cursor: pointer;
   color: var(--button-color);
   letter-spacing: 0.02em;
+  text-decoration: none;
   text-transform: lowercase;
   transition:
     background-color var(--duration-fast) var(--easing-standard),
@@ -40,12 +43,49 @@
   border-color: var(--button-hover-border-color);
   box-shadow: var(--button-hover-shadow);
   color: var(--button-hover-color);
+  animation: button-glitch var(--duration-slow) steps(2, end) 1;
 }
 
 .button:active:not(:disabled) {
   background-color: var(--button-active-background);
   border-color: var(--button-active-border-color);
   color: var(--button-active-color);
+}
+
+/* Glitch on hover — a one-shot chromatic flicker of the label. */
+@keyframes button-glitch {
+  0%,
+  100% {
+    text-shadow: none;
+  }
+  12% {
+    text-shadow:
+      1px 0 var(--button-glitch-a),
+      -1px 0 var(--button-glitch-b);
+  }
+  25% {
+    text-shadow:
+      -2px 0 var(--button-glitch-a),
+      2px 0 var(--button-glitch-b);
+  }
+  38% {
+    text-shadow:
+      1px 0 var(--button-glitch-b),
+      -1px 0 var(--button-glitch-a);
+  }
+  55% {
+    text-shadow:
+      -1px 0 var(--button-glitch-a),
+      1px 0 var(--button-glitch-b);
+  }
+  70% {
+    text-shadow:
+      2px 0 var(--button-glitch-b),
+      -2px 0 var(--button-glitch-a);
+  }
+  85% {
+    text-shadow: 1px 0 var(--button-glitch-a);
+  }
 }
 
 /* === SIZES ============================================================= */
@@ -71,48 +111,126 @@
   --button-line-height: var(--typography-body1-leading);
 }
 
+/* === COLORS =============================================================
+   Each color exposes a small palette of role tokens. Variants consume them
+   to build their rest/hover/active states, so a variant stays structurally
+   identical across colors — only the hues change. */
+
+.colorNeutral {
+  --button-solid: var(--color-foreground);
+  --button-solid-hover: var(--color-foreground-secondary);
+  --button-solid-active: var(--color-foreground-tertiary);
+  --button-soft: var(--color-background-elevated);
+  --button-ink: var(--color-foreground-secondary);
+  --button-on-solid: var(--color-background);
+  --button-on-soft: var(--color-foreground);
+  --button-border: var(--color-border-primary);
+  --button-border-hover: var(--color-foreground-tertiary);
+  --button-glow: none;
+}
+
+.colorPhosphor {
+  --button-solid: var(--color-phosphor);
+  --button-solid-hover: var(--color-phosphor-hover);
+  --button-solid-active: var(--color-phosphor-active);
+  --button-soft: var(--color-phosphor-muted);
+  --button-ink: var(--color-phosphor-text);
+  --button-on-solid: var(--color-on-phosphor);
+  --button-on-soft: var(--color-on-phosphor);
+  --button-border: var(--color-phosphor);
+  --button-border-hover: var(--color-phosphor);
+  --button-glow: 0 0 12px var(--color-phosphor-shadow);
+}
+
+.colorPositive {
+  --button-solid: var(--color-positive);
+  --button-solid-hover: var(--color-positive-hover);
+  --button-solid-active: var(--color-positive-active);
+  --button-soft: var(--color-positive-muted);
+  --button-ink: var(--color-positive-text);
+  --button-on-solid: var(--color-on-positive);
+  --button-on-soft: var(--color-on-positive);
+  --button-border: var(--color-positive);
+  --button-border-hover: var(--color-positive);
+  --button-glow: none;
+}
+
+.colorNegative {
+  --button-solid: var(--color-negative);
+  --button-solid-hover: var(--color-negative-hover);
+  --button-solid-active: var(--color-negative-active);
+  --button-soft: var(--color-negative-muted);
+  --button-ink: var(--color-negative-text);
+  --button-on-solid: var(--color-on-negative);
+  --button-on-soft: var(--color-on-negative);
+  --button-border: var(--color-negative);
+  --button-border-hover: var(--color-negative);
+  --button-glow: none;
+}
+
+.colorWarn {
+  --button-solid: var(--color-warn);
+  --button-solid-hover: var(--color-warn-hover);
+  --button-solid-active: var(--color-warn-active);
+  --button-soft: var(--color-warn-muted);
+  --button-ink: var(--color-warn-text);
+  --button-on-solid: var(--color-on-warn);
+  --button-on-soft: var(--color-on-warn);
+  --button-border: var(--color-warn);
+  --button-border-hover: var(--color-warn);
+  --button-glow: none;
+}
+
+.colorInfo {
+  --button-solid: var(--color-info);
+  --button-solid-hover: var(--color-info-hover);
+  --button-solid-active: var(--color-info-active);
+  --button-soft: var(--color-info-muted);
+  --button-ink: var(--color-info-text);
+  --button-on-solid: var(--color-on-info);
+  --button-on-soft: var(--color-on-info);
+  --button-border: var(--color-info);
+  --button-border-hover: var(--color-info);
+  --button-glow: none;
+}
+
 /* === VARIANTS =========================================================== */
 
-.variantPhosphor {
-  --button-color: var(--color-phosphor);
-  --button-border-color: var(--color-phosphor);
-  --button-hover-background: var(--color-phosphor-muted);
-  --button-hover-color: var(--color-on-phosphor);
-  --button-hover-shadow: 0 0 12px var(--color-phosphor-shadow);
-  --button-active-background: var(--color-phosphor);
-  --button-active-border-color: var(--color-phosphor);
-}
-
-.variantNeutral {
-  --button-color: var(--color-foreground);
-  --button-border-color: var(--color-border-primary);
-  --button-hover-background: var(--color-background-elevated);
-  --button-hover-border-color: var(--color-foreground-tertiary);
-  --button-active-background: var(--color-border-primary);
-}
-
 .variantGhost {
-  --button-color: var(--color-foreground-secondary);
+  --button-background: transparent;
   --button-border-color: transparent;
+  --button-color: var(--button-ink);
   --button-hover-background: var(--color-background-elevated);
-  --button-hover-color: var(--color-foreground);
+  --button-hover-color: var(--button-solid);
+  --button-hover-border-color: transparent;
+  --button-hover-shadow: none;
   --button-active-background: var(--color-background-elevated);
+  --button-active-color: var(--button-solid);
+  --button-active-border-color: transparent;
 }
 
-.variantPositive {
-  --button-color: var(--color-positive-text);
-  --button-border-color: var(--color-positive);
-  --button-hover-background: var(--color-positive-muted);
-  --button-hover-color: var(--color-on-positive);
-  --button-active-background: var(--color-positive);
-  --button-active-border-color: var(--color-positive);
+.variantOutlined {
+  --button-background: transparent;
+  --button-border-color: var(--button-border);
+  --button-color: var(--button-solid);
+  --button-hover-background: var(--button-soft);
+  --button-hover-color: var(--button-on-soft);
+  --button-hover-border-color: var(--button-border-hover);
+  --button-hover-shadow: var(--button-glow);
+  --button-active-background: var(--button-solid);
+  --button-active-color: var(--button-on-solid);
+  --button-active-border-color: var(--button-solid);
 }
 
-.variantNegative {
-  --button-color: var(--color-negative-text);
-  --button-border-color: var(--color-negative);
-  --button-hover-background: var(--color-negative-muted);
-  --button-hover-color: var(--color-on-negative);
-  --button-active-background: var(--color-negative);
-  --button-active-border-color: var(--color-negative);
+.variantFilled {
+  --button-background: var(--button-solid);
+  --button-border-color: var(--button-solid);
+  --button-color: var(--button-on-solid);
+  --button-hover-background: var(--button-solid-hover);
+  --button-hover-color: var(--button-on-solid);
+  --button-hover-border-color: var(--button-solid-hover);
+  --button-hover-shadow: var(--button-glow);
+  --button-active-background: var(--button-solid-active);
+  --button-active-color: var(--button-on-solid);
+  --button-active-border-color: var(--button-solid-active);
 }

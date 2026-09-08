@@ -25,13 +25,18 @@
   cursor: pointer;
 }
 
-.tag:hover {
+.tag:hover:not(.active) {
   --tag-color: var(--color-phosphor);
   --tag-border-color: var(--color-phosphor);
 }
 
-.active {
+.active,
+.active:hover {
   --tag-color: var(--color-on-phosphor);
   --tag-border-color: var(--color-phosphor);
   --tag-background: var(--color-phosphor);
+}
+
+.active:hover {
+  --tag-border-color: var(--color-phosphor-hover);
 }

@@ -41,7 +41,7 @@ const PostPage = async ({ params }: PostPageProps) => {
         <CodeCopy />
       </article>
       <aside className={styles.aside} data-slot="post-aside">
-        <Caption variant="muted" className={styles.tocTitle}>
+        <Caption variant="default" className={styles.tocTitle}>
           on this page
         </Caption>
         <TableOfContents items={post.toc} />

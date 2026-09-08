@@ -4,8 +4,10 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--aside-width);
   gap: var(--spacing-xl);
+  flex: 1 1 auto;
+  align-self: center;
+  width: 100%;
   max-width: var(--container-wide);
-  margin: 0 auto;
   padding: var(--spacing-xl) var(--spacing-lg);
 }
 

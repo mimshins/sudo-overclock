@@ -5,11 +5,13 @@ import type * as React from "react";
 
 import styles from "./button.module.css";
 
-type Variant = "neutral" | "phosphor" | "ghost" | "positive" | "negative";
+type Variant = "ghost" | "outlined" | "filled";
+type Color = "neutral" | "phosphor" | "positive" | "negative" | "warn" | "info";
 type Size = "sm" | "md" | "lg";
 
 type ButtonOwnProps = {
   readonly variant?: Variant;
+  readonly color?: Color;
   readonly size?: Size;
 };
 
@@ -17,11 +19,18 @@ type ButtonProps<T extends React.ElementType = typeof BaseButton> =
   PolymorphicProps<T, ButtonOwnProps>;
 
 const variantClass: Record<Variant, ClassValue> = {
-  neutral: styles.variantNeutral,
-  phosphor: styles.variantPhosphor,
   ghost: styles.variantGhost,
-  positive: styles.variantPositive,
-  negative: styles.variantNegative,
+  outlined: styles.variantOutlined,
+  filled: styles.variantFilled,
+};
+
+const colorClass: Record<Color, ClassValue> = {
+  neutral: styles.colorNeutral,
+  phosphor: styles.colorPhosphor,
+  positive: styles.colorPositive,
+  negative: styles.colorNegative,
+  warn: styles.colorWarn,
+  info: styles.colorInfo,
 };
 
 const sizeClass: Record<Size, ClassValue> = {
@@ -31,19 +40,22 @@ const sizeClass: Record<Size, ClassValue> = {
 };
 
 const Button = <T extends React.ElementType = typeof BaseButton>({
-  variant = "phosphor",
+  variant = "outlined",
+  color = "phosphor",
   size = "md",
   className,
   children,
+  as,
   ...rest
 }: ButtonProps<T>) => {
-  const Component = (rest.as ?? BaseButton) as React.ElementType;
+  const Component = (as ?? BaseButton) as React.ElementType;
 
   return (
     <Component
       className={cx(
         styles.button,
         variantClass[variant],
+        colorClass[color],
         sizeClass[size],
         className,
       )}
@@ -55,5 +67,5 @@ const Button = <T extends React.ElementType = typeof BaseButton>({
   );
 };
 
-export type { ButtonProps, Variant, Size };
+export type { ButtonProps, Variant, Color, Size };
 export { Button };

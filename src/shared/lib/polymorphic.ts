@@ -21,9 +21,13 @@ import type {
   Ref,
 } from "react";
 
-/** Props that we always want to allow regardless of the rendered element. */
-type AsProp = {
-  readonly as?: ElementType;
+/**
+ * Props that we always want to allow regardless of the rendered element. `as`
+ * is bound to `T` so the rendered element type is inferred from the `as` value
+ * (e.g. `<Button as="a" href="…">` types `href`).
+ */
+type AsProp<T extends ElementType> = {
+  readonly as?: T;
   readonly children?: ReactNode;
 };
 
@@ -33,8 +37,8 @@ type AsProp = {
  * two surfaces from colliding (e.g. `children` / `className` / `style`).
  */
 type PolymorphicProps<T extends ElementType, OwnProps> = OwnProps &
-  AsProp &
-  Omit<ComponentPropsWithoutRef<T>, keyof OwnProps | keyof AsProp> & {
+  AsProp<T> &
+  Omit<ComponentPropsWithoutRef<T>, keyof OwnProps | keyof AsProp<T>> & {
     readonly ref?: Ref<
       ComponentPropsWithRef<T>["ref"] extends Ref<infer U> ? U : never
     >;
@@ -50,7 +54,6 @@ type PolymorphicRender<
 > = T extends ElementType ? T : Default;
 
 export type {
-  AsProp,
   ComponentPropsWithoutRef,
   ComponentPropsWithRef,
   ElementType,

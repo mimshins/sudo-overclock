@@ -24,8 +24,8 @@ const PostHeader = ({ post }: PostHeaderProps) => (
     </div>
     <h1 className={styles.title}>{post.frontmatter.title}</h1>
     <div className={styles.meta} data-slot="post-meta">
-      <Caption variant="muted">{post.frontmatter.date}</Caption>
-      <Caption variant="muted">{post.readingTimeMinutes} min read</Caption>
+      <Caption variant="default">{post.frontmatter.date}</Caption>
+      <Caption variant="default">{post.readingTimeMinutes} min read</Caption>
     </div>
     {post.frontmatter.description !== undefined && (
       <p className={styles.description}>{post.frontmatter.description}</p>

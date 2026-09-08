@@ -16,7 +16,7 @@ import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 
 import { rehypeAssets, type AssetContext } from "./assets.ts";
-import { rehypeHeadings } from "./headings.ts";
+import { rehypeHeadings, rehypeStripTitleHeading } from "./headings.ts";
 import { THEME_NAME, type Highlighter } from "./shiki.ts";
 import type { TocItem } from "./types.ts";
 
@@ -42,6 +42,11 @@ const LANG_ALIASES: Readonly<Record<string, string>> = {
 type CompileMarkdownOptions = {
   readonly highlighter: Highlighter;
   readonly assets: AssetContext;
+  /**
+   * Strip a redundant leading `h1` from the body. Blog pages render the post
+   * title as the page's single `h1`, so body content should start at `h2`.
+   */
+  readonly stripTitleHeading?: boolean;
 };
 
 type CompileResult = {
@@ -55,7 +60,7 @@ const createMarkdownCompiler = (options: CompileMarkdownOptions) => {
   return async (markdown: string): Promise<CompileResult> => {
     const toc: TocItem[] = [];
 
-    const file = await unified()
+    const processor = unified()
       .use(remarkParse)
       .use(remarkGfm)
       .use(remarkRehype, { allowDangerousHtml: false })
@@ -63,10 +68,15 @@ const createMarkdownCompiler = (options: CompileMarkdownOptions) => {
         theme: THEME_NAME,
         langAlias: LANG_ALIASES,
       })
-      .use(rehypeAssets, assets)
-      .use(rehypeHeadings, toc)
-      .use(rehypeStringify)
-      .process(markdown);
+      .use(rehypeAssets, assets);
+
+    if (options.stripTitleHeading === true) {
+      processor.use(rehypeStripTitleHeading);
+    }
+
+    processor.use(rehypeHeadings, toc).use(rehypeStringify);
+
+    const file = await processor.process(markdown);
 
     return { html: String(file), toc };
   };

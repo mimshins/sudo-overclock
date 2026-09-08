@@ -4,9 +4,12 @@
  * TableOfContents — client component.
  *
  * Renders the post's heading anchors as an ordered list and highlights the
- * section currently in the viewport using an IntersectionObserver. The `toc`
- * items are passed in as props (server-rendered); only the observer + active
- * state are hydrated on the client.
+ * section currently being read. A section is "active" from when its heading
+ * crosses a reference line near the top of the viewport until the next
+ * heading crosses it, so the entry stays selected while you read the body,
+ * not only while the header itself is on screen. The `toc` items are passed
+ * in as props (server-rendered); only the scroll tracking + active state are
+ * hydrated on the client.
  */
 
 import { cx } from "@repo/shared/lib/cx";
@@ -21,52 +24,60 @@ type TableOfContentsProps = {
   readonly className?: string;
 };
 
-const selectSections = (items: readonly PostTocItem[]): HTMLElement[] =>
+const PICK_REFERENCE_LINE = 0.3;
+
+const findHeadingEls = (items: readonly PostTocItem[]): HTMLElement[] =>
   items
     .map((item) => document.querySelector<HTMLElement>(`#${item.id}`))
     .filter((el): el is HTMLElement => el !== null);
+
+const pickActiveId = (headings: readonly HTMLElement[]): string | null => {
+  const line = window.innerHeight * PICK_REFERENCE_LINE;
+  let current: string | null = null;
+
+  for (const heading of headings) {
+    if (heading.getBoundingClientRect().top <= line) {
+      current = heading.id;
+    } else {
+      break;
+    }
+  }
+
+  const atBottom =
+    window.innerHeight + window.scrollY >=
+    document.documentElement.scrollHeight - 2;
+  if (current === null && atBottom) {
+    current = headings.at(-1)?.id ?? null;
+  }
+
+  return current;
+};
 
 const useActiveSection = (items: readonly PostTocItem[]): string | null => {
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
-    const sections = selectSections(items);
-    const visible = new Map<string, number>();
+    const headings = findHeadingEls(items);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            visible.set(entry.target.id, entry.intersectionRatio);
-          } else {
-            visible.delete(entry.target.id);
-          }
-        }
+    let frame: number | null = null;
 
-        let best: string | null = null;
-        let bestRatio = 0;
+    const update = (): void => {
+      frame = null;
+      setActiveId(pickActiveId(headings));
+    };
 
-        for (const [id, ratio] of visible) {
-          if (ratio > bestRatio) {
-            bestRatio = ratio;
-            best = id;
-          }
-        }
+    const schedule = (): void => {
+      frame ??= requestAnimationFrame(update);
+    };
 
-        setActiveId(best);
-      },
-      {
-        rootMargin: "-10% 0px -80% 0px",
-        threshold: [0, 0.25, 0.5, 1],
-      },
-    );
-
-    for (const section of sections) {
-      observer.observe(section);
-    }
+    if (headings.length > 0) update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
 
     return () => {
-      observer.disconnect();
+      if (frame !== null) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
     };
   }, [items]);
 
