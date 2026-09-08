@@ -7,6 +7,9 @@ const config: NextConfig = {
     unoptimized: true,
   },
   reactStrictMode: true,
+  turbopack: {
+    root: import.meta.dirname,
+  },
 };
 
 export default config;
