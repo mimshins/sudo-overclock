@@ -31,13 +31,11 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
 - [x] Create compiler CLI/script
   - [x] Build script to process `/content/raw/**/*.md`
   - [x] Output structured data to `/content/compiled`
-  - [ ] Add file watching for development
   - [x] Integrate with build process (`prebuild`)
 - [x] Write compiler tests
   - [x] Unit tests for individual plugins (slug, reading time)
   - [x] Integration tests for full pipeline
   - [x] Heading anchors + table of contents
-  - [ ] Snapshot tests for output format
 
 ## Phase 3: Core Application
 
@@ -94,23 +92,17 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
   - [ ] Optimize images (next/image or custom solution)
   - [ ] Code splitting analysis
   - [ ] Minimize bundle size
-  - [ ] Add performance monitoring
 - [ ] Accessibility
   - [ ] Run accessibility audit
   - [ ] Fix ARIA labels and roles
   - [ ] Ensure keyboard navigation
-  - [ ] Test with screen readers
 - [ ] Dark mode
   - [ ] Implement theme toggle
   - [ ] Create dark mode color tokens
   - [ ] Update all components for dark mode
 
-## Phase 6: Testing & Documentation
+## Phase 6: Documentation & CI/CD
 
-- [ ] Comprehensive testing
-  - [ ] Achieve target code coverage
-  - [ ] Add visual regression tests (optional)
-  - [ ] Test on multiple browsers
 - [ ] Documentation
   - [ ] Document content authoring workflow
   - [ ] Create component documentation
@@ -118,7 +110,7 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
   - [ ] Update README with deployment instructions
 - [ ] CI/CD setup
   - [ ] Set up GitHub Actions (or similar)
-  - [ ] Automate linting and testing
+  - [ ] Automate code static analysis
   - [ ] Automate deployment
 
 ## Phase 7: Deployment
@@ -126,8 +118,6 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
 - [ ] Choose hosting platform (Vercel, Netlify, Cloudflare Pages, etc.)
 - [ ] Configure deployment settings
 - [ ] Set up custom domain
-- [ ] Configure analytics (optional)
-- [ ] Set up monitoring and error tracking
 
 ## Ongoing Maintenance
 
