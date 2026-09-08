@@ -1,5 +1,5 @@
 import { blogServices } from "@repo/modules/blog/presentation/blog-module";
-import { PostList } from "@repo/modules/blog/presentation/post-list";
+import { PostFilter } from "@repo/modules/blog/presentation/post-filter";
 import { Heading } from "@repo/shared/ui/heading";
 
 import styles from "./blog.module.css";
@@ -11,6 +11,7 @@ export const metadata = {
 
 const BlogPage = () => {
   const posts = blogServices.listPosts();
+  const tags = blogServices.listTags();
 
   return (
     <main className={styles.main} data-slot="blog">
@@ -22,7 +23,7 @@ const BlogPage = () => {
       <Heading as="h1" size="h1" glow className={styles.title}>
         blog
       </Heading>
-      <PostList posts={posts} className={styles.list} />
+      <PostFilter posts={posts} tags={tags} className={styles.list} />
     </main>
   );
 };

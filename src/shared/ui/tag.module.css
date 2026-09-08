@@ -1,0 +1,37 @@
+.tag {
+  --tag-color: var(--color-foreground-secondary);
+  --tag-border-color: var(--color-border-primary);
+  --tag-background: transparent;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  border: 1px solid var(--tag-border-color);
+  border-radius: var(--radius-full);
+  background-color: var(--tag-background);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--tag-color);
+  text-decoration: none;
+  transition:
+    color var(--duration-fast) var(--easing-standard),
+    border-color var(--duration-fast) var(--easing-standard),
+    background-color var(--duration-fast) var(--easing-standard);
+}
+
+.tag:where(button) {
+  cursor: pointer;
+}
+
+.tag:hover {
+  --tag-color: var(--color-phosphor);
+  --tag-border-color: var(--color-phosphor);
+}
+
+.active {
+  --tag-color: var(--color-on-phosphor);
+  --tag-border-color: var(--color-phosphor);
+  --tag-background: var(--color-phosphor);
+}

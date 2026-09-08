@@ -755,6 +755,7 @@
     font-family: var(--typography-typeface-ltr);
     font-size: var(--typography-body1-size);
     line-height: var(--typography-body1-leading);
+    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

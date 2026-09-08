@@ -46,7 +46,7 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
 - [x] Implement homepage
   - [x] List all blog posts (blog index at `/blog`)
   - [x] Display post metadata (title, date, excerpt)
-  - [ ] Add filtering/sorting functionality
+  - [x] Add filtering/sorting functionality
 - [x] Implement blog post page
   - [x] Dynamic route for `[slug]` (`/blog/posts/[slug]`)
   - [x] Render compiled markdown content
@@ -56,30 +56,31 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
   - [x] Navigation component (site header)
   - [x] Footer component
   - [x] Post card component (post list)
-  - [ ] Tag/category components
-- [ ] Additional pages
+  - [x] Post card component (post list)
+  - [x] Tag/category components
+- [x] Additional pages
   - [x] `/blog` index
-  - [ ] `/about` bio + resume
-  - [ ] `/reading` reading list
-  - [ ] `/` home (to design)
+  - [x] `/about` bio + resume (stub)
+  - [x] `/reading` reading list (stub)
+  - [x] `/` home (stub)
 
 ## Phase 4: Content Features
 
 - [x] Syntax highlighting
   - [x] Configure code block styling
   - [ ] Add language-specific themes
-  - [ ] Add copy-to-clipboard functionality
+  - [x] Add copy-to-clipboard functionality
 - [x] Table of contents
   - [x] Generate TOC from headings
-  - [ ] Add smooth scroll navigation
+  - [x] Add smooth scroll navigation
   - [x] Highlight active section
 - [x] Reading time estimation
   - [x] Calculate during compilation
   - [x] Display on post pages
-- [ ] Tag/category system
-  - [ ] Extract tags from frontmatter
-  - [ ] Create tag index pages
-  - [ ] Add tag filtering on homepage
+- [x] Tag/category system
+  - [x] Extract tags from frontmatter
+  - [x] Create tag index pages
+  - [x] Add tag filtering on homepage
 
 ## Phase 5: Polish & Optimization
 

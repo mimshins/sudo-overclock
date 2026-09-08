@@ -1,4 +1,5 @@
 import { blogServices } from "@repo/modules/blog/presentation/blog-module";
+import { CodeCopy } from "@repo/modules/blog/presentation/code-copy";
 import { PostBody } from "@repo/modules/blog/presentation/post-body";
 import { PostHeader } from "@repo/modules/blog/presentation/post-header";
 import { TableOfContents } from "@repo/modules/blog/presentation/table-of-contents";
@@ -37,6 +38,7 @@ const PostPage = async ({ params }: PostPageProps) => {
       <article className={styles.article} data-slot="post-article">
         <PostHeader post={post} />
         <PostBody html={post.body} />
+        <CodeCopy />
       </article>
       <aside className={styles.aside} data-slot="post-aside">
         <Caption variant="muted" className={styles.tocTitle}>
