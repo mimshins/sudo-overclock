@@ -3,6 +3,7 @@
 import { cx } from "@repo/shared/lib/cx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import styles from "./site-header.module.css";
 
@@ -16,8 +17,80 @@ const NAV_LINKS = [
 const isActive = (pathname: string, href: string): boolean =>
   href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+type NavLinksProps = {
+  readonly pathname: string;
+  readonly onNavigate: () => void;
+};
+
+const NavLinks = ({ pathname, onNavigate }: NavLinksProps) => (
+  <>
+    {NAV_LINKS.map(link => {
+      const active = isActive(pathname, link.href);
+      return (
+        <Link
+          key={link.href}
+          href={link.href}
+          aria-current={active ? "page" : undefined}
+          className={cx(styles.link, active && styles.active)}
+          onClick={onNavigate}
+        >
+          [ {link.label} ]
+        </Link>
+      );
+    })}
+  </>
+);
+
+type MenuButtonProps = {
+  readonly open: boolean;
+  readonly onToggle: () => void;
+  readonly onClose: () => void;
+};
+
+const MenuButton = ({ open, onToggle, onClose }: MenuButtonProps) => {
+  const button = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === "Escape") {
+        onClose();
+        button.current?.focus();
+      }
+    };
+    if (open) document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open, onClose]);
+
+  return (
+    <button
+      ref={button}
+      type="button"
+      className={cx(styles.menuButton, open && styles.menuButtonOpen)}
+      aria-expanded={open}
+      aria-controls="site-nav"
+      aria-label={open ? "close menu" : "open menu"}
+      onClick={onToggle}
+    >
+      <span
+        className={styles.burgerBar}
+        aria-hidden="true"
+      />
+    </button>
+  );
+};
+
 const SiteHeader = () => {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  const toggle = useCallback((): void => {
+    setOpen(value => !value);
+  }, []);
+  const close = useCallback((): void => {
+    setOpen(false);
+  }, []);
 
   return (
     <header
@@ -34,24 +107,21 @@ const SiteHeader = () => {
         >
           sudo-overclock
         </Link>
+        <MenuButton
+          open={open}
+          onToggle={toggle}
+          onClose={close}
+        />
         <nav
-          className={styles.nav}
+          id="site-nav"
+          className={cx(styles.nav, open && styles.navOpen)}
           aria-label="primary"
           data-slot="site-nav"
         >
-          {NAV_LINKS.map(link => {
-            const active = isActive(pathname, link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={active ? "page" : undefined}
-                className={cx(styles.link, active && styles.active)}
-              >
-                [ {link.label} ]
-              </Link>
-            );
-          })}
+          <NavLinks
+            pathname={pathname}
+            onNavigate={close}
+          />
         </nav>
       </div>
     </header>

@@ -51,3 +51,96 @@
   text-shadow: 0 0 calc(4px * var(--phosphor-glow-strength))
     var(--color-phosphor-glow);
 }
+
+.menuButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-none);
+  background: transparent;
+  color: var(--color-phosphor);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--easing-standard),
+    color var(--duration-fast) var(--easing-standard);
+}
+
+.menuButton:hover {
+  border-color: var(--color-phosphor);
+}
+
+.burgerBar,
+.burgerBar::before,
+.burgerBar::after {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: currentColor;
+}
+
+.burgerBar {
+  position: relative;
+}
+
+.burgerBar::before {
+  position: absolute;
+  top: -6px;
+  left: 0;
+}
+
+.burgerBar::after {
+  position: absolute;
+  top: 6px;
+  left: 0;
+}
+
+.menuButtonOpen .burgerBar::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.menuButtonOpen .burgerBar::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+.menuButtonOpen .burgerBar {
+  background: transparent;
+}
+
+@media (max-width: 640px) {
+  .inner {
+    flex-wrap: wrap;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .menuButton {
+    display: inline-flex;
+  }
+
+  .nav {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-xxs);
+    flex-basis: 100%;
+    order: 3;
+    border-top: 1px solid
+      color-mix(in srgb, var(--color-border-primary) 60%, transparent);
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+  }
+
+  .navOpen {
+    display: flex;
+  }
+
+  .link {
+    display: block;
+    padding: var(--spacing-xxs) var(--spacing-xs);
+  }
+}

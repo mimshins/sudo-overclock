@@ -45,3 +45,9 @@
   flex-wrap: wrap;
   gap: var(--spacing-sm);
 }
+
+@media (max-width: 640px) {
+  .main {
+    padding-inline: var(--spacing-md);
+  }
+}

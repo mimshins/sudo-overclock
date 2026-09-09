@@ -102,11 +102,12 @@ const History = () => (
 
 const AboutPage = () => (
   <main
+    id="main"
     className={`${styles.main} noise`}
     data-slot="about"
   >
     <PhosphorField
-      src="/about/bg.png"
+      src="/about/bg.jpg"
       glowOnHover={false}
     />
     <div

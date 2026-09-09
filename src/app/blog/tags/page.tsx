@@ -10,11 +10,32 @@ export const metadata = {
   description: "All tags across blog posts.",
 };
 
+const TagItem = ({ tag }: { readonly tag: string }) => {
+  const count = blogServices.listPostsByTag(tag).length;
+
+  return (
+    <li
+      key={tag}
+      className={styles.item}
+      data-slot="tag-index-item"
+    >
+      <Link
+        href={`/blog/tags/${tag}/`}
+        className={styles.link}
+      >
+        <Tag>{tag}</Tag>
+        <span className={styles.count}>[ {count} ]</span>
+      </Link>
+    </li>
+  );
+};
+
 const TagsPage = () => {
   const tags = blogServices.listTags();
 
   return (
     <main
+      id="main"
       className={styles.main}
       data-slot="tags"
     >
@@ -38,24 +59,12 @@ const TagsPage = () => {
         className={styles.list}
         data-slot="tag-index"
       >
-        {tags.map(tag => {
-          const count = blogServices.listPostsByTag(tag).length;
-          return (
-            <li
-              key={tag}
-              className={styles.item}
-              data-slot="tag-index-item"
-            >
-              <Link
-                href={`/blog/tags/${tag}/`}
-                className={styles.link}
-              >
-                <Tag>{tag}</Tag>
-                <span className={styles.count}>[ {count} ]</span>
-              </Link>
-            </li>
-          );
-        })}
+        {tags.map(tag => (
+          <TagItem
+            key={tag}
+            tag={tag}
+          />
+        ))}
       </ul>
     </main>
   );

@@ -147,8 +147,30 @@
 }
 
 .review {
-  margin: var(--spacing-md) 0 0;
+  margin: var(--spacing-xxs) 0 0;
   font-size: var(--typography-body2-size);
   line-height: var(--typography-body2-leading);
   color: var(--color-foreground-secondary);
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding-inline: var(--spacing-md);
+  }
+
+  .book {
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+  }
+
+  .coverFrame {
+    width: 72px;
+    height: 108px;
+  }
+}
+
+@media (max-width: 400px) {
+  .coverFrame {
+    display: none;
+  }
 }

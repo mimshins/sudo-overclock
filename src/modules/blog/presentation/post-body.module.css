@@ -237,3 +237,26 @@
   border: 1px solid var(--color-border-primary);
   border-radius: var(--radius-sm);
 }
+
+/* --- Responsive headings -------------------------------------------------- */
+@media (max-width: 640px) {
+  .prose :global(h1) {
+    font-size: var(--typography-h2-size);
+    line-height: var(--typography-h2-leading);
+  }
+
+  .prose :global(h2) {
+    font-size: var(--typography-h3-size);
+    line-height: var(--typography-h3-leading);
+  }
+
+  .prose :global(h3) {
+    font-size: var(--typography-h4-size);
+    line-height: var(--typography-h4-leading);
+  }
+
+  .prose :global(h4) {
+    font-size: var(--typography-h5-size);
+    line-height: var(--typography-h5-leading);
+  }
+}

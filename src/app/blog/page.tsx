@@ -16,11 +16,12 @@ const BlogPage = () => {
 
   return (
     <main
+      id="main"
       className={`${styles.main} noise`}
       data-slot="blog"
     >
       <PhosphorField
-        src="/blog/bg.png"
+        src="/blog/bg.jpg"
         glowOnHover={false}
       />
       <div

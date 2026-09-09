@@ -87,11 +87,12 @@ const BookSection = ({
 
 const ReadingPage = () => (
   <main
+    id="main"
     className={`${styles.main} noise`}
     data-slot="reading"
   >
     <PhosphorField
-      src="/reading/bg.png"
+      src="/reading/bg.jpg"
       glowOnHover={false}
     />
     <div

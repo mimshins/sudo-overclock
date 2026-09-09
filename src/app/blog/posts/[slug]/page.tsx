@@ -35,6 +35,7 @@ const PostPage = async ({ params }: PostPageProps) => {
 
   return (
     <main
+      id="main"
       className={styles.main}
       data-slot="post"
     >

@@ -1,22 +1,46 @@
 import type { ReactNode } from "react";
 
 import { SiteFooter } from "./site-footer.tsx";
+import { SiteHeader } from "./site-header.tsx";
 
 import "./globals.css";
 
-import { SiteHeader } from "./site-header.tsx";
+import {
+  AUTHOR_NAME,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+  TWITTER_HANDLE,
+} from "./site.ts";
 
 export const metadata = {
-  title: "sudo-overclock",
-  description: "Engineering blog of @mimshins (Mostafa Shamsitabar)",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_NAME,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: AUTHOR_NAME }],
+  creator: AUTHOR_NAME,
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_US",
+    title: {
+      default: SITE_NAME,
+    },
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary",
+    creator: TWITTER_HANDLE,
+  },
 };
 
+// Dark-only: pin the CRT theme regardless of system preference.
 const THEME_INIT_SCRIPT = `(() => {
   try {
-    const stored = localStorage.getItem('theme');
-    const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const theme = stored === 'dark' || stored === 'light' ? stored : system;
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', 'dark');
   } catch (_) {
     document.documentElement.setAttribute('data-theme', 'dark');
   }
@@ -55,6 +79,12 @@ const RootLayout = (props: RootLayoutProps): ReactNode => {
         />
       </head>
       <body>
+        <a
+          className="skip-link"
+          href="#main"
+        >
+          skip to content
+        </a>
         <SiteHeader />
         {children}
         <SiteFooter />

@@ -56,19 +56,25 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
   - [x] Navigation component (site header)
   - [x] Footer component
   - [x] Post card component (post list)
-  - [x] Post card component (post list)
   - [x] Tag/category components
 - [x] Additional pages
   - [x] `/blog` index
-  - [x] `/about` bio + resume (stub)
-  - [x] `/reading` reading list (stub)
-  - [x] `/` home (stub)
+  - [x] `/about` bio + current role + history
+  - [x] `/reading` technical reading list
+  - [x] `/` landing with interactive phosphor field
+- [x] Interactive dot-field (`PhosphorField`)
+  - [x] Extract into `shared/ui` (core / render / hover / reveal / image /
+        session)
+  - [x] Procedural mode (home) with hover glow + drift
+  - [x] Image pointillism mode for blog/about/reading backgrounds
+  - [x] Random pop-in reveal + drift, no hover glow (blog/about/reading)
+  - [x] Reduced-motion safe
 
 ## Phase 4: Content Features
 
 - [x] Syntax highlighting
   - [x] Configure code block styling
-  - [ ] Add language-specific themes
+  - [ ] Add language-specific themes (green-mono is the single deliberate theme)
   - [x] Add copy-to-clipboard functionality
 - [x] Table of contents
   - [x] Generate TOC from headings
@@ -80,27 +86,39 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
 - [x] Tag/category system
   - [x] Extract tags from frontmatter
   - [x] Create tag index pages
-  - [x] Add tag filtering on homepage
+  - [x] Add tag filtering on blog index
 
 ## Phase 5: Polish & Optimization
 
-- [ ] SEO optimization
-  - [ ] Add sitemap generation
-  - [ ] Configure robots.txt
-  - [ ] Add RSS feed
-  - [ ] Optimize meta tags
-- [ ] Performance optimization
-  - [ ] Optimize images (next/image or custom solution)
-  - [ ] Code splitting analysis
-  - [ ] Minimize bundle size
-- [ ] Accessibility
-  - [ ] Run accessibility audit
-  - [ ] Fix ARIA labels and roles
-  - [ ] Ensure keyboard navigation
-- [ ] Dark mode
-  - [ ] Implement theme toggle
-  - [ ] Create dark mode color tokens
-  - [ ] Update all components for dark mode
+- [x] Responsive layout
+  - [x] Audit large desktop / wide-viewport canvases (dot-field perf + layout)
+  - [x] Tablet breakpoints (panels, book rows, header/footer)
+  - [x] Mobile breakpoints (stack covers, cards, nav)
+  - [x] Touch/no-hover behavior for the dot fields
+  - note: initial pass — no horizontal overflow at 390/768/1280 across all
+    routes; small-screen padding/gap pass done
+- [x] SEO optimization
+  - [x] Add sitemap generation
+  - [x] Configure robots.txt
+  - [x] Add RSS feed
+  - [x] Optimize meta tags (OG/Twitter defaults + per page)
+- [x] Performance optimization
+  - [x] Optimize images — mosaic backgrounds re-encoded to JPEG
+    (~5MB → ~1.2MB total); book covers already small + lazy-loaded
+  - [x] Code splitting analysis — React/BaseUI framework chunks dominate;
+    per-route app chunks are small (~12–16KB)
+  - [x] Minimize bundle size (see analysis; revisit if routes grow heavy)
+- [x] Accessibility
+  - [x] Run accessibility audit (axe-core across all routes)
+  - [x] Fix ARIA labels and roles (skip link, burger `aria-expanded`/controls,
+    footer contrast fix)
+  - [x] Ensure keyboard navigation (skip-to-content, menu closes on Esc with
+    focus return to the trigger)
+  - note: 0 axe violations across all routes
+- [x] Theme: dark mode only (chosen)
+  - [x] Dark color tokens
+  - [x] Theme toggle intentionally dropped — boot script pins
+        `data-theme="dark"` regardless of system preference
 
 ## Phase 6: Documentation & CI/CD
 
@@ -122,7 +140,7 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
 
 ## Ongoing Maintenance
 
-- [ ] Write first blog post
+- [ ] Write first real blog post
 - [ ] Establish content publishing workflow
 - [ ] Monitor performance metrics
 - [ ] Gather feedback and iterate

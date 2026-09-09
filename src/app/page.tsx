@@ -5,20 +5,25 @@ import { LinkButton } from "./link-button.tsx";
 
 import styles from "./page.module.css";
 
+const HomeLeader = () => (
+  <div
+    className={styles.leader}
+    data-slot="leader"
+  >
+    <span className={styles.leaderDash}>&mdash;&mdash;</span>
+    <span className={styles.leaderText}>home.sh</span>
+    <span className={styles.leaderDash}>&mdash;&mdash;</span>
+  </div>
+);
+
 const HomePage = () => (
   <main
+    id="main"
     className={`${styles.main} noise`}
     data-slot="home"
   >
     <PhosphorField />
-    <div
-      className={styles.leader}
-      data-slot="leader"
-    >
-      <span className={styles.leaderDash}>&mdash;&mdash;</span>
-      <span className={styles.leaderText}>home.sh</span>
-      <span className={styles.leaderDash}>&mdash;&mdash;</span>
-    </div>
+    <HomeLeader />
     <Heading
       as="h1"
       size="h1"

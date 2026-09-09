@@ -35,3 +35,9 @@
   max-width: var(--container-narrow);
   margin-top: var(--spacing-md);
 }
+
+@media (max-width: 640px) {
+  .main {
+    padding-inline: var(--spacing-md);
+  }
+}

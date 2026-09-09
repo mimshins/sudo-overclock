@@ -24,7 +24,7 @@
 }
 
 .ascii {
-  color: var(--color-foreground-muted);
+  color: var(--color-foreground-secondary);
 }
 
 .socials {
@@ -33,4 +33,18 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--spacing-xxs);
+}
+
+@media (max-width: 640px) {
+  .inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .socials {
+    justify-content: center;
+  }
 }

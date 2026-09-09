@@ -28,6 +28,7 @@ const TagPage = async ({ params }: TagPageProps) => {
 
   return (
     <main
+      id="main"
       className={styles.main}
       data-slot="tag"
     >
