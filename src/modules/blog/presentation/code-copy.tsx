@@ -71,7 +71,7 @@ const CodeCopy = () => {
     const blocks = Array.from(
       document.querySelectorAll<HTMLElement>('[data-slot="post-body"] pre'),
     );
-    const teardowns = blocks.map((block) => attachCopyButton(block));
+    const teardowns = blocks.map(block => attachCopyButton(block));
 
     return () => {
       for (const teardown of teardowns) teardown();

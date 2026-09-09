@@ -10,7 +10,7 @@ type TagPageProps = {
 };
 
 export const generateStaticParams = () =>
-  blogServices.listTags().map((tag) => ({ tag }));
+  blogServices.listTags().map(tag => ({ tag }));
 
 export const generateMetadata = async ({ params }: TagPageProps) => {
   const { tag } = await params;
@@ -27,16 +27,30 @@ const TagPage = async ({ params }: TagPageProps) => {
   if (posts.length === 0) notFound();
 
   return (
-    <main className={styles.main} data-slot="tag">
-      <div className={styles.leader} data-slot="leader">
+    <main
+      className={styles.main}
+      data-slot="tag"
+    >
+      <div
+        className={styles.leader}
+        data-slot="leader"
+      >
         <span className={styles.leaderDash}>&mdash;&mdash;</span>
         <span className={styles.leaderText}>tag: {tag}</span>
         <span className={styles.leaderDash}>&mdash;&mdash;</span>
       </div>
-      <Heading as="h1" size="h1" glow className={styles.title}>
+      <Heading
+        as="h1"
+        size="h1"
+        glow
+        className={styles.title}
+      >
         #{tag}
       </Heading>
-      <PostList posts={posts} className={styles.list} />
+      <PostList
+        posts={posts}
+        className={styles.list}
+      />
     </main>
   );
 };

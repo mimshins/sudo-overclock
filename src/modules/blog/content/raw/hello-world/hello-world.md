@@ -59,8 +59,8 @@ Unordered lists nest, and each level keeps its own marker:
 
 Blockquotes get a phosphor rail so they read as spoken, not authored:
 
-> Compilers are the closest thing software has to a mirror — they show you
-> what you actually wrote, not what you meant to write.
+> Compilers are the closest thing software has to a mirror — they show you what
+> you actually wrote, not what you meant to write.
 
 Quote inside a quote keeps its own rail:
 

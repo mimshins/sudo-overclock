@@ -38,12 +38,21 @@ const Toolbar = ({
   onSelectTag,
   onToggleOrder,
 }: ToolbarProps) => (
-  <div className={styles.toolbar} data-slot="post-filter-toolbar">
-    <div className={styles.tags} data-slot="post-filter-tags">
-      <Tag active={activeTag === ALL_TAGS} onClick={onSelectAll}>
+  <div
+    className={styles.toolbar}
+    data-slot="post-filter-toolbar"
+  >
+    <div
+      className={styles.tags}
+      data-slot="post-filter-tags"
+    >
+      <Tag
+        active={activeTag === ALL_TAGS}
+        onClick={onSelectAll}
+      >
         all
       </Tag>
-      {tags.map((tag) => (
+      {tags.map(tag => (
         <Tag
           key={tag}
           active={activeTag === tag}
@@ -88,18 +97,21 @@ const PostFilter = ({ posts, tags, className }: PostFilterProps) => {
   }, []);
 
   const toggleOrder = useCallback(() => {
-    setOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
+    setOrder(prev => (prev === "newest" ? "oldest" : "newest"));
   }, []);
 
   const visiblePosts = sortSummaries(
     activeTag === ALL_TAGS
       ? posts
-      : posts.filter((post) => post.tags.includes(activeTag)),
+      : posts.filter(post => post.tags.includes(activeTag)),
     order,
   );
 
   return (
-    <div className={cx(styles.filter, className)} data-slot="post-filter">
+    <div
+      className={cx(styles.filter, className)}
+      data-slot="post-filter"
+    >
       <Toolbar
         tags={tags}
         activeTag={activeTag}

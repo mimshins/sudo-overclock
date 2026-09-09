@@ -33,7 +33,7 @@ describe("createBlogServices", () => {
     });
 
     assert.deepEqual(
-      services.listPosts().map((post) => post.id),
+      services.listPosts().map(post => post.id),
       ["new", "old"],
     );
   });
@@ -58,7 +58,7 @@ describe("createBlogServices", () => {
     });
 
     assert.deepEqual(
-      services.listPostsByTag("meta").map((post) => post.id),
+      services.listPostsByTag("meta").map(post => post.id),
       ["meta-post"],
     );
   });

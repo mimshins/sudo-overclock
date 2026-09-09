@@ -22,21 +22,34 @@ type PostListProps = {
 const PostList = ({ posts, className }: PostListProps) => {
   if (posts.length === 0) {
     return (
-      <p className={cx(styles.empty, className)} data-slot="empty">
+      <p
+        className={cx(styles.empty, className)}
+        data-slot="empty"
+      >
         no posts yet
       </p>
     );
   }
 
   return (
-    <ul className={cx(styles.list, className)} data-slot="post-list">
-      {posts.map((post) => (
-        <li key={post.id} className={styles.item} data-slot="post-list-item">
+    <ul
+      className={cx(styles.list, className)}
+      data-slot="post-list"
+    >
+      {posts.map(post => (
+        <li
+          key={post.id}
+          className={styles.item}
+          data-slot="post-list-item"
+        >
           <Link
             href={`/blog/posts/${post.slug}/`}
             className={styles.link}
           >
-            <div className={styles.header} data-slot="post-card-header">
+            <div
+              className={styles.header}
+              data-slot="post-card-header"
+            >
               <h2 className={styles.title}>{post.title}</h2>
               <span className={styles.meta}>
                 {post.date} &middot; {post.readingTimeMinutes} min
@@ -46,8 +59,11 @@ const PostList = ({ posts, className }: PostListProps) => {
               <span className={styles.description}>{post.description}</span>
             )}
             {post.tags.length > 0 && (
-              <span className={styles.tags} data-slot="post-card-tags">
-                {post.tags.map((tag) => (
+              <span
+                className={styles.tags}
+                data-slot="post-card-tags"
+              >
+                {post.tags.map(tag => (
                   <Tag key={tag}>{tag}</Tag>
                 ))}
               </span>

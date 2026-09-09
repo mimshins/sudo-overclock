@@ -31,9 +31,124 @@
   text-align: center;
 }
 
-.note {
-  font-size: var(--typography-body2-size);
-  color: var(--color-foreground-secondary);
+.body {
+  width: 100%;
+  max-width: var(--container-narrow);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-lg);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.sectionHead {
   margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--typography-caption-size);
+  font-weight: var(--typography-caption-weight);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.sectionDash {
+  color: var(--color-foreground-muted);
+}
+
+.sectionLabel {
+  color: var(--color-phosphor);
+}
+
+.books {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.book {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  border: 1px solid
+    color-mix(in srgb, var(--color-border-primary) 60%, transparent);
+  border-radius: var(--radius-none);
+  background-color: color-mix(
+    in srgb,
+    var(--color-background-elevated) 48%,
+    transparent
+  );
+  -webkit-backdrop-filter: blur(8px) saturate(1.4);
+  backdrop-filter: blur(8px) saturate(1.4);
+  padding: var(--spacing-md);
+}
+
+.coverFrame {
+  position: relative;
+  flex: 0 0 auto;
+  width: 96px;
+  height: 144px;
+  background-color: color-mix(
+    in srgb,
+    var(--color-foreground-tertiary) 12%,
+    transparent
+  );
+}
+
+.coverFallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--typography-h3-size);
+  color: var(--color-foreground-tertiary);
   letter-spacing: 0.05em;
+  padding: var(--spacing-xs);
+  text-align: center;
+}
+
+.cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bookBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+  min-width: 0;
+}
+
+.bookTitle {
+  margin: 0;
+  font-size: var(--typography-subheading2-size);
+  line-height: var(--typography-subheading2-leading);
+  font-weight: 500;
+}
+
+.bookAuthors {
+  margin: 0;
+  font-size: var(--typography-caption-size);
+  line-height: var(--typography-caption-leading);
+  color: var(--color-foreground-tertiary);
+  letter-spacing: 0.05em;
+}
+
+.review {
+  margin: var(--spacing-md) 0 0;
+  font-size: var(--typography-body2-size);
+  line-height: var(--typography-body2-leading);
+  color: var(--color-foreground-secondary);
 }

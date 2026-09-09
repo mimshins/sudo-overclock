@@ -45,7 +45,7 @@ const createBlogServices = (
 
   return {
     listPosts: () => sortSummaries(contentRepository.getAllPostSummaries()),
-    getPost: (slug) => contentRepository.getPostBySlug(slug),
+    getPost: slug => contentRepository.getPostBySlug(slug),
     listTags: () => {
       const tags = new Set<string>();
       for (const summary of contentRepository.getAllPostSummaries()) {
@@ -53,11 +53,11 @@ const createBlogServices = (
       }
       return [...tags].toSorted((a, b) => a.localeCompare(b));
     },
-    listPostsByTag: (tag) =>
+    listPostsByTag: tag =>
       sortSummaries(
         contentRepository
           .getAllPostSummaries()
-          .filter((summary) => summary.tags.includes(tag)),
+          .filter(summary => summary.tags.includes(tag)),
       ),
   };
 };

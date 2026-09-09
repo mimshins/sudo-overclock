@@ -28,7 +28,7 @@ const PICK_REFERENCE_LINE = 0.3;
 
 const findHeadingEls = (items: readonly PostTocItem[]): HTMLElement[] =>
   items
-    .map((item) => document.querySelector<HTMLElement>(`#${item.id}`))
+    .map(item => document.querySelector<HTMLElement>(`#${item.id}`))
     .filter((el): el is HTMLElement => el !== null);
 
 const pickActiveId = (headings: readonly HTMLElement[]): string | null => {
@@ -95,8 +95,11 @@ const TableOfContents = ({ items, className }: TableOfContentsProps) => {
       aria-label="table of contents"
       data-slot="toc"
     >
-      <ol className={styles.list} data-slot="toc-list">
-        {items.map((item) => (
+      <ol
+        className={styles.list}
+        data-slot="toc-list"
+      >
+        {items.map(item => (
           <li
             key={item.id}
             className={styles.item}

@@ -8,9 +8,14 @@
  * can't cross the RSC boundary), so this thin client wrapper owns the Link.
  */
 
-import { Button, type Color, type Size, type Variant } from "@repo/shared/ui/button";
-import type { ReactNode } from "react";
+import {
+  Button,
+  type Color,
+  type Size,
+  type Variant,
+} from "@repo/shared/ui/button";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 type LinkButtonProps = {
   readonly href: string;

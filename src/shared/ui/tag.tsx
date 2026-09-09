@@ -15,14 +15,22 @@ const Tag = ({ active = false, onClick, className, children }: TagProps) => {
 
   if (onClick !== undefined) {
     return (
-      <button type="button" onClick={onClick} className={classes} data-slot="tag">
+      <button
+        type="button"
+        onClick={onClick}
+        className={classes}
+        data-slot="tag"
+      >
         {children}
       </button>
     );
   }
 
   return (
-    <span className={classes} data-slot="tag">
+    <span
+      className={classes}
+      data-slot="tag"
+    >
       {children}
     </span>
   );

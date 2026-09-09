@@ -40,13 +40,19 @@ const RootLayout = (props: RootLayoutProps): ReactNode => {
     >
       <head>
         <script dangerouslySetInnerHTML={themeScriptProp} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin=""
         />
-        <link rel="stylesheet" href={fontLinkHref} />
+        <link
+          rel="stylesheet"
+          href={fontLinkHref}
+        />
       </head>
       <body>
         <SiteHeader />

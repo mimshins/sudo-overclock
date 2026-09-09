@@ -16,8 +16,16 @@
   flex-direction: column;
   gap: var(--spacing-xs);
   padding: var(--spacing-md);
-  border: 1px solid var(--color-border-primary);
+  border: 1px solid
+    color-mix(in srgb, var(--color-border-primary) 80%, transparent);
   border-radius: var(--radius-none);
+  background-color: color-mix(
+    in srgb,
+    var(--color-background-elevated) 78%,
+    transparent
+  );
+  -webkit-backdrop-filter: blur(6px) saturate(1.5);
+  backdrop-filter: blur(6px) saturate(1.5);
   color: var(--color-foreground);
   text-decoration: none;
   transition:
@@ -27,7 +35,11 @@
 
 .link:hover {
   border-color: var(--color-phosphor);
-  background-color: var(--color-background-elevated);
+  background-color: color-mix(
+    in srgb,
+    var(--color-background-elevated) 90%,
+    transparent
+  );
 }
 
 .header {

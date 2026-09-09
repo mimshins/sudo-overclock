@@ -31,9 +31,154 @@
   text-align: center;
 }
 
-.note {
-  font-size: var(--typography-body2-size);
-  color: var(--color-foreground-secondary);
+.body {
+  width: 100%;
+  max-width: var(--container-narrow);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-md);
+}
+
+.panel {
+  border: 1px solid
+    color-mix(in srgb, var(--color-border-primary) 65%, transparent);
+  border-radius: var(--radius-none);
+  background-color: color-mix(
+    in srgb,
+    var(--color-background-elevated) 55%,
+    transparent
+  );
+  -webkit-backdrop-filter: blur(8px) saturate(1.4);
+  backdrop-filter: blur(8px) saturate(1.4);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.blockHead {
   margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--typography-caption-size);
+  font-weight: var(--typography-caption-weight);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.blockDash {
+  color: var(--color-foreground-muted);
+}
+
+.blockLabel {
+  color: var(--color-phosphor);
+}
+
+.name {
+  margin: 0;
+  font-size: var(--typography-subheading1-size);
+  line-height: var(--typography-subheading1-leading);
+  font-weight: 500;
+}
+
+.role {
+  margin: 0;
+  font-size: var(--typography-body1-size);
+  line-height: var(--typography-body1-leading);
+  color: var(--color-foreground);
+}
+
+.keywords {
+  margin: 0;
+  font-size: var(--typography-caption-size);
+  line-height: var(--typography-caption-leading);
+  color: var(--color-phosphor);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.blurb {
+  margin: var(--spacing-md) 0 0;
+  font-size: var(--typography-body2-size);
+  line-height: var(--typography-body2-leading);
+  color: var(--color-foreground-secondary);
+}
+
+.current {
+  margin: 0;
+  font-size: var(--typography-body1-size);
+  line-height: var(--typography-body1-leading);
+  color: var(--color-foreground);
+}
+
+.since {
+  margin: 0;
+  font-size: var(--typography-caption-size);
+  line-height: var(--typography-caption-leading);
+  color: var(--color-foreground-tertiary);
+  text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.projectLabel {
+  margin: var(--spacing-sm) 0 0;
+  font-size: var(--typography-caption-size);
+  line-height: var(--typography-caption-leading);
+  color: var(--color-foreground-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.projectName {
+  margin: 0;
+  font-size: var(--typography-subheading1-size);
+  line-height: var(--typography-subheading1-leading);
+  font-weight: 500;
+  color: var(--color-phosphor);
+}
+
+.projectDesc {
+  margin: 0;
+  font-size: var(--typography-body2-size);
+  line-height: var(--typography-body2-leading);
+  color: var(--color-foreground-secondary);
+}
+
+.history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.entry {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  border-top: 1px solid
+    color-mix(in srgb, var(--color-border-primary) 35%, transparent);
+}
+
+.period {
+  flex: 0 0 auto;
+  min-width: 16ch;
+  font-size: var(--typography-caption-size);
+  line-height: var(--typography-caption-leading);
+  color: var(--color-foreground-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.entryRole {
+  font-size: var(--typography-body1-size);
+  line-height: var(--typography-body1-leading);
+  color: var(--color-foreground);
+}
+
+.accent {
+  color: var(--color-phosphor);
 }

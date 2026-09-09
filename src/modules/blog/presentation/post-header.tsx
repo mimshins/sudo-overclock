@@ -16,14 +16,23 @@ type PostHeaderProps = {
 };
 
 const PostHeader = ({ post }: PostHeaderProps) => (
-  <header className={styles.header} data-slot="post-header">
-    <div className={styles.leader} data-slot="leader">
+  <header
+    className={styles.header}
+    data-slot="post-header"
+  >
+    <div
+      className={styles.leader}
+      data-slot="leader"
+    >
       <span className={styles.leaderDash}>&mdash;&mdash;</span>
       <span className={styles.leaderText}>{post.frontmatter.slug}.md</span>
       <span className={styles.leaderDash}>&mdash;&mdash;</span>
     </div>
     <h1 className={styles.title}>{post.frontmatter.title}</h1>
-    <div className={styles.meta} data-slot="post-meta">
+    <div
+      className={styles.meta}
+      data-slot="post-meta"
+    >
       <Caption variant="default">{post.frontmatter.date}</Caption>
       <Caption variant="default">{post.readingTimeMinutes} min read</Caption>
     </div>

@@ -20,13 +20,26 @@ const SiteHeader = () => {
   const pathname = usePathname();
 
   return (
-    <header className={styles.header} data-slot="site-header">
-      <div className={styles.inner} data-slot="site-header-inner">
-        <Link href="/" className={styles.brand}>
+    <header
+      className={styles.header}
+      data-slot="site-header"
+    >
+      <div
+        className={styles.inner}
+        data-slot="site-header-inner"
+      >
+        <Link
+          href="/"
+          className={styles.brand}
+        >
           sudo-overclock
         </Link>
-        <nav className={styles.nav} aria-label="primary" data-slot="site-nav">
-          {NAV_LINKS.map((link) => {
+        <nav
+          className={styles.nav}
+          aria-label="primary"
+          data-slot="site-nav"
+        >
+          {NAV_LINKS.map(link => {
             const active = isActive(pathname, link.href);
             return (
               <Link

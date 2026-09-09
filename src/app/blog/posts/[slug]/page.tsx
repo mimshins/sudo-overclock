@@ -13,7 +13,7 @@ type PostPageProps = {
 };
 
 export const generateStaticParams = () =>
-  blogServices.listPosts().map((post) => ({ slug: post.slug }));
+  blogServices.listPosts().map(post => ({ slug: post.slug }));
 
 export const generateMetadata = async ({ params }: PostPageProps) => {
   const { slug } = await params;
@@ -34,14 +34,26 @@ const PostPage = async ({ params }: PostPageProps) => {
   if (post === null) notFound();
 
   return (
-    <main className={styles.main} data-slot="post">
-      <article className={styles.article} data-slot="post-article">
+    <main
+      className={styles.main}
+      data-slot="post"
+    >
+      <article
+        className={styles.article}
+        data-slot="post-article"
+      >
         <PostHeader post={post} />
         <PostBody html={post.body} />
         <CodeCopy />
       </article>
-      <aside className={styles.aside} data-slot="post-aside">
-        <Caption variant="default" className={styles.tocTitle}>
+      <aside
+        className={styles.aside}
+        data-slot="post-aside"
+      >
+        <Caption
+          variant="default"
+          className={styles.tocTitle}
+        >
           on this page
         </Caption>
         <TableOfContents items={post.toc} />

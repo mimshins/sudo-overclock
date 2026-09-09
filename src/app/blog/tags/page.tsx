@@ -14,21 +14,42 @@ const TagsPage = () => {
   const tags = blogServices.listTags();
 
   return (
-    <main className={styles.main} data-slot="tags">
-      <div className={styles.leader} data-slot="leader">
+    <main
+      className={styles.main}
+      data-slot="tags"
+    >
+      <div
+        className={styles.leader}
+        data-slot="leader"
+      >
         <span className={styles.leaderDash}>&mdash;&mdash;</span>
         <span className={styles.leaderText}>tags.md</span>
         <span className={styles.leaderDash}>&mdash;&mdash;</span>
       </div>
-      <Heading as="h1" size="h1" glow className={styles.title}>
+      <Heading
+        as="h1"
+        size="h1"
+        glow
+        className={styles.title}
+      >
         tags
       </Heading>
-      <ul className={styles.list} data-slot="tag-index">
-        {tags.map((tag) => {
+      <ul
+        className={styles.list}
+        data-slot="tag-index"
+      >
+        {tags.map(tag => {
           const count = blogServices.listPostsByTag(tag).length;
           return (
-            <li key={tag} className={styles.item} data-slot="tag-index-item">
-              <Link href={`/blog/tags/${tag}/`} className={styles.link}>
+            <li
+              key={tag}
+              className={styles.item}
+              data-slot="tag-index-item"
+            >
+              <Link
+                href={`/blog/tags/${tag}/`}
+                className={styles.link}
+              >
                 <Tag>{tag}</Tag>
                 <span className={styles.count}>[ {count} ]</span>
               </Link>

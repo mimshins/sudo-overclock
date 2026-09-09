@@ -9,8 +9,14 @@ const SOCIAL_LINKS = [
 ] as const;
 
 const SiteFooter = () => (
-  <footer className={styles.footer} data-slot="site-footer">
-    <div className={styles.inner} data-slot="site-footer-inner">
+  <footer
+    className={styles.footer}
+    data-slot="site-footer"
+  >
+    <div
+      className={styles.inner}
+      data-slot="site-footer-inner"
+    >
       <span className={styles.copy}>
         &copy; {new Date().getFullYear()} &middot; sudo-overclock
       </span>
@@ -20,7 +26,7 @@ const SiteFooter = () => (
         aria-label="social"
         data-slot="site-socials"
       >
-        {SOCIAL_LINKS.map((social) => (
+        {SOCIAL_LINKS.map(social => (
           <Button
             key={social.label}
             as="a"

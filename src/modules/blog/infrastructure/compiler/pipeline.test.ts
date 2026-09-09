@@ -109,13 +109,7 @@ describe("heading anchors and table of contents", () => {
       "# Intro\n\n## Setup\n\n## Usage",
     );
     for (const item of toc) {
-      assert.match(
-        output,
-        new RegExp(
-          `href="#${item.id}"[^>]*>#<\\/a>`,
-          "u",
-        ),
-      );
+      assert.match(output, new RegExp(`href="#${item.id}"[^>]*>#<\\/a>`, "u"));
     }
   });
 });
