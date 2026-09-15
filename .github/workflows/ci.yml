@@ -34,6 +34,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Generated content (content/compiled/, public/posts/) is gitignored.
+      # oxlint type-aware rules import the compiled module, so it must exist
+      # before linting runs.
+      - name: Compile content
+        run: pnpm compile
+
       - name: Lint and format check
         run: pnpm check:lint
 
