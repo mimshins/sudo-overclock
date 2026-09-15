@@ -1,12 +1,13 @@
 /*
  * Site-wide constants for SEO and feeds.
  *
- * Set NEXT_PUBLIC_SITE_URL at build time (or on the host) to the final domain;
- * until then the placeholder below keeps sitemap/RSS/OG URLs well-formed.
+ * The canonical domain is the GitHub Pages custom domain. Set
+ * NEXT_PUBLIC_SITE_URL at build time to override it (used by the deploy
+ * workflow so sitemap/RSS/OG always reference the final host).
  */
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sudo-overclock.dev";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sudo-overclock.com";
 const SITE_NAME = "sudo-overclock";
 const SITE_DESCRIPTION =
   "Engineering log of @mimshins (Mostafa Shamsitabar) — platform, developer experience, and the tooling engineers build on.";

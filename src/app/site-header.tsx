@@ -1,5 +1,13 @@
 "use client";
 
+/*
+ * SiteHeader — client component.
+ *
+ * Brand, primary nav, and the small-screen menu. Active state comes from the
+ * current pathname; the menu closes on navigation and on Escape, returning
+ * focus to the toggle button.
+ */
+
 import { cx } from "@repo/shared/lib/cx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

@@ -103,17 +103,17 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
   - [x] Add RSS feed
   - [x] Optimize meta tags (OG/Twitter defaults + per page)
 - [x] Performance optimization
-  - [x] Optimize images — mosaic backgrounds re-encoded to JPEG
-    (~5MB → ~1.2MB total); book covers already small + lazy-loaded
+  - [x] Optimize images — mosaic backgrounds re-encoded to JPEG (~5MB → ~1.2MB
+        total); book covers already small + lazy-loaded
   - [x] Code splitting analysis — React/BaseUI framework chunks dominate;
-    per-route app chunks are small (~12–16KB)
+        per-route app chunks are small (~12–16KB)
   - [x] Minimize bundle size (see analysis; revisit if routes grow heavy)
 - [x] Accessibility
   - [x] Run accessibility audit (axe-core across all routes)
   - [x] Fix ARIA labels and roles (skip link, burger `aria-expanded`/controls,
-    footer contrast fix)
+        footer contrast fix)
   - [x] Ensure keyboard navigation (skip-to-content, menu closes on Esc with
-    focus return to the trigger)
+        focus return to the trigger)
   - note: 0 axe violations across all routes
 - [x] Theme: dark mode only (chosen)
   - [x] Dark color tokens
@@ -122,21 +122,30 @@ Step-by-step implementation plan for the sudo-overclock engineering blog.
 
 ## Phase 6: Documentation & CI/CD
 
-- [ ] Documentation
-  - [ ] Document content authoring workflow
-  - [ ] Create component documentation
-  - [ ] Add inline code comments
-  - [ ] Update README with deployment instructions
-- [ ] CI/CD setup
-  - [ ] Set up GitHub Actions (or similar)
-  - [ ] Automate code static analysis
-  - [ ] Automate deployment
+- [x] Documentation
+  - [x] Document content authoring workflow — `docs/authoring.md`
+  - [x] Create component documentation — `docs/components.md`
+  - [x] Add inline code comments — file-level docs across compiler +
+        presentation; filled gaps in the app shell
+  - [x] Update README with deployment instructions
+- [x] CI/CD setup
+  - [x] Set up GitHub Actions — `.github/workflows/ci.yml` (lint + test + build)
+        and `deploy.yml` (Pages deploy on `main`)
+  - [x] Automate code static analysis — `pnpm check:lint` (oxlint + oxfmt) in CI
+  - [x] Automate deployment — `actions/deploy-pages` on every `main` push
 
 ## Phase 7: Deployment
 
-- [ ] Choose hosting platform (Vercel, Netlify, Cloudflare Pages, etc.)
-- [ ] Configure deployment settings
-- [ ] Set up custom domain
+- [x] Choose hosting platform — GitHub Pages (Next.js static export to `out/`)
+- [x] Configure deployment settings
+  - deploy workflow sets `NEXT_PUBLIC_SITE_URL=https://sudo-overclock.com`;
+    build uses root-relative paths for the custom-domain apex
+  - manual one-time step: repo **Settings → Pages → Source: GitHub Actions**
+- [x] Set up custom domain — `sudo-overclock.com`
+  - GitHub ignores `CNAME` files for Actions-based Pages; the domain must be set
+    in **Settings → Pages → Custom domain**
+  - manual step: DNS apex `A` records → `185.199.108–111.153` (see README);
+    optional `www` CNAME → `mimshins.github.io`; then Enforce HTTPS
 
 ## Ongoing Maintenance
 

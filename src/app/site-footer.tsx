@@ -1,3 +1,10 @@
+/*
+ * SiteFooter — server component.
+ *
+ * Copyright line, ASCII tagline, and the social links rendered as ghost
+ * buttons over the shared Button primitive.
+ */
+
 import { Button } from "@repo/shared/ui/button";
 
 import styles from "./site-footer.module.css";
