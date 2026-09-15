@@ -20,8 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Canonical host for sitemap / robots / RSS / Open Graph URLs.
-      # Mirrors the default in src/app/site.ts (sudo-overclock.com).
-      NEXT_PUBLIC_SITE_URL: https://sudo-overclock.com
+      # Mirrors the default in src/app/site.ts (sudo-overclock.space).
+      NEXT_PUBLIC_SITE_URL: https://sudo-overclock.space
     steps:
       - name: Checkout
         uses: actions/checkout@v4

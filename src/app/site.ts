@@ -7,7 +7,7 @@
  */
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sudo-overclock.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sudo-overclock.space";
 const SITE_NAME = "sudo-overclock";
 const SITE_DESCRIPTION =
   "Engineering log of @mimshins (Mostafa Shamsitabar) — platform, developer experience, and the tooling engineers build on.";

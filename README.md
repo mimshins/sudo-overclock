@@ -120,16 +120,16 @@ custom domain is configured.
 1. **Enable Pages from Actions** Repository **Settings → Pages → Source: GitHub
    Actions**. Until this is set, the `deploy` job fails.
 
-2. **Configure the custom domain** (once `sudo-overclock.com` is pointed at
+2. **Configure the custom domain** (once `sudo-overclock.space` is pointed at
    GitHub) Repository **Settings → Pages → Custom domain**: enter
-   `sudo-overclock.com` and **Save**, then **Enforce HTTPS**.
+   `sudo-overclock.space` and **Save**, then **Enforce HTTPS**.
 
    When publishing from a custom GitHub Actions workflow GitHub ignores a
    `CNAME` file, so the domain must be set here (there is intentionally no
    `CNAME` in the repo).
 
 3. **Point DNS at GitHub Pages** at your DNS provider For the apex
-   `sudo-overclock.com` add four `A` records (or an `ALIAS`/`ANAME`):
+   `sudo-overclock.space` add four `A` records (or an `ALIAS`/`ANAME`):
 
    ```text
    185.199.108.153
@@ -146,7 +146,7 @@ custom domain is configured.
 ### Canonical URL
 
 Sitemap, robots, RSS, and Open Graph URLs are rooted at `SITE_URL` in
-`src/app/site.ts` (default `https://sudo-overclock.com`). The deploy workflow
+`src/app/site.ts` (default `https://sudo-overclock.space`). The deploy workflow
 sets `NEXT_PUBLIC_SITE_URL` explicitly; override it for any other host.
 
 ## Contributing

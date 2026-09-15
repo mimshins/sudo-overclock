@@ -60,7 +60,7 @@ Hosting is GitHub Pages. `.github/workflows/ci.yml` lints, tests, and builds on
 every push and PR; `.github/workflows/deploy.yml` builds and deploys the static
 export on every push to `main`. A commit to `main` is a deploy.
 
-CI sets `NEXT_PUBLIC_SITE_URL=https://sudo-overclock.com`; the build uses
+CI sets `NEXT_PUBLIC_SITE_URL=https://sudo-overclock.space`; the build uses
 root-relative paths for the custom-domain apex.
 
 ## Release
