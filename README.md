@@ -25,8 +25,9 @@ Engineering blog of
 
 ## Project Structure
 
-The codebase is a layered, DDD-inspired module layout. See
-[`AGENTS.md`](./AGENTS.md) for the authoritative architecture guide.
+The codebase is a layered, DDD-inspired module layout. The authoritative guide
+is [`docs/architecture.md`](./docs/architecture.md); [`AGENTS.md`](./AGENTS.md)
+is the onboarding index and lists the non-negotiable rules.
 
 ```
 src/
@@ -38,20 +39,35 @@ src/
     └── blog/
         ├── domain/         # Pure types (Post, PostSummary, ...)
         ├── application/    # Use cases + ports
-        ├── infrastructure/ # Content compiler + repository adapter
+        ├── infrastructure/ # Content compiler, repository adapter, authoring CLI
         ├── presentation/   # React components consumed by app/
         └── content/
-            ├── raw/        # Source markdown (committed)
+            ├── raw/        # Published source markdown (committed)
+            ├── drafts/     # In-progress posts (excluded from the build)
             └── compiled/   # Generated TS (gitignored, built at compile time)
-scripts/                    # Compiler entrypoint
+scripts/                    # Compiler + authoring entrypoints
 public/                     # Static assets + generated post images
+docs/                       # Architecture, design language, authoring, runbook
+.ai/                        # Agent knowledge base (memory, skills, RFCs, specs)
 ```
 
 ## Content
 
-Blog posts are authored as markdown in `src/modules/blog/content/raw/` and
-compiled at build time. See [`docs/authoring.md`](./docs/authoring.md) for the
-full authoring workflow.
+Blog posts are authored as markdown under `src/modules/blog/content/raw/` and
+compiled at build time. Writing follows a staged, human-led pipeline documented
+in
+[`.ai/skills/post-authoring/pipeline.md`](./.ai/skills/post-authoring/pipeline.md);
+drafts live in `src/modules/blog/content/drafts/<slug>/` and are excluded from
+the build.
+
+```sh
+pnpm author:new <slug>        # scaffold a draft
+pnpm author:preflight <slug>  # validate it
+pnpm author:publish <slug>    # move it into content/raw/
+```
+
+See [`docs/authoring.md`](./docs/authoring.md) for frontmatter and body rules,
+and [`docs/runbook.md`](./docs/runbook.md) for commands and troubleshooting.
 
 ## Development
 
@@ -135,8 +151,9 @@ sets `NEXT_PUBLIC_SITE_URL` explicitly; override it for any other host.
 
 ## Contributing
 
-See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and the module-boundary rules in
-[`AGENTS.md`](./AGENTS.md). Component conventions are documented in
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md). Architecture and module-boundary
+rules are in [`docs/architecture.md`](./docs/architecture.md) and
+[`AGENTS.md`](./AGENTS.md); component conventions are in
 [`docs/components.md`](./docs/components.md).
 
 ## Requirements

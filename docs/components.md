@@ -1,7 +1,9 @@
 # Component Documentation
 
 How components are organised, how to build a new one, and what already exists.
-For the authoritative architecture rules see [`AGENTS.md`](../AGENTS.md).
+For the authoritative architecture rules see
+[`docs/architecture.md`](./architecture.md); [`AGENTS.md`](../AGENTS.md) is the
+onboarding index.
 
 ## Three layers
 

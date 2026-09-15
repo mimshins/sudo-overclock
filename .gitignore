@@ -141,3 +141,6 @@ vite.config.ts.timestamp-*
 # Blog compiler output (generated at build time)
 src/modules/blog/content/compiled/
 public/posts/
+
+# Local-only AI specs (never committed)
+.ai/specs/

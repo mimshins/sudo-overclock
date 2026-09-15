@@ -2,6 +2,17 @@
 
 How to write and publish a blog post on sudo-overclock.
 
+## Writing pipeline
+
+Writing is a staged, human-led, AI-assisted process — seed → brief → research →
+outline → draft → editorial → resolve → preflight → publish. It is defined in
+[`.ai/skills/post-authoring/pipeline.md`](../.ai/skills/post-authoring/pipeline.md),
+with per-stage prompts under `.ai/skills/post-authoring/stages/` and templates
+under `.ai/templates/`.
+
+The rest of this document covers the publishing mechanics: where files live,
+frontmatter, markdown rules, and the commands that build and ship a post.
+
 ## Where posts live
 
 Source markdown lives in `src/modules/blog/content/raw/`. Give every post its
@@ -17,6 +28,21 @@ src/modules/blog/content/raw/
     hero.svg
 ```
 
+In-progress posts live in the sibling `src/modules/blog/content/drafts/<slug>/`
+directory:
+
+```
+src/modules/blog/content/drafts/my-next-post/
+  post.md        # the draft; frontmatter `stage` tracks progress
+  brief.md       # stage-1 reference
+  research.md    # stage-2 reference
+  snapshots/     # frozen outline/editorial/preflight gates
+  assets/        # co-located images
+```
+
+The compiler globs `content/raw/**` only, so drafts never reach the build.
+Publishing moves `post.md` and `assets/` out of `drafts/` and into `raw/`.
+
 Assets are resolved against the post's directory, so a post referenced as
 `![diagram](./diagram.png)` inside `my-next-post/` finds
 `my-next-post/diagram.png`. Never touch `public/` or
@@ -27,14 +53,15 @@ Assets are resolved against the post's directory, so a post referenced as
 Frontmatter is YAML between `---` fences at the top of the file. Supported
 fields:
 
-| Field         | Required | Notes                                                         |
-| ------------- | -------- | ------------------------------------------------------------- |
-| `title`       | yes      | Page `<title>` and list/header display name.                  |
-| `date`        | yes      | ISO date, `YYYY-MM-DD`. Drives sort order and sitemap.        |
-| `description` | no\*     | Meta description, list excerpt. \*Strongly recommended.       |
-| `tags`        | no       | YAML list (`- go\n- distributed-systems`) or a single string. |
-| `author`      | no       | Defaults to the site author.                                  |
-| `slug`        | no       | URL slug override. Defaults to the file's base name.          |
+| Field         | Required | Notes                                                               |
+| ------------- | -------- | ------------------------------------------------------------------- |
+| `title`       | yes      | Page `<title>` and list/header display name.                        |
+| `date`        | yes      | ISO date, `YYYY-MM-DD`. Drives sort order and sitemap.              |
+| `description` | no\*     | Meta description, list excerpt. \*Required by `author:preflight`.   |
+| `tags`        | no       | YAML list (`- go\n- distributed-systems`) or a single string.       |
+| `author`      | no       | Defaults to the site author.                                        |
+| `slug`        | no       | URL slug override. Defaults to the file's base name.                |
+| `stage`       | drafts   | Pipeline stage; stripped on publish. Not a built-in compiler field. |
 
 ```md
 ---
@@ -72,14 +99,18 @@ lower-cased with runs of non-alphanumerics collapsed to `-`
 ## Local workflow
 
 ```bash
-# 1. Compile raw markdown -> compiled content (public/posts + content/compiled)
+# 1. Scaffold a draft, write, and stage it
+pnpm author:new my-next-post
+
+# 2. Validate, then publish (moves it to content/raw/)
+pnpm author:preflight my-next-post
+pnpm author:publish my-next-post
+
+# 3. Compile raw markdown -> compiled content (public/posts + content/compiled)
 pnpm compile
 
-# 2. Preview
+# 4. Preview
 pnpm dev
-
-# 3. (optional) regenerate
-pnpm compile && pnpm dev
 ```
 
 `pnpm build` runs `pnpm compile` automatically via the `prebuild` hook, and CI
@@ -95,9 +126,12 @@ Push to `main`. The `ci` workflow lints/tests/builds every push and PR; the
 
 Compilation is orchestrated by `src/modules/blog/infrastructure/compiler/`:
 
-- `compile.ts` — walks `raw/**`, writes `compiled/index.ts`, copies images.
+- `compile.ts` — walks `raw/**`, writes `compiled/index.ts`, copies assets.
 - `pipeline.ts` — remark-parse → remark-gfm → remark-rehype → Shiki → assets →
   headings → rehype-stringify.
 - `reading-time.ts` — reading-time estimation stored on each post.
 - `headings.ts` — heading anchors, permalinks, and TOC extraction.
-- `assets.ts` — relative-image copy and `src` rewrite.
+- `assets.ts` — relative image copy and `src` rewrite.
+
+Draft scaffolding and validation live in
+`src/modules/blog/infrastructure/authoring/`, invoked by `scripts/author/*.ts`.

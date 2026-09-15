@@ -1,201 +1,87 @@
-# Contributing to Ripple | TypeScript
+# Contributing to sudo-overclock
 
-If you're reading this, you're definitely awesome! <br /> The following is a set
-of guidelines for contributing to ClientSocketManager, which are hosted in the
-[GitHub](https://github.com/Tap30/ripple-ts). These are mostly guidelines, not
-rules. Use your best judgment, and feel free to propose changes to this document
-in a pull request.
+Thanks for your interest in contributing. This is the engineering blog of
+[@mimshins](https://github.com/mimshins). Code, documentation, and content fixes
+are all welcome.
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the
-[Code of Conduct](https://github.com/Tap30/ripple-ts/blob/main/CODE_OF_CONDUCT.md).
-By participating, you are expected to uphold this code.
+This project is governed by the [Code of Conduct](./CODE_OF_CONDUCT.md). By
+participating, you are expected to uphold it.
 
-## A large spectrum of contributions
+## Before you start
 
-There are many ways to contribute, code contribution is one aspect of it. For
-instance, documentation improvements are as important as code changes.
+- Open an issue to discuss a non-trivial change before writing code, so we can
+  agree on scope.
+- Architectural or design changes follow the spec-driven workflow in
+  [`AGENTS.md`](./AGENTS.md). Routine changes, small fixes, and copy edits do
+  not.
 
-## Your first Pull Request
+## Development setup
 
-Working on your first Pull Request? You can learn how from this free video
-series:
-
-[How to Contribute to an Open Source Project on GitHub](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
-
-To help you get your feet wet and get you familiar with our contribution
-process, we have a list of
-[good first issues](https://github.com/Tap30/ripple-ts/issues?q=is:open+is:issue+label:"good+first+issue")
-that contain changes that have a relatively limited scope. This label means that
-there is already a working solution to the issue in the discussion section.
-Therefore, it is a great place to get started.
-
-We also have a list of
-[good to take issues](https://github.com/Tap30/ripple-ts/issues?q=is:open+is:issue+label:"good+to+take").
-This label is set when there has been already some discussion about the solution
-and it is clear in which direction to go. These issues are good for developers
-that want to reduce the chance of going down a rabbit hole.
-
-You can also work on any other issue you choose to. The "good first" and "good
-to take" issues are just issues where we have a clear picture about scope and
-timeline. Pull requests working on other issues or completely new problems may
-take a bit longer to review when they don't fit into our current development
-cycle.
-
-If you decide to fix an issue, please be sure to check the comment thread in
-case somebody is already working on a fix. If nobody is working on it at the
-moment, please leave a comment stating that you have started to work on it so
-other people don't accidentally duplicate your effort.
-
-If somebody claims an issue but doesn't follow up for more than a week, it's
-fine to take it over but you should still leave a comment. If there has been no
-activity on the issue for 7 to 14 days, it is safe to assume that nobody is
-working on it.
-
-## Sending a Pull Request
-
-Pull Requests are always welcome, but, before working on a large change, it is
-best to open an issue first to discuss it with the maintainers.
-
-When in doubt, keep your Pull Requests small. To give a Pull Request the best
-chance of getting accepted, don't bundle more than one feature or bug fix per
-Pull Request. It's often best to create two smaller Pull Requests than one big
-one.
-
-1. Fork the repository.
-
-2. Clone the fork to your local machine and add upstream remote:
-
-   ```sh
-   git clone https://github.com/<your username>/ripple-ts.git
-   cd ripple-ts
-   git remote add upstream https://github.com/Tap30/ripple-ts.git
-   ```
-
-3. Synchronize your local `main` branch with the upstream one:
-
-   ```sh
-   git checkout main
-   git pull upstream main
-   ```
-
-4. Install the dependencies with `pnpm` (`npm` and `yarn` aren't supported):
-
-   ```sh
-   pnpm install
-   ```
-
-5. Create a new topic branch:
-
-   ```sh
-   git switch -c my-topic-branch
-   ```
-
-6. Make changes, commit and push to your fork:
-
-   ```sh
-   git push -u origin HEAD
-   ```
-
-7. Go to [the repository](https://github.com/Tap30/ripple-ts) and make a Pull
-   Request.
-
-The core team is monitoring for Pull Requests. We will review your Pull Request
-and either merge it, request changes to it, or close it with an explanation.
-
-## Development Workflow
-
-### Project Structure
-
-For a comprehensive understanding of the project architecture, features, and
-design principles, see the
-[AI Agent Documentation](https://github.com/Tap30/ripple-ts/blob/main/AGENTS.md).
-
-### Running the Playground
-
-Start the development server to test the SDK in a browser environment:
+Requirements: Node.js `>= 24` and pnpm `10.22.0`.
 
 ```sh
-pnpm dev
+pnpm install       # install dependencies
+pnpm dev           # start the dev server
+pnpm compile       # raw markdown -> generated content
+pnpm build         # production static export (runs compile first)
+pnpm test          # unit/integration tests
+pnpm check:lint    # oxlint + oxfmt check
+pnpm format        # auto-fix formatting
 ```
 
-This runs the playground at `http://localhost:5173` with hot module replacement.
+## Project structure
 
-### Building
+The codebase is a layered, DDD-inspired module layout. The authoritative guide
+is [`docs/architecture.md`](./docs/architecture.md); [`AGENTS.md`](./AGENTS.md)
+is the onboarding index and lists the non-negotiable rules. Component
+conventions live in [`docs/components.md`](./docs/components.md).
 
-Build all packages:
+## Working on code
+
+1. Keep changes inside the layer that owns the behaviour. Inner layers never
+   import outer ones, and peer modules communicate through `application/ports/`
+   — the rules are enforced by `oxlint`.
+2. Use relative imports inside a module and aliases (`@repo/...`) across
+   packages; never add a barrel file unless an interface boundary needs one.
+3. Style with CSS Modules and semantic tokens (`var(--color-phosphor)`); never
+   inline hex outside `globals.css`.
+4. Run `pnpm check:lint` and `pnpm test` before opening a Pull Request.
+
+## Working on content
+
+Posts go through the staged authoring pipeline documented in
+[`.ai/skills/post-authoring/pipeline.md`](./.ai/skills/post-authoring/pipeline.md).
+Drafts live in `src/modules/blog/content/drafts/<slug>/`; the mechanical steps
+are:
 
 ```sh
-pnpm build
+pnpm author:new <slug>        # scaffold a draft
+pnpm author:preflight <slug>  # validate it
+pnpm author:publish <slug>    # move it into content/raw/
 ```
 
-### Testing
+Never edit `content/compiled/` or `public/posts/` by hand — both are generated.
+See [`docs/authoring.md`](./docs/authoring.md) for frontmatter and body rules,
+and [`docs/runbook.md`](./docs/runbook.md) for troubleshooting.
 
-Run all unit tests:
+## Commit messages
 
-```sh
-pnpm test:unit
-```
+- Use the present tense ("Add feature", not "Added feature") and the imperative
+  mood ("Move cursor to...", not "Moves cursor to...").
+- Keep the first line to 72 characters or less.
+- Reference issues and Pull Requests where relevant.
+- Use a conventional prefix: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`,
+  `test`, `build`, `ci`, `chore`, or `revert`.
 
-Run unit tests in watch mode:
+## Pull requests
 
-```sh
-pnpm test:unit:watch
-```
-
-Run tests for specific packages:
-
-```sh
-pnpm test:unit:workspace   # Test workspace packages only
-pnpm test:unit:internals   # Test internals only
-```
-
-### Linting and Formatting
-
-Check code quality:
-
-```sh
-pnpm check:lint     # Run all checks
-pnpm check:format   # Check formatting only
-```
-
-Auto-fix formatting:
-
-```sh
-pnpm format
-```
-
-### Coding style
-
-Please follow the coding style of the project. We use `oxfmt` and `oxlint`, so
-if possible, enable linting in your editor to get real-time feedback.
-
-### Git Commit Messages
-
-- Use the present tense ("Add feature" not "Added feature")
-- Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
-- Limit the first line to 72 characters or less
-- Reference issues and pull requests liberally after the first line
-- Please use the following commit message conventions for consistent and
-  informative commit history:
-  - **feat**: A new feature
-  - **fix**: A bug fix
-  - **docs**: Documentation only changes
-  - **style**: Changes that do not affect the meaning of the code (white-space,
-    formatting, missing semi-colons, etc)
-  - **refactor**: A code change that neither fixes a bug nor adds a feature
-  - **perf**: A code change that improves performance
-  - **test**: Adding missing or correcting existing tests
-  - **build**: Changes that affect the build system or external dependencies
-    (example scopes: gulp, broccoli, npm)
-  - **ci**: Changes to our CI configuration files and scripts (example scopes:
-    Travis, Circle, BrowserStack, SauceLabs)
-  - **chore**: Other changes that don't modify src or test files
-  - **revert**: Reverts a previous commit
+- Keep them small and focused — one feature or fix per Pull Request.
+- Describe what changed and why, and link the related issue.
+- Make sure `pnpm check:lint` and `pnpm test` pass; CI runs both plus a build.
 
 ## License
 
-By contributing your code to the `Tap30/*` GitHub repositories, you agree to
-license your contribution under the
-[MIT license](https://github.com/Tap30/ripple-ts/blob/main/LICENSE).
+By contributing, you agree that your contributions are licensed under the
+[MIT License](./LICENSE).
