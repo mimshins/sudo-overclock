@@ -9,6 +9,8 @@ tags:
 author: "Mostafa Shamsitabar"
 ---
 
+![Poster](./poster.jpg)
+
 Welcome to the first post. This blog is an engineering log — a place to write
 about systems, compilers, and the craft of building software.
 
@@ -30,6 +32,8 @@ type Post = {
 
 const render = (post: Post): string => `<article>${post.body}</article>`;
 ```
+
+![Something](./p1.png)
 
 ## A table
 
@@ -54,6 +58,8 @@ Unordered lists nest, and each level keeps its own marker:
 - Code is highlighted at build time
   - zero runtime JS
   - one Shiki theme, green-mono
+
+![Another thing](./p2.jpg)
 
 ## Quotes
 

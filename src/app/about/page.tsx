@@ -27,7 +27,7 @@ const HISTORY: readonly HistoryEntry[] = [
   },
   {
     period: "jun 2019 — may 2024",
-    role: "senior front-end engineer",
+    role: "senior front-end engineer · design system & local businesses vertical",
     company: "divar",
   },
 ];
@@ -50,7 +50,6 @@ const WhoAmI = () => (
   >
     <h2 className={styles.name}>Mostafa Shamsitabar</h2>
     <p className={styles.role}>platform &amp; software engineer</p>
-    <p className={styles.keywords}>engineering productivity</p>
     <p className={styles.blurb}>
       highly accomplished and results-driven lead/senior engineer with
       sre/platform engineer mindset and a proven track record in architecting,

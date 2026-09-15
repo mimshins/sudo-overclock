@@ -85,17 +85,10 @@
 
 .role {
   margin: 0;
-  font-size: var(--typography-body1-size);
-  line-height: var(--typography-body1-leading);
-  color: var(--color-foreground);
-}
-
-.keywords {
-  margin: 0;
-  font-size: var(--typography-caption-size);
-  line-height: var(--typography-caption-leading);
-  color: var(--color-phosphor);
   text-transform: uppercase;
+  font-size: var(--typography-body2-size);
+  line-height: var(--typography-body2-leading);
+  color: var(--color-phosphor);
   letter-spacing: 0.15em;
 }
 
