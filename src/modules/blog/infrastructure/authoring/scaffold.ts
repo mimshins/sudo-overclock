@@ -41,8 +41,8 @@ const todayIso = (): string => {
 const titleFromSlug = (slug: string): string =>
   slug
     .split("-")
-    .filter((part) => part !== "")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .filter(part => part !== "")
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
 
 const renderTemplate = (
@@ -122,14 +122,12 @@ const scaffoldDraft = async (
     { path: resolve(draftDir, "snapshots/.gitkeep"), body: "" },
   ];
 
-  await Promise.all(
-    files.map((file) => writeFile(file.path, file.body, "utf8")),
-  );
+  await Promise.all(files.map(file => writeFile(file.path, file.body, "utf8")));
 
   return {
     slug,
     draftDir,
-    files: files.map((file) => file.path),
+    files: files.map(file => file.path),
   };
 };
 

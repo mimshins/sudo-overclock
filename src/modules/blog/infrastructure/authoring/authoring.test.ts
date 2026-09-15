@@ -78,13 +78,13 @@ describe("slug and template helpers", () => {
 describe("frontmatter validation", () => {
   it("reports missing required fields", () => {
     const issues = validateFrontmatter({ stage: "ready" });
-    const messages = issues.map((issue) => issue.message).join("\n");
+    const messages = issues.map(issue => issue.message).join("\n");
     assert.match(messages, /title/u);
     assert.match(messages, /`date`/u);
     assert.match(messages, /`description`/u);
     assert.match(messages, /`tags`/u);
     assert.equal(
-      issues.every((issue) => issue.level === "error"),
+      issues.every(issue => issue.level === "error"),
       true,
     );
   });
@@ -99,7 +99,7 @@ describe("frontmatter validation", () => {
     });
     assert.equal(
       issues.some(
-        (issue) => issue.message.includes("ISO") && issue.level === "error",
+        issue => issue.message.includes("ISO") && issue.level === "error",
       ),
       true,
     );
@@ -133,7 +133,7 @@ describe("body validation", () => {
   it("warns on a leading h1", () => {
     const issues = validateBody("# Title\n\nBody.");
     assert.equal(
-      issues.some((issue) => issue.message.includes("h1")),
+      issues.some(issue => issue.message.includes("h1")),
       true,
     );
   });
@@ -141,7 +141,7 @@ describe("body validation", () => {
   it("warns on a fence without a language", () => {
     const issues = validateBody("## H\n\n```\ncode\n```");
     assert.equal(
-      issues.some((issue) => issue.message.includes("no language")),
+      issues.some(issue => issue.message.includes("no language")),
       true,
     );
   });
@@ -149,7 +149,7 @@ describe("body validation", () => {
   it("warns on an image without alt text", () => {
     const issues = validateBody("## H\n\n![](./x.png)");
     assert.equal(
-      issues.some((issue) => issue.message.includes("alt")),
+      issues.some(issue => issue.message.includes("alt")),
       true,
     );
   });
@@ -251,9 +251,7 @@ describe("scaffold, preflight, and publish", () => {
 
     const report = await preflightDraft({ context, slug: "second" });
     assert.equal(
-      report.issues.some((issue) =>
-        issue.message.includes("already publishes"),
-      ),
+      report.issues.some(issue => issue.message.includes("already publishes")),
       true,
     );
   });

@@ -39,7 +39,7 @@ const buildReport = (
   issues: readonly DraftIssue[],
 ): PreflightReport => ({
   slug,
-  ok: issues.every((issue) => issue.level !== "error"),
+  ok: issues.every(issue => issue.level !== "error"),
   issues,
 });
 
@@ -78,7 +78,7 @@ const preflightDraft = async (
 
   const imageIssues = await Promise.all(
     findImages(content)
-      .filter((image) => !EXTERNAL_SRC_PATTERN.test(image.src))
+      .filter(image => !EXTERNAL_SRC_PATTERN.test(image.src))
       .map(async (image): Promise<DraftIssue | null> => {
         const beside = resolve(context.draftsDir, slug, image.src);
         const inAssets = resolve(
@@ -113,7 +113,7 @@ const preflightDraft = async (
   const otherDirs = await listDirectoryNames(context.draftsDir);
   const collisionIssues = await Promise.all(
     otherDirs
-      .filter((other) => other !== slug)
+      .filter(other => other !== slug)
       .map(async (other): Promise<DraftIssue | null> => {
         const otherPost = resolve(context.draftsDir, other, "post.md");
         if (!(await pathExists(otherPost))) return null;
@@ -139,16 +139,14 @@ const formatPreflightReport = (report: PreflightReport): string => {
     return `preflight ${report.slug}: OK`;
   }
 
-  const errors = report.issues.filter(
-    (issue) => issue.level === "error",
-  ).length;
+  const errors = report.issues.filter(issue => issue.level === "error").length;
   const warnings = report.issues.length - errors;
   const header = `preflight ${report.slug}: ${
     report.ok ? "OK" : "FAILED"
   } (${errors} error(s), ${warnings} warning(s))`;
 
   const lines = report.issues.map(
-    (issue) =>
+    issue =>
       `  ${issue.level === "error" ? "error" : "warn "} ${issue.message}`,
   );
 

@@ -72,7 +72,7 @@ root), `src/shared/` (domain-free primitives), and `src/modules/<name>/`
   `application/ports/`; wire concrete adapters in the composition root.
 - **Inside a module, use relative imports** (`./types`, `../domain/post.ts`).
   **Inside `src/shared/**`, use aliases only** (`@repo/shared/ui/button`).
-Cross-module references go through aliases (`@repo/modules/\*`).
+  Cross-module references go through aliases (`@repo/modules/\*`).
 - **No barrel files** except where an interface boundary genuinely needs one.
 - **Files are kebab-case; component identifiers are PascalCase.**
 - **Style with CSS Modules; reference semantic tokens**

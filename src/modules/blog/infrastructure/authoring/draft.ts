@@ -67,8 +67,8 @@ const normalizeTags = (value: unknown): readonly string[] => {
   const list = Array.isArray(value) ? value : [value];
   return list
     .filter((tag): tag is string => typeof tag === "string")
-    .map((tag) => tag.trim())
-    .filter((tag) => tag !== "");
+    .map(tag => tag.trim())
+    .filter(tag => tag !== "");
 };
 
 const isKebabSlug = (value: string): boolean => KEBAB_SLUG_PATTERN.test(value);

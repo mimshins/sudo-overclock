@@ -19,8 +19,8 @@ const listDirectoryNames = async (dir: string): Promise<readonly string[]> => {
   try {
     const entries = await readdir(dir, { withFileTypes: true });
     return entries
-      .filter((entry) => entry.isDirectory())
-      .map((entry) => entry.name);
+      .filter(entry => entry.isDirectory())
+      .map(entry => entry.name);
   } catch {
     return [];
   }
@@ -43,8 +43,8 @@ const copyDirectoryContents = async (
 
   const copied = await Promise.all(
     entries
-      .filter((entry) => entry.name !== ".gitkeep")
-      .map((entry) =>
+      .filter(entry => entry.name !== ".gitkeep")
+      .map(entry =>
         cp(resolve(fromDir, entry.name), resolve(toDir, entry.name), {
           recursive: true,
         }),
