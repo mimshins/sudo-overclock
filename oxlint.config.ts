@@ -31,6 +31,7 @@ export default defineConfig({
   },
   ignorePatterns: ["dist", "out", ".next"],
   rules: {
+    "max-lines-per-function": "off",
     "no-console": "warn",
     "no-alert": "error",
     "prefer-const": "error",
