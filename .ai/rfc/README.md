@@ -61,6 +61,7 @@ alternatives → a spec alone is enough.
 
 ## Index
 
-| RFC                                      | Title                               | Status |
-| ---------------------------------------- | ----------------------------------- | ------ |
-| [001](001-ai-post-authoring-pipeline.md) | AI-Assisted Post Authoring Pipeline | Draft  |
+| RFC                                      | Title                                         | Status      |
+| ---------------------------------------- | --------------------------------------------- | ----------- |
+| [001](001-ai-post-authoring-pipeline.md) | AI-Assisted Post Authoring Pipeline           | Draft       |
+| [002](002-post-image-cls.md)             | Post Image Loading: Reserved Space + Skeleton | Implemented |

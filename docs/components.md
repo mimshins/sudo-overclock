@@ -47,6 +47,7 @@ All primitives are polymorphic where it makes sense and expose a
 | `PostList`        | server | Renders `PostSummary[]` as post cards; empty state included           |
 | `PostHeader`      | server | Post title block: slug leader, `h1`, date + reading time, description |
 | `PostBody`        | server | Prose wrapper around the compiled post HTML                           |
+| `PostImages`      | client | Wraps post images in a skeleton frame + fade-in (progressive)         |
 | `TableOfContents` | client | TOC list + scroll-spy active-section highlight                        |
 | `PostFilter`      | client | Tag filter + sort toolbar for the blog index                          |
 | `CodeCopy`        | client | Mounts copy-to-clipboard buttons on rendered Shiki blocks             |

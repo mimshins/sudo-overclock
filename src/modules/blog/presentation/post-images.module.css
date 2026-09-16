@@ -1,0 +1,49 @@
+.frame {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-background-elevated);
+  background-image: linear-gradient(
+    100deg,
+    transparent 20%,
+    color-mix(in srgb, var(--color-phosphor) 8%, transparent) 50%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: post-image-sheen 1.6s var(--easing-standard) infinite;
+}
+
+.frame[data-loaded],
+.frame[data-error] {
+  background-image: none;
+  animation: none;
+}
+
+.frame .image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: none;
+  border-radius: var(--radius-none);
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--easing-standard);
+}
+
+.frame[data-loaded] .image,
+.frame[data-error] .image {
+  opacity: 1;
+}
+
+@keyframes post-image-sheen {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}

@@ -48,6 +48,22 @@ Assets are resolved against the post's directory, so a post referenced as
 `my-next-post/diagram.png`. Never touch `public/` or
 `src/modules/blog/content/compiled/` by hand — both are generated.
 
+### Images
+
+Always write meaningful **alt text**; `pnpm author:preflight` warns when it is
+missing, and it is what screen readers announce.
+
+```md
+![A request flowing through the cache layer](./diagram.png)
+```
+
+The compiler reads each local image's intrinsic dimensions and emits `width`,
+`height`, `loading="lazy"`, and `decoding="async"` alongside the rewritten
+`src`. The reserved `width`/`height` box means images never cause cumulative
+layout shift, and the post page shows a skeleton placeholder until each image
+loads. Prefer **local** assets: external (`https://…`) and root-relative (`/…`)
+images are passed through untouched and therefore get no reserved space.
+
 ## Frontmatter
 
 Frontmatter is YAML between `---` fences at the top of the file. Supported

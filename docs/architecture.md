@@ -126,7 +126,7 @@ See [`docs/authoring.md`](./authoring.md) and
 Pipeline stages: `compile.ts` orchestrates; `pipeline.ts` runs remark-parse →
 remark-gfm → remark-rehype → Shiki → assets → headings → rehype-stringify;
 `reading-time.ts` estimates reading time; `headings.ts` adds anchors and TOC;
-`assets.ts` copies images and rewrites `src`.
+`assets.ts` copies images, reads their intrinsic dimensions, and rewrites `src`.
 
 ## Assets and Code Blocks
 
@@ -153,6 +153,15 @@ The compiler resolves `./diagram.png` against the post's directory, copies the
 file into Next.js's `public/posts/<slug>/`, and rewrites the `<img>` `src` to
 its public URL (`/posts/<slug>/diagram.png`). Authors never touch `public/`
 directly — the compiler owns that.
+
+Local images are also **enriched at build time**: the compiler reads each file's
+intrinsic dimensions and emits `width`, `height`, `loading="lazy"`,
+`decoding="async"`, and `data-slot="post-image"`. The dimensions reserve layout
+space so images are CLS-free **before hydration and without JavaScript**;
+`PostImages` (a client component) then layers on a skeleton frame and fade-in as
+pure progressive enhancement. External/root-relative images are left untouched.
+A file whose dimensions cannot be read degrades gracefully: the image is emitted
+without `width`/`height` and the compiler warns on stderr.
 
 **Code blocks** are highlighted at build time by **Shiki**, with a custom theme
 derived from our token palette (green-mono). Output is static HTML — zero
@@ -243,6 +252,8 @@ as part of `pnpm check:lint`.
 ## Performance Considerations
 
 - All content is pre-rendered (SSG).
-- Optimize images during compilation.
+- Local images carry intrinsic `width`/`height` (CLS-free), `loading="lazy"`,
+  `decoding="async"`, and a skeleton placeholder until load. Responsive
+  `srcset`/format conversion is future work.
 - Code-split components where appropriate.
 - Minimize client-side JavaScript.

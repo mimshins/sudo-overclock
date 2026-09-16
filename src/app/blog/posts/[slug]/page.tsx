@@ -2,6 +2,7 @@ import { blogServices } from "@repo/modules/blog/presentation/blog-module";
 import { CodeCopy } from "@repo/modules/blog/presentation/code-copy";
 import { PostBody } from "@repo/modules/blog/presentation/post-body";
 import { PostHeader } from "@repo/modules/blog/presentation/post-header";
+import { PostImages } from "@repo/modules/blog/presentation/post-images";
 import { TableOfContents } from "@repo/modules/blog/presentation/table-of-contents";
 import { Caption } from "@repo/shared/ui/caption";
 import { notFound } from "next/navigation";
@@ -46,6 +47,7 @@ const PostPage = async ({ params }: PostPageProps) => {
         <PostHeader post={post} />
         <PostBody html={post.body} />
         <CodeCopy />
+        <PostImages />
       </article>
       <aside
         className={styles.aside}

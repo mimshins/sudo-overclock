@@ -238,6 +238,13 @@
   border-radius: var(--radius-sm);
 }
 
+/* Static placeholder behind local images until they paint. Without JS this is
+   the whole skeleton; with JS the client enhancer adds the animated frame and
+   fades the image in. Intrinsic width/height keep the box stable either way. */
+.prose :global(img[data-slot="post-image"]) {
+  background-color: var(--color-background-elevated);
+}
+
 /* --- Responsive headings -------------------------------------------------- */
 @media (max-width: 640px) {
   .prose :global(h1) {
