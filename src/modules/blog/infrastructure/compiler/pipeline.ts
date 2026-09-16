@@ -17,7 +17,11 @@ import { unified } from "unified";
 
 import { rehypeAssets, type AssetContext } from "./assets.ts";
 import { rehypeHeadings, rehypeStripTitleHeading } from "./headings.ts";
-import { THEME_NAME, type Highlighter } from "./shiki.ts";
+import {
+  loadSupportedLanguages,
+  THEME_NAME,
+  type Highlighter,
+} from "./shiki.ts";
 import type { TocItem } from "./types.ts";
 
 /** Fenced block aliases → canonical Shiki language id. */
@@ -54,11 +58,42 @@ type CompileResult = {
   readonly toc: readonly TocItem[];
 };
 
+/** Opening fences: up to three spaces, ``` or ~~~, then the info word. */
+const FENCE_LANGUAGE_PATTERN = /^[ \t]{0,3}(?:```|~~~)[ \t]*([\w+#.-]*)/gmu;
+
+/**
+ * Language ids fenced in a markdown document, alias-resolved and de-duplicated.
+ * Used to load only the Shiki grammars a post needs.
+ */
+const collectFenceLanguages = (
+  markdown: string,
+  aliases: Readonly<Record<string, string>>,
+): readonly string[] => {
+  const languages = new Set<string>();
+
+  for (const match of markdown.matchAll(FENCE_LANGUAGE_PATTERN)) {
+    const raw = match[1]?.toLowerCase();
+
+    if (raw === undefined || raw === "") {
+      continue;
+    }
+
+    languages.add(aliases[raw] ?? raw);
+  }
+
+  return [...languages];
+};
+
 const createMarkdownCompiler = (options: CompileMarkdownOptions) => {
   const { highlighter, assets } = options;
 
   return async (markdown: string): Promise<CompileResult> => {
     const toc: TocItem[] = [];
+
+    await loadSupportedLanguages(
+      highlighter,
+      collectFenceLanguages(markdown, LANG_ALIASES),
+    );
 
     const processor = unified()
       .use(remarkParse)
@@ -82,5 +117,5 @@ const createMarkdownCompiler = (options: CompileMarkdownOptions) => {
   };
 };
 
-export { createMarkdownCompiler };
+export { createMarkdownCompiler, collectFenceLanguages };
 export type { CompileMarkdownOptions, CompileResult };

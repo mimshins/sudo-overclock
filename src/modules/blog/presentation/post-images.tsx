@@ -17,20 +17,49 @@ import { useEffect } from "react";
 
 import styles from "./post-images.module.css";
 
+const PICTURE_SELECTOR =
+  '[data-slot="post-body"] picture[data-slot="post-picture"]';
 const IMAGE_SELECTOR = '[data-slot="post-body"] img[data-slot="post-image"]';
 
 const hasDimensions = (image: HTMLImageElement): boolean =>
   image.getAttribute("width") !== null && image.getAttribute("height") !== null;
 
-const enhanceImage = (image: HTMLImageElement): (() => void) => {
+type ImageTarget = {
+  /** Element wrapped in the skeleton frame — the `<picture>` or a lone `<img>`. */
+  readonly frameContent: HTMLElement;
+  /** The rendered `<img>` whose load state drives the frame. */
+  readonly image: HTMLImageElement;
+};
+
+const collectTargets = (): ImageTarget[] => {
+  const pictures = Array.from(
+    document.querySelectorAll<HTMLElement>(PICTURE_SELECTOR),
+  );
+  const loneImages = Array.from(
+    document.querySelectorAll<HTMLImageElement>(IMAGE_SELECTOR),
+  ).filter(image => image.closest("picture") === null);
+
+  const fromPictures = pictures.flatMap(picture => {
+    const image = picture.querySelector<HTMLImageElement>("img");
+
+    return image === null ? [] : [{ frameContent: picture, image }];
+  });
+
+  return [
+    ...fromPictures,
+    ...loneImages.map(image => ({ frameContent: image, image })),
+  ].filter(target => hasDimensions(target.image));
+};
+
+const enhanceImage = ({ frameContent, image }: ImageTarget): (() => void) => {
   const frame = document.createElement("span");
   const imageClass = cx(styles.image);
 
   frame.className = cx(styles.frame);
   frame.dataset.slot = "post-image-frame";
 
-  image.parentNode?.insertBefore(frame, image);
-  frame.append(image);
+  frameContent.parentNode?.insertBefore(frame, frameContent);
+  frame.append(frameContent);
   image.classList.add(imageClass);
 
   const markLoaded = (): void => {
@@ -56,18 +85,14 @@ const enhanceImage = (image: HTMLImageElement): (() => void) => {
     image.removeEventListener("load", markLoaded);
     image.removeEventListener("error", markError);
     image.classList.remove(imageClass);
-    frame.parentNode?.insertBefore(image, frame);
+    frame.parentNode?.insertBefore(frameContent, frame);
     frame.remove();
   };
 };
 
 const PostImages = () => {
   useEffect(() => {
-    const images = Array.from(
-      document.querySelectorAll<HTMLImageElement>(IMAGE_SELECTOR),
-    ).filter(image => hasDimensions(image));
-
-    const teardowns = images.map(image => enhanceImage(image));
+    const teardowns = collectTargets().map(target => enhanceImage(target));
 
     return () => {
       for (const teardown of teardowns) teardown();

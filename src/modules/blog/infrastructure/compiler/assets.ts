@@ -1,21 +1,27 @@
 /*
- * Asset resolution and copying.
+ * Asset resolution and optimization.
  *
- * A rehype transformer that visits every `<img>` node, resolves relative
- * `src` paths against the post's source directory, copies the file into
- * `public/posts/<slug>/`, rewrites the `src` to its public URL, and enriches
- * the node with intrinsic `width`/`height` (reserved space — no layout shift),
+ * A rehype transformer that visits every `<img>` node, resolves relative `src`
+ * paths against the post's source directory, prepares the file into
+ * `public/posts/<slug>/` (content-addressed and transcoded to AVIF/WebP), and
+ * rewrites the node.
+ *
+ * Local raster images become `<picture>` elements wrapping an enriched `<img>`
+ * that carries intrinsic `width`/`height` (reserved space — no layout shift),
  * `loading="lazy"`, `decoding="async"`, and a `data-slot="post-image"` hook.
+ * SVG, animated, and undecodable assets stay plain `<img>` elements.
  *
  * External URLs (http, data:, /-rooted, #) are left untouched.
  */
 
-import { copyFile, mkdir } from "node:fs/promises";
-import { basename, dirname, resolve } from "node:path";
+import { mkdir } from "node:fs/promises";
+import { basename, extname, resolve } from "node:path";
 
-import type { Element, Root } from "hast";
+import type { Element, Parent, Root } from "hast";
 import { imageSizeFromFile } from "image-size/fromFile";
 import { visit } from "unist-util-visit";
+
+import { prepareImage, type PreparedImage } from "./image-optimizer.ts";
 
 type ImageDimensions = {
   readonly width: number;
@@ -78,52 +84,99 @@ const isLocalImage = (node: Element): boolean => {
   return typeof src === "string" && !isExternal(src);
 };
 
-const findImages = (tree: Root): Element[] => {
-  const images: Element[] = [];
+const publicUrl = (slug: string, fileName: string): string =>
+  `/posts/${slug}/${fileName}`;
 
-  visit(tree, "element", node => {
-    if (!isLocalImage(node)) return;
-
-    images.push(node);
-  });
-
-  return images;
-};
-
-const copyImage = async (
+const createImageNode = (
   image: Element,
-  context: AssetContext,
-): Promise<void> => {
-  const { postDir, slug, publicDir } = context;
-  const src = image.properties?.src;
-
-  if (typeof src !== "string") return;
-
-  const absoluteSource = resolve(postDir, src);
-  const fileName = basename(absoluteSource);
-  const absoluteTarget = resolve(publicDir, "posts", slug, fileName);
-
-  await mkdir(dirname(absoluteTarget), { recursive: true });
-  await copyFile(absoluteSource, absoluteTarget);
-
-  const dimensions = await readImageDimensions(absoluteSource);
-
-  image.properties = {
+  slug: string,
+  fileName: string,
+  dimensions: ImageDimensions | null,
+): Element => ({
+  ...image,
+  properties: {
     ...image.properties,
-    src: `/posts/${slug}/${fileName}`,
+    src: publicUrl(slug, fileName),
     loading: "lazy",
     decoding: "async",
     "data-slot": "post-image",
     ...(dimensions === null
       ? {}
       : { width: dimensions.width, height: dimensions.height }),
-  };
+  },
+});
+
+const createPictureNode = (
+  image: Element,
+  slug: string,
+  prepared: Extract<PreparedImage, { kind: "picture" }>,
+): Element => ({
+  type: "element",
+  tagName: "picture",
+  properties: { "data-slot": "post-picture" },
+  children: [
+    ...prepared.sources.map(source => ({
+      type: "element" as const,
+      tagName: "source",
+      properties: {
+        type: source.type,
+        srcset: publicUrl(slug, source.fileName),
+      },
+      children: [],
+    })),
+    createImageNode(image, slug, prepared.fallbackFileName, {
+      width: prepared.width,
+      height: prepared.height,
+    }),
+  ],
+});
+
+const processImage = async (
+  node: Element,
+  index: number,
+  parent: Parent,
+  context: AssetContext,
+): Promise<void> => {
+  const src = node.properties?.src;
+
+  if (typeof src !== "string") return;
+
+  const { postDir, slug, publicDir } = context;
+  const absoluteSource = resolve(postDir, src);
+  const targetDir = resolve(publicDir, "posts", slug);
+  const baseName = basename(absoluteSource, extname(absoluteSource));
+
+  await mkdir(targetDir, { recursive: true });
+
+  const prepared = await prepareImage(absoluteSource, targetDir, baseName);
+
+  if (prepared.kind === "picture") {
+    parent.children[index] = createPictureNode(node, slug, prepared);
+    return;
+  }
+
+  const dimensions = await readImageDimensions(absoluteSource);
+  parent.children[index] = createImageNode(
+    node,
+    slug,
+    prepared.fileName,
+    dimensions,
+  );
 };
 
 const rehypeAssets = (context: AssetContext) => {
   return async (tree: Root): Promise<void> => {
-    const images = findImages(tree);
-    await Promise.all(images.map(image => copyImage(image, context)));
+    const jobs: Promise<void>[] = [];
+
+    visit(tree, "element", (node, index, parent) => {
+      if (!isLocalImage(node) || index === undefined || parent === undefined) {
+        return;
+      }
+
+      jobs.push(processImage(node, index, parent, context));
+    });
+
+    await Promise.all(jobs);
   };
 };
 

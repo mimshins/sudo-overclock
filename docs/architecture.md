@@ -126,7 +126,19 @@ See [`docs/authoring.md`](./authoring.md) and
 Pipeline stages: `compile.ts` orchestrates; `pipeline.ts` runs remark-parse →
 remark-gfm → remark-rehype → Shiki → assets → headings → rehype-stringify;
 `reading-time.ts` estimates reading time; `headings.ts` adds anchors and TOC;
-`assets.ts` copies images, reads their intrinsic dimensions, and rewrites `src`.
+`assets.ts` resolves and rewrites images; `image-optimizer.ts` hashes and
+encodes them; `concurrency.ts` bounds the CPU-bound work.
+
+Two compiler-level details are worth knowing. **Shiki grammars load lazily**:
+the highlighter starts with none, and each post's fences are scanned
+(`collectFenceLanguages`) so only the languages it uses are loaded — cold start
+and memory track the content, not the supported-language list. **Work is
+bounded**: `withPipelineSlot` caps concurrent post compilations at
+`availableParallelism()`, and `withEncodeSlot` caps image encodes at roughly
+half the cores (independent limiters, so nesting cannot deadlock). Post
+compilation is synchronous main-thread work, so it is bounded for memory, not
+parallelized; image encoding is the CPU-heavy stage and is where concurrency
+pays off.
 
 ## Assets and Code Blocks
 
@@ -149,19 +161,41 @@ In markdown, reference them with relative paths:
 ![diagram](./diagram.png)
 ```
 
-The compiler resolves `./diagram.png` against the post's directory, copies the
-file into Next.js's `public/posts/<slug>/`, and rewrites the `<img>` `src` to
-its public URL (`/posts/<slug>/diagram.png`). Authors never touch `public/`
-directly — the compiler owns that.
+The compiler resolves `./diagram.png` against the post's directory, prepares the
+file into Next.js's `public/posts/<slug>/`, and rewrites the markup. Authors
+never touch `public/` directly — the compiler owns that.
 
-Local images are also **enriched at build time**: the compiler reads each file's
-intrinsic dimensions and emits `width`, `height`, `loading="lazy"`,
-`decoding="async"`, and `data-slot="post-image"`. The dimensions reserve layout
-space so images are CLS-free **before hydration and without JavaScript**;
-`PostImages` (a client component) then layers on a skeleton frame and fade-in as
-pure progressive enhancement. External/root-relative images are left untouched.
-A file whose dimensions cannot be read degrades gracefully: the image is emitted
-without `width`/`height` and the compiler warns on stderr.
+**Local raster images are content-addressed and optimized at build time**
+(`infrastructure/compiler/image-optimizer.ts`):
+
+- Each image is transcoded to **AVIF** (q55) and **WebP** (q80) with a fallback
+  in its original format (JPEG q82, or PNG when the source has alpha); EXIF
+  orientation is applied and images are downscaled to a **2048 px** maximum
+  width (never upscaled).
+- Variants are written as `<basename>.<hash>.<ext>`, where the hash is
+  `sha256(source bytes + transform parameters)`. Hashing the **source**, not the
+  encoded output, keeps filenames stable across machines and libvips versions.
+- A local raster image becomes
+  `<picture data-slot="post-picture"><source type="image/avif">…<source type="image/webp">…<img …></picture>`.
+  The `<img>` carries intrinsic `width`/`height`, `loading="lazy"`,
+  `decoding="async"`, and `data-slot="post-image"`.
+- The three formats encode in parallel from one shared pipeline, and how many
+  encodes run at once is derived from `os.availableParallelism()` (roughly half
+  the cores, since libvips already multithreads a single operation).
+  `SOC_IMAGE_CONCURRENCY` overrides it; see
+  `infrastructure/compiler/concurrency.ts`.
+
+The intrinsic dimensions reserve layout space so images are CLS-free **before
+hydration and without JavaScript**; `PostImages` (a client component) wraps the
+`<picture>` in a skeleton frame and fades the image in as pure progressive
+enhancement. `picture { display: contents }` keeps the wrapper
+layout-transparent.
+
+**SVG** is copied with a hash but not transcoded; **animated** images are passed
+through unchanged. External/root-relative images are left untouched. A file that
+cannot be decoded or encoded is copied as-is under a hashed name, emitted as a
+plain `<img>` without dimensions, and the compiler warns on stderr — the build
+never fails for an image.
 
 **Code blocks** are highlighted at build time by **Shiki**, with a custom theme
 derived from our token palette (green-mono). Output is static HTML — zero

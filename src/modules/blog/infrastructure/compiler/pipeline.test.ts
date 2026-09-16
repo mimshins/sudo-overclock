@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { createMarkdownCompiler } from "./pipeline.ts";
+import { createMarkdownCompiler, collectFenceLanguages } from "./pipeline.ts";
 import { getHighlighter } from "./shiki.ts";
 
 const highlighter = await getHighlighter();
@@ -42,6 +42,43 @@ describe("markdown pipeline", () => {
   it("renders inline code", async () => {
     const output = await html("use `npm install` now");
     assert.match(output, /<code>npm install<\/code>/u);
+  });
+});
+
+describe("collectFenceLanguages", () => {
+  const aliases = { ts: "typescript", sh: "bash" };
+
+  it("extracts, alias-resolves, and de-duplicates fenced languages", () => {
+    const markdown = [
+      "```ts",
+      "const x = 1;",
+      "```",
+      "",
+      "~~~rust",
+      "fn main() {}",
+      "~~~",
+      "",
+      "```typescript",
+      "const y = 2;",
+      "```",
+    ].join("\n");
+
+    assert.deepEqual(collectFenceLanguages(markdown, aliases), [
+      "typescript",
+      "rust",
+    ]);
+  });
+
+  it("ignores fences without a language and keeps unknown ones as-is", () => {
+    const markdown = "```\nplain\n```\n\n```cobol\nx\n```";
+
+    assert.deepEqual(collectFenceLanguages(markdown, aliases), ["cobol"]);
+  });
+
+  it("accepts an info string with additional attributes", () => {
+    assert.deepEqual(collectFenceLanguages('```sh title="run"', aliases), [
+      "bash",
+    ]);
   });
 });
 

@@ -57,12 +57,16 @@ missing, and it is what screen readers announce.
 ![A request flowing through the cache layer](./diagram.png)
 ```
 
-The compiler reads each local image's intrinsic dimensions and emits `width`,
-`height`, `loading="lazy"`, and `decoding="async"` alongside the rewritten
-`src`. The reserved `width`/`height` box means images never cause cumulative
-layout shift, and the post page shows a skeleton placeholder until each image
-loads. Prefer **local** assets: external (`https://…`) and root-relative (`/…`)
-images are passed through untouched and therefore get no reserved space.
+The compiler optimizes each local image at build time: it transcodes to AVIF and
+WebP with a same-format fallback, applies EXIF orientation, downscales to a 2048
+px maximum width, and emits `width`, `height`, `loading="lazy"`, and
+`decoding="async"` alongside a content-hashed `src`. The reserved
+`width`/`height` box means images never cause cumulative layout shift, and the
+post page shows a skeleton placeholder until each image loads. Because the URL
+is hashed from the image's bytes, replacing a file automatically busts any cache
+— just overwrite it and recompile. Prefer **local** assets: external
+(`https://…`) and root-relative (`/…`) images are passed through untouched and
+therefore get no optimization or reserved space.
 
 ## Frontmatter
 
@@ -107,9 +111,10 @@ lower-cased with runs of non-alphanumerics collapsed to `-`
   `js`→javascript, etc.). Every block gets a copy-to-clipboard button.
 - **GFM is enabled**: tables, task lists, footnotes not included, nested lists,
   and autolinks.
-- **Images** use relative paths and are copied to `public/posts/<slug>/` with
-  their `src` rewritten to `/posts/<slug>/...` by the compiler. External URLs,
-  data URIs, and `/`-rooted paths are left untouched.
+- **Images** use relative paths and are optimized into `public/posts/<slug>/` as
+  content-hashed AVIF/WebP/fallback variants; the compiler emits a `<picture>`
+  whose `src` values are `/posts/<slug>/...`. External URLs, data URIs, and
+  `/`-rooted paths are left untouched.
 - **Blockquotes** render with the phosphor rail styling; nesting is supported.
 
 ## Local workflow
@@ -147,7 +152,9 @@ Compilation is orchestrated by `src/modules/blog/infrastructure/compiler/`:
   headings → rehype-stringify.
 - `reading-time.ts` — reading-time estimation stored on each post.
 - `headings.ts` — heading anchors, permalinks, and TOC extraction.
-- `assets.ts` — relative image copy and `src` rewrite.
+- `assets.ts` — relative image resolution, `<picture>`/`src` rewrite,
+  dimensions.
+- `image-optimizer.ts` — content hashing, EXIF rotate, resize, AVIF/WebP encode.
 
 Draft scaffolding and validation live in
 `src/modules/blog/infrastructure/authoring/`, invoked by `scripts/author/*.ts`.

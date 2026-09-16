@@ -12,6 +12,7 @@ import { basename, dirname, extname, join, resolve } from "node:path";
 
 import matter from "gray-matter";
 
+import { withPipelineSlot } from "./concurrency.ts";
 import { createMarkdownCompiler } from "./pipeline.ts";
 import { estimateReadingTimeMinutes } from "./reading-time.ts";
 import { getHighlighter, type Highlighter } from "./shiki.ts";
@@ -161,7 +162,9 @@ const compileAll = async (
 
   const compiledPosts = await Promise.all(
     markdownFiles.map(filePath =>
-      compileOnePost({ filePath, rawDir, publicDir, highlighter }),
+      withPipelineSlot(() =>
+        compileOnePost({ filePath, rawDir, publicDir, highlighter }),
+      ),
     ),
   );
 

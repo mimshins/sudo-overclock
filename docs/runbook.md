@@ -9,17 +9,17 @@ Commands, local workflow, troubleshooting, and release for sudo-overclock.
 
 ## Commands
 
-| Command                        | What it does                                                                              |
-| ------------------------------ | ----------------------------------------------------------------------------------------- |
-| `pnpm dev`                     | Start the Next.js dev server.                                                             |
-| `pnpm compile`                 | Compile `content/raw/**` → `content/compiled/index.ts`, copy assets into `public/posts/`. |
-| `pnpm build`                   | `prebuild` runs `pnpm compile`, then Next.js static export to `out/`.                     |
-| `pnpm test`                    | Unit/integration tests (`tsx --test src/**/*.test.ts`).                                   |
-| `pnpm check:lint`              | `oxlint` + `oxfmt --check`. Run before committing.                                        |
-| `pnpm format`                  | Auto-fix formatting (`oxfmt --write` + `oxlint --fix`).                                   |
-| `pnpm author:new <slug>`       | Scaffold a draft in `content/drafts/<slug>/`.                                             |
-| `pnpm author:preflight <slug>` | Validate a draft; non-zero exit on failure.                                               |
-| `pnpm author:publish <slug>`   | Move a ready draft to `content/raw/<slug>/`.                                              |
+| Command                        | What it does                                                                                  |
+| ------------------------------ | --------------------------------------------------------------------------------------------- |
+| `pnpm dev`                     | Start the Next.js dev server.                                                                 |
+| `pnpm compile`                 | Compile `content/raw/**` → `content/compiled/index.ts`; optimize assets into `public/posts/`. |
+| `pnpm build`                   | `prebuild` runs `pnpm compile`, then Next.js static export to `out/`.                         |
+| `pnpm test`                    | Unit/integration tests (`tsx --test src/**/*.test.ts`).                                       |
+| `pnpm check:lint`              | `oxlint` + `oxfmt --check`. Run before committing.                                            |
+| `pnpm format`                  | Auto-fix formatting (`oxfmt --write` + `oxlint --fix`).                                       |
+| `pnpm author:new <slug>`       | Scaffold a draft in `content/drafts/<slug>/`.                                                 |
+| `pnpm author:preflight <slug>` | Validate a draft; non-zero exit on failure.                                                   |
+| `pnpm author:publish <slug>`   | Move a ready draft to `content/raw/<slug>/`.                                                  |
 
 ## Local workflow
 
@@ -81,6 +81,23 @@ pnpm release             # build + publish
 Asset paths are resolved relative to the post's directory. A path like
 `![x](./x.png)` must sit beside the markdown. `pnpm author:preflight` catches
 missing assets before publish.
+
+### `pnpm compile` is slow, or image encoding fails
+
+`pnpm compile` transcodes every local raster image to AVIF and WebP via `sharp`
+(a native `devDependency`), so it is CPU-bound — larger posts take longer.
+Encoding concurrency is derived from the host's core count; set
+`SOC_IMAGE_CONCURRENCY=<n>` to override it (useful on constrained CI runners).
+If `sharp` cannot decode or encode a file, the compiler warns on stderr and
+copies the original under a hashed name instead of failing; check that the asset
+is a valid image.
+
+### A replaced post image still looks old
+
+Local images are content-addressed: overwriting an image changes its URL on the
+next compile, so caches (browser and CDN) miss automatically. If an old image
+persists, confirm the compile ran and that the page references the new hashed
+filename.
 
 ### Code block has no highlighting
 
