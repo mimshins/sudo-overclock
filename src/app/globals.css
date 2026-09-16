@@ -122,16 +122,32 @@
   --typography-typeface-mono:
     "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     monospace;
+  /* Display face: undefined medium (pixel grid, OFL). Wordmark + h1/h2 only.
+     The family name is injected by next/font/local on <html>. */
+  --typography-typeface-display:
+    var(--font-display-family), ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, monospace;
 
   /* === TYPOGRAPHY (SCALE) ================================================= */
   /* Smaller than the original — body 0.875rem reads sharper in CRT context. */
-  --typography-h1-size: 3rem;
-  --typography-h1-leading: 1.1666666667;
-  --typography-h1-weight: 600;
+  /* Display sizes use undefined medium, a pixel-grid face (0.1em cell) with a
+     single weight. Sizes MUST stay multiples of 10px to render crisp, and
+     leading 1.4 keeps the 1.4em content box on integer pixels. h1/h2 are the
+     display heading roles (`--typography-h1/h2-*` alias into this scale). */
+  --typography-display-h1-size: 40px;
+  --typography-display-h2-size: 30px;
+  --typography-display-h3-size: 20px;
+  --typography-display-brand-size: 20px;
+  --typography-display-leading: 1.4;
+  --typography-display-weight: 400;
 
-  --typography-h2-size: 2.25rem;
-  --typography-h2-leading: 1.2222222222;
-  --typography-h2-weight: 600;
+  --typography-h1-size: var(--typography-display-h1-size);
+  --typography-h1-leading: var(--typography-display-leading);
+  --typography-h1-weight: var(--typography-display-weight);
+
+  --typography-h2-size: var(--typography-display-h2-size);
+  --typography-h2-leading: var(--typography-display-leading);
+  --typography-h2-weight: var(--typography-display-weight);
 
   --typography-h3-size: 1.75rem;
   --typography-h3-leading: 1.2857142857;
@@ -664,6 +680,7 @@
   --font-rtl: var(--typography-typeface-rtl);
   --font-ltr: var(--typography-typeface-ltr);
   --font-mono: var(--typography-typeface-mono);
+  --font-display: var(--typography-typeface-display);
 
   --text-h1: var(--typography-h1-size);
   --text-h2: var(--typography-h2-size);

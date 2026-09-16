@@ -19,6 +19,8 @@ Engineering blog of
 - **BaseUI** - Component library
 - **Tailwind CSS** - Token/variable management only
 - **CSS Modules** - Primary styling solution
+- **JetBrains Mono** - Text typeface
+- **undefined medium** - Display typeface (wordmark + `h1`/`h2`)
 - **Unified.js + Rehype + Remark** - Markdown processing pipeline
 - **Shiki** - Build-time code highlighting
 - **GitHub Pages** - Hosting (via GitHub Actions)
@@ -164,3 +166,8 @@ rules are in [`docs/architecture.md`](./docs/architecture.md) and
 ## License
 
 MIT - See [LICENSE](./LICENSE) for details.
+
+Bundled font: [undefined medium](https://undefined-medium.com) by Andi Rueckel,
+licensed under the SIL Open Font License 1.1. The font ships unmodified with its
+license at
+[`public/fonts/undefined-medium/OFL.txt`](./public/fonts/undefined-medium/OFL.txt).

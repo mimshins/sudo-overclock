@@ -20,6 +20,7 @@ Commands, local workflow, troubleshooting, and release for sudo-overclock.
 | `pnpm author:new <slug>`       | Scaffold a draft in `content/drafts/<slug>/`.                                                 |
 | `pnpm author:preflight <slug>` | Validate a draft; non-zero exit on failure.                                                   |
 | `pnpm author:publish <slug>`   | Move a ready draft to `content/raw/<slug>/`.                                                  |
+| `pnpm brand:icons`             | Regenerate `src/app/apple-icon.png` from `src/app/icon.svg`.                                  |
 
 ## Local workflow
 

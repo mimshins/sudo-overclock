@@ -17,13 +17,27 @@
 }
 
 .brand {
-  font-family: var(--font-mono);
-  font-size: var(--text-body1);
-  font-weight: 600;
-  color: var(--color-phosphor);
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--spacing-xs);
+  font-family: var(--font-display);
+  font-size: var(--typography-display-brand-size);
+  font-weight: var(--typography-display-weight);
+  line-height: var(--typography-display-leading);
+  letter-spacing: 0;
+  -webkit-font-smoothing: none;
+  color: var(--color-foreground);
   text-decoration: none;
+}
+
+.brand:hover {
+  color: var(--color-phosphor);
   text-shadow: 0 0 calc(4px * var(--phosphor-glow-strength))
     var(--color-phosphor-glow);
+}
+
+.brandPrompt {
+  color: var(--color-phosphor);
 }
 
 .nav {

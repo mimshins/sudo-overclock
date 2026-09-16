@@ -1,28 +1,44 @@
 .heading {
   --heading-line-height: 1.2;
   --heading-font-weight: 500;
+  --heading-font-family: var(--typography-typeface-ltr);
+  --heading-letter-spacing: -0.02em;
+  --heading-smoothing: antialiased;
   --heading-color: var(--color-foreground);
   --heading-text-shadow: none;
 
   margin: 0;
-  font-family: var(--typography-typeface-ltr);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-size);
   color: var(--heading-color);
   font-weight: var(--heading-font-weight);
-  letter-spacing: -0.02em;
+  letter-spacing: var(--heading-letter-spacing);
   line-height: var(--heading-line-height);
   text-shadow: var(--heading-text-shadow);
+  -webkit-font-smoothing: var(--heading-smoothing);
 }
 
+/*
+ * h1/h2 are the display sizes and render in undefined medium: a pixel grid
+ * (0.1em cell) single-weight face. Keep sizes on the 10px grid, disable
+ * letter-spacing so advances stay on the grid, and turn smoothing off.
+ */
 .sizeH1 {
   --heading-size: var(--typography-h1-size);
   --heading-line-height: var(--typography-h1-leading);
   --heading-font-weight: var(--typography-h1-weight);
+  --heading-font-family: var(--font-display);
+  --heading-letter-spacing: 0;
+  --heading-smoothing: none;
 }
 
 .sizeH2 {
   --heading-size: var(--typography-h2-size);
   --heading-line-height: var(--typography-h2-leading);
   --heading-font-weight: var(--typography-h2-weight);
+  --heading-font-family: var(--font-display);
+  --heading-letter-spacing: 0;
+  --heading-smoothing: none;
 }
 
 .sizeH3 {
@@ -65,4 +81,14 @@
   --heading-text-shadow:
     0 0 calc(4px * var(--phosphor-glow-strength)) var(--color-phosphor-glow),
     0 0 calc(10px * var(--phosphor-glow-strength)) var(--color-phosphor-shadow);
+}
+
+@media (max-width: 640px) {
+  .sizeH1 {
+    --heading-size: var(--typography-display-h2-size);
+  }
+
+  .sizeH2 {
+    --heading-size: var(--typography-display-h3-size);
+  }
 }

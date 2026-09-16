@@ -32,6 +32,7 @@
     "author:new": "tsx scripts/author/new.ts",
     "author:preflight": "tsx scripts/author/preflight.ts",
     "author:publish": "tsx scripts/author/publish.ts",
+    "brand:icons": "tsx scripts/brand/render-apple-icon.ts",
     "prebuild": "pnpm compile",
     "build": "next build",
     "dev": "next dev",

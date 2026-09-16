@@ -61,11 +61,12 @@ alternatives → a spec alone is enough.
 
 ## Index
 
-| RFC                                        | Title                                                      | Status      |
-| ------------------------------------------ | ---------------------------------------------------------- | ----------- |
-| [001](001-ai-post-authoring-pipeline.md)   | AI-Assisted Post Authoring Pipeline                        | Draft       |
-| [002](002-post-image-cls.md)               | Post Image Loading: Reserved Space + Skeleton              | Implemented |
-| [003](003-cloudflare-cdn.md)               | Cloudflare CDN in front of GitHub Pages                    | Implemented |
-| [004](004-post-asset-pipeline.md)          | Post Asset Pipeline: Content-Addressed, Optimized Images   | Implemented |
-| [005](005-image-encode-concurrency.md)     | Compiler Image Encoding Concurrency                        | Implemented |
-| [006](006-compiler-pipeline-scheduling.md) | Compiler Pipeline: Lazy Shiki Grammars + Bounded Scheduler | Implemented |
+| RFC                                        | Title                                                              | Status      |
+| ------------------------------------------ | ------------------------------------------------------------------ | ----------- |
+| [001](001-ai-post-authoring-pipeline.md)   | AI-Assisted Post Authoring Pipeline                                | Draft       |
+| [002](002-post-image-cls.md)               | Post Image Loading: Reserved Space + Skeleton                      | Implemented |
+| [003](003-cloudflare-cdn.md)               | Cloudflare CDN in front of GitHub Pages                            | Implemented |
+| [004](004-post-asset-pipeline.md)          | Post Asset Pipeline: Content-Addressed, Optimized Images           | Implemented |
+| [005](005-image-encode-concurrency.md)     | Compiler Image Encoding Concurrency                                | Implemented |
+| [006](006-compiler-pipeline-scheduling.md) | Compiler Pipeline: Lazy Shiki Grammars + Bounded Scheduler         | Implemented |
+| [007](007-display-typeface.md)             | Display Typeface: undefined medium for Wordmark & Display Headings | Implemented |

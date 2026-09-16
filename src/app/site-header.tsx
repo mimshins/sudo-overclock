@@ -113,6 +113,12 @@ const SiteHeader = () => {
           href="/"
           className={styles.brand}
         >
+          <span
+            className={styles.brandPrompt}
+            aria-hidden="true"
+          >
+            &gt;
+          </span>
           sudo-overclock
         </Link>
         <MenuButton

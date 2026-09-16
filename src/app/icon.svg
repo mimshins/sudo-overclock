@@ -1,0 +1,5 @@
+<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="16" height="16" fill="#0a0a0a"/>
+  <path d="M150-400L150-500L550-500L550-400L150-400M150-400L150-300L50-300L50-400L150-400M150-200L150-300L450-300L450-200L150-200M450-100L450 0L50 0L50-100L450-100M450-100L450-200L550-200L550-100" fill="#00ff9c" transform="translate(1 13) scale(0.02)"/>
+  <rect x="13" y="11" width="2" height="2" fill="#00ff9c"/>
+</svg>

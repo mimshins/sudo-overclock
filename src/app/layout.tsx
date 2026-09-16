@@ -1,3 +1,4 @@
+import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
 import { SiteFooter } from "./site-footer.tsx";
@@ -12,6 +13,26 @@ import {
   SITE_URL,
   TWITTER_HANDLE,
 } from "./site.ts";
+
+/*
+ * Display face: undefined medium (SIL OFL-1.1). Self-hosted, unmodified.
+ * Scoped to the wordmark and h1/h2 via --font-display; see docs/design-language.
+ */
+const displayFont = localFont({
+  src: "./fonts/undefined-medium.woff2",
+  variable: "--font-display-family",
+  weight: "400",
+  style: "normal",
+  display: "swap",
+  preload: true,
+  fallback: [
+    "ui-monospace",
+    "SFMono-Regular",
+    "Menlo",
+    "Consolas",
+    "monospace",
+  ],
+});
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -60,6 +81,7 @@ const RootLayout = (props: RootLayoutProps): ReactNode => {
   return (
     <html
       lang="en"
+      className={displayFont.variable}
       suppressHydrationWarning
     >
       <head>

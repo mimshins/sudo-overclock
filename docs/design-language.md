@@ -9,9 +9,12 @@ rendered with modern browser technology.
 
 ## Pillars
 
-1. **One typeface, one rhythm.** JetBrains Mono everywhere — prose, UI,
-   headings, buttons. No pairing. Single family keeps the page feeling cohesive
-   and intensifies the terminal aesthetic.
+1. **One text face, one display face.** JetBrains Mono is the **text face** —
+   prose, UI, code, metadata, buttons, and `h3`–`h6`. **undefined medium** (a
+   pixel-grid monospace) is the **display face**, used only for the brand
+   wordmark and `h1`/`h2`. The pairing is deliberate and narrow: it gives the
+   brand a distinctive pixel voice without changing how the prose reads. Never a
+   third typeface, and never the display face outside those roles.
 2. **Mono palette with phosphor accent.** Background and foreground use neutral
    scale only. The single accent color is **phosphor green**
    (`--color-phosphor`, `#00ff9c`). Brand/positive/negative/warn/info roles map
@@ -69,6 +72,17 @@ CSS only — no React state for theming primitives.
   color. No emoji in chrome.
 - **Decorative pixel art** allowed in hero / 404 / post headers, drawn inline as
   `<svg>` with `shape-rendering: pixelated`.
+- **Display face** — undefined medium (SIL OFL-1.1), self-hosted unmodified at
+  `src/app/fonts/undefined-medium.woff2` with its license at
+  `public/fonts/undefined-medium/OFL.txt`. It is a pixel face (0.1em cell,
+  single weight), so display text must use the 10px-grid sizes in `globals.css`,
+  `letter-spacing: 0`, and `-webkit-font-smoothing: none`. Subsetting or
+  modifying it would trigger the Reserved Font Name and is not allowed without a
+  new decision (see `.ai/rfc/007-display-typeface.md`).
+- **Brand mark** — the wordmark is a typed lockup (`> sudo-overclock`), not an
+  illustrated logo. The standalone `soc-assembled-logo.svg` is the two-line
+  lockup; the favicon (`src/app/icon.svg`) is the `s` monogram plus a block
+  cursor, on a 16-unit grid so it stays crisp at 16px.
 - **Code blocks** use Shiki with a custom theme whose colors are derived from
   the active theme tokens (green-mono palette).
 
@@ -77,7 +91,8 @@ CSS only — no React state for theming primitives.
 - ✅ Monospace everywhere. Integer-aligned spacing. Phosphor accents.
 - ✅ ASCII chrome for section titles and callouts.
 - ✅ Snap transitions; subtle phosphor glow on focus.
-- ❌ Don't introduce a second typeface, ever.
+- ❌ Don't introduce a third typeface, or use the display face outside the brand
+  wordmark and `h1`/`h2`.
 - ❌ Don't use anti-aliased drop shadows — phosphor glow only.
 - ❌ Don't add new colors without a semantic token reason.
 - ❌ Don't use emoji in UI chrome.

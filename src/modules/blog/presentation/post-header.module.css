@@ -24,10 +24,12 @@
 
 .title {
   margin: var(--spacing-sm) 0 var(--spacing-xs);
-  font-family: var(--font-ltr);
+  font-family: var(--font-display);
   font-size: var(--typography-h1-size);
   line-height: var(--typography-h1-leading);
   font-weight: var(--typography-h1-weight);
+  letter-spacing: 0;
+  -webkit-font-smoothing: none;
   color: var(--color-foreground);
   text-shadow:
     0 0 calc(4px * var(--phosphor-glow-strength)) var(--color-phosphor-glow),
@@ -45,4 +47,11 @@
   color: var(--color-foreground-secondary);
   font-size: var(--text-body1);
   line-height: var(--leading-body1);
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: var(--typography-h2-size);
+    line-height: var(--typography-h2-leading);
+  }
 }
