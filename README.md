@@ -145,9 +145,9 @@ custom domain is configured.
 
 ### Canonical URL
 
-Sitemap, robots, RSS, and Open Graph URLs are rooted at `SITE_URL` in
-`src/app/site.ts` (default `https://sudo-overclock.space`). The deploy workflow
-sets `NEXT_PUBLIC_SITE_URL` explicitly; override it for any other host.
+Sitemap, robots, RSS, `llms.txt`, and Open Graph URLs are rooted at `SITE_URL`
+in `src/app/site.ts` (default `https://sudo-overclock.space`). The deploy
+workflow sets `NEXT_PUBLIC_SITE_URL` explicitly; override it for any other host.
 
 ## Contributing
 
