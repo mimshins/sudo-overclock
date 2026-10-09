@@ -34,6 +34,7 @@
     "author:new": "tsx scripts/author/new.ts",
     "author:preflight": "tsx scripts/author/preflight.ts",
     "author:publish": "tsx scripts/author/publish.ts",
+    "brand:backgrounds": "tsx scripts/brand/render-about-bg.ts && tsx scripts/brand/render-reading-bg.ts",
     "brand:icons": "tsx scripts/brand/render-apple-icon.ts",
     "build": "wireit",
     "dev": "next dev",

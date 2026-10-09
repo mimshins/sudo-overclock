@@ -99,6 +99,15 @@ material**, not finished imagery:
 - Page backgrounds (`public/<route>/bg.jpg`) are sources for `PhosphorField`.
   They are 1536 × 1024, dark, graded toward phosphor green, with one clear
   subject and large dark areas. The visitor sees them only as dots.
+- A background relates to its page: the desk and terminal for the blog, an open
+  book with the line being read in inverse video for reading, a fingerprint
+  mid-scan (`whoami`) for about. Keep the subject near the center; tall pages
+  cover-crop the sides away, and the text column sits over frosted panels.
+- Encode sources with mozjpeg at quality ~82 (about 100–200 KB). The 4 px dots
+  hide the artifacts, and the field preloads the source on every page.
+- Procedural sources ship with their generator so they can be regenerated: the
+  about and reading sources come from `scripts/brand/render-*-bg.ts` on the
+  shared CRT toolkit in `scripts/brand/raster.ts` (`pnpm brand:backgrounds`).
 - A source must be licensed for this use; record where it came from in the
   change that adds it.
 - Do not show a source photo un-treated in the UI. The exceptions are product
