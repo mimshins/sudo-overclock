@@ -1,6 +1,7 @@
 # ADR-008 — Agent-Agnostic Knowledge Layer and Guardrails
 
-- **Status:** Accepted
+- **Status:** Accepted; the pre-push hook amended by
+  [ADR-011](./ADR-011-build-caching.md) (wireit tasks)
 - **Date:** 2026-10-09
 - **Topic:** repository / process
 - **RFC:** [RFC-008](../rfcs/archived/RFC-008-agent-agnostic-knowledge-layer.md)
@@ -38,9 +39,10 @@ asked".
    lightweight approval gate (agents never stage, commit, or push unless the
    author asks; the reviewer agent runs on request); a knowledge-maintenance
    table and a drift-sync skill; no secrets, no fabrication; an ADR for every
-   new runtime `dependencies` entry; a versioned pre-push hook (compile only if
-   compiled content is missing, then lint and test); a PR template with a
-   definition of done.
+   new runtime `dependencies` entry; a versioned pre-push hook that lints and
+   tests (originally compiling only when compiled content was missing; since
+   [ADR-011](./ADR-011-build-caching.md) it runs the cached wireit tasks); a PR
+   template with a definition of done.
 
 ## Rationale
 

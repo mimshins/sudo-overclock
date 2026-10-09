@@ -139,5 +139,4 @@ feed or metadata today (`Post` has no cover field; `layout.tsx` sets a global
 - The `<picture>` wrapper touches three presentation touchpoints — the enhancer
   selector, `post-images.module.css`, and `post-body.module.css` — and they must
   ship together with the compiler change.
-- The concrete compiler, markup, and test changes are specified in
-  `.ai/specs/post-asset-pipeline.md`.
+- Recorded in [ADR-004](../../decisions/ADR-004-post-asset-pipeline.md).

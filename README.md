@@ -23,6 +23,11 @@ Engineering blog of
 - **undefined medium** - Display typeface (wordmark + `h1`/`h2`)
 - **Unified.js + Rehype + Remark** - Markdown processing pipeline
 - **Shiki** - Build-time code highlighting
+- **yaml** - Post front matter
+- **Vitest + Testing Library** - Unit, integration, and component tests
+- **oxlint + oxfmt + stylelint** - Linting, formatting, and design-token rules
+- **wireit** - Content-addressed task caching (local and CI)
+- **Changesets** - Semver releases and changelogs
 - **GitHub Pages** - Hosting (via GitHub Actions)
 
 ## Project Structure

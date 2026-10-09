@@ -25,6 +25,8 @@ export default defineConfig({
     "**/node_modules",
     "pnpm-lock.*",
     "LICENSE",
+    // Agent and skill files keep single-line frontmatter descriptions, which
+    // some agent tools require; oxfmt would wrap them.
     ".ai/agents/*.md",
     ".ai/skills/*/SKILL.md",
   ],

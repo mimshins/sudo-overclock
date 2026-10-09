@@ -2,10 +2,9 @@
 
 - **Status:** Implemented
 - **Date:** 2026-10-09
-- **Supersedes:** —
+- **Supersedes:** [RFC-001](./RFC-001-ai-post-authoring-pipeline.md)
+  (knowledge-layer layout only; the staged pipeline stands)
 - **Superseded by:** —
-- **Supersedes (in part):** [RFC-001](./RFC-001-ai-post-authoring-pipeline.md)
-  (the `.ai/` layout only)
 
 ## Context
 
