@@ -14,15 +14,15 @@ participating, you are expected to uphold it.
 - Open an issue to discuss a non-trivial change before writing code, so we can
   agree on scope.
 - Architectural or design changes follow the spec-driven workflow in
-  [`AGENTS.md`](./AGENTS.md). Routine changes, small fixes, and copy edits do
-  not.
+  [`AGENTS.md`](./AGENTS.md): a spec, an RFC when there are real alternatives,
+  and an ADR once it ships. Routine changes, small fixes, and copy edits do not.
 
 ## Development setup
 
 Requirements: Node.js `>= 24` and pnpm `10.22.0`.
 
 ```sh
-pnpm install       # install dependencies
+pnpm install       # install dependencies and the git hooks
 pnpm dev           # start the dev server
 pnpm compile       # raw markdown -> generated content
 pnpm build         # production static export (runs compile first)
@@ -30,6 +30,11 @@ pnpm test          # unit/integration tests
 pnpm check:lint    # oxlint + oxfmt check
 pnpm format        # auto-fix formatting
 ```
+
+`pnpm install` sets `git config core.hooksPath .githooks`. The versioned
+[`.githooks/pre-push`](./.githooks/pre-push) compiles content if it is missing,
+then runs `pnpm check:lint` and `pnpm test`, and aborts the push on failure.
+Bypass only in an emergency with `git push --no-verify`; CI runs the same gates.
 
 ## Project structure
 
@@ -52,9 +57,8 @@ conventions live in [`docs/components.md`](./docs/components.md).
 ## Working on content
 
 Posts go through the staged authoring pipeline documented in
-[`.ai/skills/post-authoring/pipeline.md`](./.ai/skills/post-authoring/pipeline.md).
-Drafts live in `src/modules/blog/content/drafts/<slug>/`; the mechanical steps
-are:
+[`docs/authoring.md`](./docs/authoring.md#writing-pipeline). Drafts live in
+`src/modules/blog/content/drafts/<slug>/`; the mechanical steps are:
 
 ```sh
 pnpm author:new <slug>        # scaffold a draft
@@ -65,6 +69,38 @@ pnpm author:publish <slug>    # move it into content/raw/
 Never edit `content/compiled/` or `public/posts/` by hand — both are generated.
 See [`docs/authoring.md`](./docs/authoring.md) for frontmatter and body rules,
 and [`docs/runbook.md`](./docs/runbook.md) for troubleshooting.
+
+## Where knowledge lives
+
+| Artifact | Home                                  | Answers                                       |
+| -------- | ------------------------------------- | --------------------------------------------- |
+| docs     | [`docs/`](./docs/)                    | How does it work now, and what are the rules? |
+| ADR      | [`decisions/`](./decisions/README.md) | Why was this decided?                         |
+| RFC      | [`rfcs/`](./rfcs/README.md)           | What is proposed, and what were the options?  |
+| tests    | `*.test.ts` beside the code           | Does the behavior hold?                       |
+| AI layer | [`.ai/`](./.ai/README.md)             | How does an agent orient and do the work?     |
+
+Project knowledge never lives only in `.ai/`; removing every AI tool leaves the
+site, the authoring CLI, and every decision intact
+([ADR-008](./decisions/ADR-008-agent-agnostic-knowledge-layer.md)).
+
+## Working with AI agents
+
+[`AGENTS.md`](./AGENTS.md) is the only instruction source. Skills and role
+agents are defined once in [`.ai/skills/`](./.ai/skills/) and
+[`.ai/agents/`](./.ai/agents/) and exposed through pointer-only adapters
+(symlinks; on Windows enable `git config core.symlinks true`):
+
+| Tool           | Finds instructions / skills / agents                          | Invoke a role                                             |
+| -------------- | ------------------------------------------------------------- | --------------------------------------------------------- |
+| Claude Code    | `CLAUDE.md` → `AGENTS.md`; `.claude/skills`, `.claude/agents` | "use the reviewer agent" or `@agent-reviewer`             |
+| OpenCode       | `AGENTS.md`; `.opencode/skills`, `.opencode/agents`           | `@reviewer`                                               |
+| Codex / others | `AGENTS.md`; `.agents/skills`                                 | "Act as the reviewer defined in `.ai/agents/reviewer.md`" |
+
+Roles: **documenter** (spec/RFC/ADR), **implementer** (code + tests),
+**reviewer** (architecture and drift check, on request), **editor** (post
+stages). A typical change: documenter → implementer → your review → reviewer
+(optional). **Agents never stage, commit, or push unless you ask.**
 
 ## Commit messages
 
@@ -80,6 +116,8 @@ and [`docs/runbook.md`](./docs/runbook.md) for troubleshooting.
 - Keep them small and focused — one feature or fix per Pull Request.
 - Describe what changed and why, and link the related issue.
 - Make sure `pnpm check:lint` and `pnpm test` pass; CI runs both plus a build.
+- Fill in the [PR template](./.github/PULL_REQUEST_TEMPLATE.md) definition of
+  done.
 
 ## License
 

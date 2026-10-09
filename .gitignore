@@ -144,3 +144,6 @@ public/posts/
 
 # Local-only AI specs (never committed)
 .ai/specs/
+
+# Per-machine AI tool settings (shared adapters in .claude/ are committed)
+.claude/settings.local.json

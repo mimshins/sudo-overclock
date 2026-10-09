@@ -49,18 +49,18 @@ src/
             └── compiled/   # Generated TS (gitignored, built at compile time)
 scripts/                    # Compiler + authoring entrypoints
 public/                     # Static assets + generated post images
-docs/                       # Architecture, design language, authoring, runbook
-.ai/                        # Agent knowledge base (memory, skills, RFCs, specs)
+docs/                       # Current-state docs: architecture, design, authoring, runbook
+decisions/                  # Accepted decisions (ADRs)
+rfcs/                       # Proposals: active/ and archived/
+.ai/                        # AI tooling only: memories, skills, agents, templates
 ```
 
 ## Content
 
 Blog posts are authored as markdown under `src/modules/blog/content/raw/` and
 compiled at build time. Writing follows a staged, human-led pipeline documented
-in
-[`.ai/skills/post-authoring/pipeline.md`](./.ai/skills/post-authoring/pipeline.md);
-drafts live in `src/modules/blog/content/drafts/<slug>/` and are excluded from
-the build.
+in [`docs/authoring.md`](./docs/authoring.md#writing-pipeline); drafts live in
+`src/modules/blog/content/drafts/<slug>/` and are excluded from the build.
 
 ```sh
 pnpm author:new <slug>        # scaffold a draft

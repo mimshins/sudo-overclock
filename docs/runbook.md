@@ -7,6 +7,11 @@ Commands, local workflow, troubleshooting, and release for sudo-overclock.
 - Node `>= 24` (pinned: `24.10.0` via Volta)
 - pnpm `10.22.0` (declared in `packageManager`)
 
+Run `pnpm install` once after cloning: besides dependencies, its `prepare`
+script points git at the versioned hooks (`core.hooksPath=.githooks`). The
+`pre-push` hook compiles content only when `content/compiled/index.ts` is
+missing, then runs `pnpm check:lint` and `pnpm test`; a failure aborts the push.
+
 ## Commands
 
 | Command                        | What it does                                                                                  |
@@ -36,8 +41,7 @@ assets do not accumulate.
 ## Writing and publishing a post
 
 Writing is a staged, human-led process documented in
-[`.ai/skills/post-authoring/pipeline.md`](../.ai/skills/post-authoring/pipeline.md).
-The mechanical steps:
+[`docs/authoring.md`](./authoring.md#writing-pipeline). The mechanical steps:
 
 ```sh
 pnpm author:new my-post-slug      # scaffold content/drafts/my-post-slug/

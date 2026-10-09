@@ -1,7 +1,7 @@
 /*
  * `pnpm author:new <slug> [--title "<Title>"] [--date YYYY-MM-DD]`
  *
- * Scaffolds `content/drafts/<slug>/` from `.ai/templates/`.
+ * Scaffolds `content/drafts/<slug>/` from `infrastructure/authoring/templates/`.
  */
 
 import { relative, resolve } from "node:path";
@@ -32,9 +32,7 @@ try {
     ...(flags.date === undefined ? {} : { date: flags.date }),
   });
   console.log(`created ${relative(projectRoot, result.draftDir)}/`);
-  console.log(
-    "next: fill in post.md, then follow .ai/skills/post-authoring/pipeline.md",
-  );
+  console.log("next: fill in post.md, then follow docs/authoring.md");
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));
   process.exit(1);

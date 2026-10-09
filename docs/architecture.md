@@ -120,8 +120,7 @@ Unified.js, Rehype, and Remark plugins. It is invoked from a build-time script
 
 Drafts live in `modules/blog/content/drafts/<slug>/` — a sibling of `raw/`. The
 compiler globs only `raw/**`, so drafts are excluded from the build for free.
-See [`docs/authoring.md`](./authoring.md) and
-[`.ai/skills/post-authoring/pipeline.md`](../.ai/skills/post-authoring/pipeline.md).
+See [`docs/authoring.md`](./authoring.md).
 
 Pipeline stages: `compile.ts` orchestrates; `pipeline.ts` runs remark-parse →
 remark-gfm → remark-rehype → Shiki → assets → headings → rehype-stringify;
@@ -271,6 +270,20 @@ belong in `globals.css` only.
 Next.js is configured for Static Site Generation (SSG). All blog content is
 pre-rendered at build time.
 
+## Comments
+
+Code explains itself through names and structure; comments are the exception.
+Two kinds are standard:
+
+- **File-header doc comments** that open scripts (`scripts/**`) and
+  infrastructure modules, stating the file's job and its contract.
+- **Constraint comments**: one or two lines where the code cannot express a
+  non-obvious reason (a workaround, a platform quirk, a visual constraint such
+  as box-drawing glyphs needing `letter-spacing: 0` to join).
+
+Everything else — narrating what the code does, commented-out code, TODOs
+without a tracked item — does not belong in the source.
+
 ## Circular Dependencies
 
 The project uses oxlint's `import/no-cycle` rule to detect circular dependencies
@@ -287,7 +300,9 @@ as part of `pnpm check:lint`.
 
 - All content is pre-rendered (SSG).
 - Local images carry intrinsic `width`/`height` (CLS-free), `loading="lazy"`,
-  `decoding="async"`, and a skeleton placeholder until load. Responsive
-  `srcset`/format conversion is future work.
+  `decoding="async"`, and a skeleton placeholder until load. They are served as
+  content-hashed AVIF/WebP with a same-format fallback
+  ([ADR-004](../decisions/ADR-004-post-asset-pipeline.md)); a multi-width
+  `srcset` is future work.
 - Code-split components where appropriate.
 - Minimize client-side JavaScript.

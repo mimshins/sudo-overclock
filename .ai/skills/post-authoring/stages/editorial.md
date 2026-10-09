@@ -23,7 +23,9 @@ the author's voice.
    tags, alt text, terminology consistency (against `research.md` glossary).
 4. **Facts.** Flag every claim not backed by `research.md` as `[unverified]`.
 5. Produce **two artifacts**: an annotated snapshot and a proposed diff. Every
-   change carries a rationale and a severity (`blocker` / `should` / `nit`).
+   change carries a rationale and a severity (`blocker` / `should` / `nit`) as
+   defined in the
+   [editorial standard](../../../../docs/authoring.md#editorial-standard).
 
 ## Output contract
 

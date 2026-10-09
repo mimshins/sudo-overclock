@@ -10,15 +10,16 @@ catches what regexes can, you catch what they cannot.
 
 - `post.md` — the resolved draft.
 - `brief.md`, `research.md` — intent and facts.
-- `checklists/preflight.md` — the mechanical checklist.
+- [`docs/authoring.md#preflight-checklist`](../../../../docs/authoring.md#preflight-checklist)
+  — the mechanical and content checklist.
 
 ## Instructions
 
 1. Run `pnpm author:preflight <slug>` and read its report.
-2. Walk the content checklist in
-   [`checklists/preflight.md`](../checklists/preflight.md): claims sourced,
-   links alive, code correct, alt text meaningful, TOC/headings coherent,
-   description and tags suitable.
+2. Walk the content items of the
+   [preflight checklist](../../../../docs/authoring.md#preflight-checklist):
+   claims sourced, links alive, code correct, alt text meaningful, TOC/headings
+   coherent, description and tags suitable.
 3. Confirm `brief.md`'s target length is respected (or the deviation is
    intentional).
 4. Record anything the author must fix, with a severity.

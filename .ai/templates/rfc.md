@@ -1,10 +1,10 @@
 # RFC Template
 
-Copy to `.ai/rfc/NNN-<kebab-title>.md` (next free number, never reuse) and fill
-out. See `.ai/rfc/README.md` for the lifecycle.
+Copy to `rfcs/active/RFC-NNN-<kebab-title>.md` (next free number, never reuse)
+and fill out. See `rfcs/README.md` for the lifecycle.
 
 ```md
-# NNN — <Title>
+# RFC-NNN — <Title>
 
 - **Status:** Draft
 - **Date:** YYYY-MM-DD

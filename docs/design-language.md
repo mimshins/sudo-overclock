@@ -78,7 +78,7 @@ CSS only — no React state for theming primitives.
   single weight), so display text must use the 10px-grid sizes in `globals.css`,
   `letter-spacing: 0`, and `-webkit-font-smoothing: none`. Subsetting or
   modifying it would trigger the Reserved Font Name and is not allowed without a
-  new decision (see `.ai/rfc/007-display-typeface.md`).
+  new decision (see [ADR-007](../decisions/ADR-007-display-typeface.md)).
 - **Brand mark** — the wordmark is a typed lockup (`> sudo-overclock`), not an
   illustrated logo. The standalone `soc-assembled-logo.svg` is the two-line
   lockup; the favicon (`src/app/icon.svg`) is the `s` monogram plus a block

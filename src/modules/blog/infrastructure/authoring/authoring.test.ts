@@ -30,7 +30,7 @@ const makeContext = async (): Promise<AuthoringContext> => {
     rawDir,
     compiledDir: join(root, "compiled"),
     publicDir: join(root, "public"),
-    templatesDir: resolve(process.cwd(), ".ai/templates"),
+    templatesDir: resolve(import.meta.dirname, "templates"),
   };
 };
 

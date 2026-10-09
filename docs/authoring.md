@@ -4,11 +4,138 @@ How to write and publish a blog post on sudo-overclock.
 
 ## Writing pipeline
 
-Writing is a staged, human-led, AI-assisted process — seed → brief → research →
-outline → draft → editorial → resolve → preflight → publish. It is defined in
-[`.ai/skills/post-authoring/pipeline.md`](../.ai/skills/post-authoring/pipeline.md),
-with per-stage prompts under `.ai/skills/post-authoring/stages/` and templates
-under `.ai/templates/`.
+Writing is a staged, human-led process
+([ADR-001](../decisions/ADR-001-ai-post-authoring-pipeline.md)). The author owns
+voice, facts, and every final decision. Assistance — from a person or an AI tool
+— drafts, gathers, and critiques; it proposes diffs and inline notes and never
+rewrites the author's prose silently.
+
+| #   | Stage         | Owner                     | Artifact                                     | Assistance                              |
+| --- | ------------- | ------------------------- | -------------------------------------------- | --------------------------------------- |
+| 0   | Seed          | Author                    | `post.md`                                    | none                                    |
+| 1   | Brief         | Author seeds, AI expands  | `brief.md`                                   | expand into a tight brief               |
+| 2   | Research pack | AI drafts, author curates | `research.md`                                | cheatsheet + checklist + open questions |
+| 3   | Outline       | Author                    | `snapshots/outline-<date>.md`                | critique structure, flag gaps           |
+| 4   | Draft         | Author                    | `post.md`                                    | none — the voice stays the author's     |
+| 5   | Editorial     | Lead editor               | `snapshots/editorial-<date>.md` + `.diff.md` | structural → line → copy pass           |
+| 6   | Resolve       | Author                    | `post.md`                                    | none                                    |
+| 7   | Preflight     | Editor + CLI              | `snapshots/preflight-<date>.md`              | mechanical + content audit              |
+| 8   | Publish       | Author                    | `content/raw/<slug>/`                        | none                                    |
+
+`post.md` frontmatter `stage` values, in order: `seed` → `brief` → `research` →
+`outline` → `draft` → `review` → `resolve` → `preflight` → `ready`.
+
+### Gates
+
+A stage is complete when its artifact exists and the next stage has what it
+needs. Do not skip a gate.
+
+- **0 → 1** `post.md` states the subject, audience, and a bullet-level intent.
+- **1 → 2** `brief.md` has angle, takeaway, why-now, non-goals, target length.
+- **2 → 3** `research.md` answers the brief's open questions with sources.
+- **3 → 4** `snapshots/outline-*.md` has an `h2`/`h3` skeleton with per-section
+  intent, and the critique is addressed.
+- **4 → 5** `post.md` is a complete rough draft (start at `h2`).
+- **5 → 6** `snapshots/editorial-*.diff.md` lists every proposed change with a
+  rationale; the author resolves each in `post.md`.
+- **6 → 7** `pnpm author:preflight <slug>` exits clean and the content audit is
+  recorded in `snapshots/preflight-*.md`.
+- **7 → 8** `pnpm author:publish <slug>` moves the post to `content/raw/`.
+
+### Rules
+
+- Only the author publishes. Nothing but `pnpm author:publish` writes to
+  `content/raw/`, and nothing writes to `public/` or `content/compiled/` by
+  hand.
+- During editorial, `post.md` is never edited in place; changes arrive as a
+  snapshot plus a diff.
+- Facts and claims the author did not provide are flagged `[unverified]`, never
+  asserted.
+- Code fences always carry a language; images always carry alt text.
+
+`pnpm author:new` scaffolds the workspace from the templates in
+`src/modules/blog/infrastructure/authoring/templates/`. AI tools run the
+assisted stages with the prompts in `.ai/skills/post-authoring/`; those prompts
+implement this contract and never override it.
+
+### Editorial standard
+
+The editorial pass (stage 5) checks the draft against this standard.
+
+Every editorial note carries one severity:
+
+| Severity  | Meaning                                                              |
+| --------- | -------------------------------------------------------------------- |
+| `blocker` | Must be fixed before publishing (factual error, broken logic).       |
+| `should`  | Clear improvement; the author should address or consciously decline. |
+| `nit`     | Taste-level; optional.                                               |
+
+#### Structural
+
+- [ ] The draft delivers the brief's single takeaway.
+- [ ] Section order supports the argument; no section is doing two jobs.
+- [ ] No missing sections, no redundant ones.
+- [ ] Headings form a clean `h2`/`h3` tree; the body starts at `h2`.
+
+#### Line
+
+- [ ] Hedges, filler, and throat-clearing removed.
+- [ ] Sentences varied; no repeated scaffold ("In this section we…").
+- [ ] The author's voice and idioms preserved.
+
+#### Copy
+
+- [ ] Grammar and punctuation correct.
+- [ ] Terminology matches `research.md`'s glossary.
+- [ ] Every code fence has a language; code is correct and runnable.
+- [ ] Every image has meaningful alt text.
+- [ ] Links resolve and point where they claim.
+
+#### Facts
+
+- [ ] Every factual claim traces to `research.md` or is flagged `[unverified]`.
+- [ ] No invented benchmarks, statistics, quotes, or citations.
+
+### Preflight checklist
+
+The preflight (stage 7) is complete when every item passes.
+
+The `pnpm author:preflight <slug>` command covers the mechanical items marked
+**[auto]**. Walk the rest by hand (or with the assistant).
+
+#### Frontmatter
+
+- [ ] `title` present and descriptive. **[auto]**
+- [ ] `date` present and ISO `YYYY-MM-DD`. **[auto]**
+- [ ] `description` present, 50–160 chars. **[auto]**
+- [ ] `tags` present and non-empty. **[auto]**
+- [ ] `stage` is `ready`. **[auto]**
+- [ ] No draft-only keys left behind. **[auto]**
+
+#### Body
+
+- [ ] Body starts at `h2` (a leading `h1` is stripped at compile time).
+      **[auto]**
+- [ ] Every relative image path exists next to the post. **[auto]**
+- [ ] Every fenced code block declares a language. **[auto]**
+- [ ] Every image has non-empty alt text. **[auto]**
+- [ ] Heading anchors do not collide after slugification (compiler suffixes
+      duplicates; confirm that is acceptable). **[auto]**
+
+#### Uniqueness
+
+- [ ] Slug does not collide with a published post in `content/raw/`. **[auto]**
+- [ ] Slug does not collide with another draft. **[auto]** (self excluded)
+
+#### Content (human/assistant)
+
+- [ ] Every factual claim is sourced or flagged.
+- [ ] Every link resolves and points where it claims.
+- [ ] Code samples are correct and runnable.
+- [ ] Alt text describes the image's purpose, not "image".
+- [ ] `description` reads well as a list excerpt and meta description.
+- [ ] Tags are consistent with existing tags where sensible.
+- [ ] Assets are final and reasonably sized.
 
 The rest of this document covers the publishing mechanics: where files live,
 frontmatter, markdown rules, and the commands that build and ship a post.

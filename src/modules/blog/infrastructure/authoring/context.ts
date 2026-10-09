@@ -2,8 +2,8 @@
  * Authoring paths.
  *
  * Resolves the directories the authoring CLI touches: the draft workspace, the
- * published raw content, the Next.js public directory, and the `.ai/templates/`
- * starting points. Kept in one place so scripts and tests agree.
+ * published raw content, the Next.js public directory, and the draft templates.
+ * Kept in one place so scripts and tests agree.
  */
 
 import { resolve } from "node:path";
@@ -19,7 +19,7 @@ type AuthoringContext = {
   readonly compiledDir: string;
   /** Absolute path to the Next.js `public/` directory. */
   readonly publicDir: string;
-  /** Absolute path to `.ai/templates/`. */
+  /** Absolute path to the draft templates (`authoring/templates/`). */
   readonly templatesDir: string;
 };
 
@@ -29,7 +29,10 @@ const createAuthoringContext = (projectRoot: string): AuthoringContext => ({
   rawDir: resolve(projectRoot, "src/modules/blog/content/raw"),
   compiledDir: resolve(projectRoot, "src/modules/blog/content/compiled"),
   publicDir: resolve(projectRoot, "public"),
-  templatesDir: resolve(projectRoot, ".ai/templates"),
+  templatesDir: resolve(
+    projectRoot,
+    "src/modules/blog/infrastructure/authoring/templates",
+  ),
 });
 
 export { createAuthoringContext };

@@ -25,5 +25,7 @@ export default defineConfig({
     "**/node_modules",
     "pnpm-lock.*",
     "LICENSE",
+    ".ai/agents/*.md",
+    ".ai/skills/*/SKILL.md",
   ],
 });

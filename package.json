@@ -27,6 +27,7 @@
     "changesets:apply": "changeset version",
     "changesets:status": "changeset status --since=main",
     "release": "pnpm build && changeset publish --tag latest",
+    "prepare": "git config core.hooksPath .githooks || true",
     "test": "tsx --test src/**/*.test.ts",
     "compile": "tsx scripts/compile.ts",
     "author:new": "tsx scripts/author/new.ts",

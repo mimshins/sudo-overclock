@@ -1,8 +1,9 @@
 /*
  * Draft scaffolding.
  *
- * Creates `content/drafts/<slug>/` from `.ai/templates/`, ready for the first
- * pipeline stage. Refuses to overwrite an existing draft or a published post.
+ * Creates `content/drafts/<slug>/` from the `templates/` beside this file, ready
+ * for the first pipeline stage. Refuses to overwrite an existing draft or a
+ * published post.
  */
 
 import { mkdir, readFile, writeFile } from "node:fs/promises";
