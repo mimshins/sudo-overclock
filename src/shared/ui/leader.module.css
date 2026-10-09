@@ -1,7 +1,7 @@
 .leader {
   --leader-size: var(--typography-caption-size);
-  --leader-font-weight: 700;
-  --leader-letter-spacing: 0.15em;
+  --leader-font-weight: var(--typography-weight-bold);
+  --leader-letter-spacing: var(--typography-tracking-widest);
   --leader-label-color: var(--color-on-phosphor);
   --leader-rule-color: var(--color-foreground-tertiary);
   --leader-plate: var(--color-phosphor);

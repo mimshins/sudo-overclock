@@ -45,18 +45,32 @@ const PostList = ({ posts, className }: PostListProps) => {
           <Link
             href={`/blog/posts/${post.slug}/`}
             className={styles.link}
+            data-slot="post-card"
           >
             <div
               className={styles.header}
               data-slot="post-card-header"
             >
-              <h2 className={styles.title}>{post.title}</h2>
-              <span className={styles.meta}>
+              <h2
+                className={styles.title}
+                data-slot="post-card-title"
+              >
+                {post.title}
+              </h2>
+              <span
+                className={styles.meta}
+                data-slot="post-card-meta"
+              >
                 {post.date} &middot; {post.readingTimeMinutes} min
               </span>
             </div>
             {post.description.length > 0 && (
-              <span className={styles.description}>{post.description}</span>
+              <span
+                className={styles.description}
+                data-slot="post-card-description"
+              >
+                {post.description}
+              </span>
             )}
             {post.tags.length > 0 && (
               <span

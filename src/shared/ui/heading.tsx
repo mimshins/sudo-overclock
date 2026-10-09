@@ -53,8 +53,8 @@ const Heading = <T extends ElementType = "h2">({
         glow && styles.glow,
         className,
       )}
-      data-slot="heading"
       {...rest}
+      data-slot="heading"
     >
       {children}
     </Component>

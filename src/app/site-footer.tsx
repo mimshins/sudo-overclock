@@ -26,7 +26,10 @@ const SiteFooter = () => (
       className={styles.inner}
       data-slot="site-footer-inner"
     >
-      <span className={styles.copy}>
+      <span
+        className={styles.copy}
+        data-slot="footer-copy"
+      >
         &copy; {new Date().getFullYear()} &middot; sudo-overclock &middot;{" "}
         <span
           className={styles.version}
@@ -35,7 +38,12 @@ const SiteFooter = () => (
           v{SITE_VERSION} &middot; {CONTENT_REVISION}
         </span>
       </span>
-      <span className={styles.ascii}>&mdash; built with phosphor &mdash;</span>
+      <span
+        className={styles.ascii}
+        data-slot="footer-ascii"
+      >
+        &mdash; built with phosphor &mdash;
+      </span>
       <nav
         className={styles.socials}
         aria-label="social"

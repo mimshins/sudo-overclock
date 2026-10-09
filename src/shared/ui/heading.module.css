@@ -1,8 +1,8 @@
 .heading {
   --heading-line-height: 1.2;
-  --heading-font-weight: 500;
+  --heading-font-weight: var(--typography-weight-medium);
   --heading-font-family: var(--typography-typeface-ltr);
-  --heading-letter-spacing: -0.02em;
+  --heading-letter-spacing: var(--typography-tracking-tight);
   --heading-smoothing: antialiased;
   --heading-color: var(--color-foreground);
   --heading-strike: 0 0 0 transparent;

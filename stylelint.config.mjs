@@ -36,6 +36,31 @@ export default {
           "Primitive color token — use a semantic token (docs/design-system.md#color).",
       },
     ],
+    "declaration-property-value-allowed-list": [
+      {
+        "/^(letter-spacing|--[\\w-]*letter-spacing)$/": [
+          "0",
+          "normal",
+          "/^var\\(--/",
+        ],
+        "/^(font-weight|--[\\w-]*-weight)$/": ["/^var\\(--/"],
+        "/^(border(-(top|right|bottom|left|block|inline)(-(start|end))?)?|--[\\w-]*border)$/":
+          [
+            "0",
+            "none",
+            "/^var\\(--[\\w-]+\\)$/",
+            "/^var\\(--border-width-[\\w-]+\\) (solid|dashed) /",
+          ],
+        "/^(border(-[a-z]+)*-width|--[\\w-]*border[\\w-]*-width)$/": [
+          "0",
+          "/^var\\(--/",
+        ],
+      },
+      {
+        message: property =>
+          `Raw "${property}" value — use a --typography-tracking-*, --typography-weight-*, or --border-width-* token (docs/design-system.md#tokens).`,
+      },
+    ],
   },
   overrides: [
     {
@@ -46,6 +71,7 @@ export default {
         "function-disallowed-list": null,
         "unit-disallowed-list": null,
         "declaration-property-value-disallowed-list": null,
+        "declaration-property-value-allowed-list": null,
       },
     },
   ],

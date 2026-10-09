@@ -17,7 +17,7 @@
   font-size: var(--typography-body2-size);
   color: var(--color-foreground-secondary);
   margin: 0;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--typography-tracking-wide);
 }
 
 .actions {

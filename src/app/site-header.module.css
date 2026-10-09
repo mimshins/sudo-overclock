@@ -1,5 +1,5 @@
 .header {
-  --header-border: 1px solid var(--color-border-primary);
+  --header-border: var(--border-width-thin) solid var(--color-border-primary);
 
   flex-shrink: 0;
   border-bottom: var(--header-border);
@@ -17,6 +17,9 @@
 }
 
 .brand {
+  --brand-color: var(--color-foreground);
+  --brand-glow: none;
+
   display: inline-flex;
   align-items: baseline;
   gap: var(--spacing-xs);
@@ -26,13 +29,14 @@
   line-height: var(--typography-display-leading);
   letter-spacing: 0;
   -webkit-font-smoothing: none;
-  color: var(--color-foreground);
+  color: var(--brand-color);
   text-decoration: none;
+  text-shadow: var(--brand-glow);
 }
 
 .brand:hover {
-  color: var(--color-phosphor);
-  text-shadow: 0 0 calc(4px * var(--phosphor-glow-strength))
+  --brand-color: var(--color-phosphor);
+  --brand-glow: 0 0 calc(4px * var(--phosphor-glow-strength))
     var(--color-phosphor-glow);
 }
 
@@ -52,32 +56,40 @@
 }
 
 .link {
+  --link-color: var(--color-foreground-secondary);
+  --link-weight: var(--typography-weight-regular);
+  --link-glow: none;
+
   font-family: var(--font-mono);
   font-size: var(--text-body2);
-  color: var(--color-foreground-secondary);
+  font-weight: var(--link-weight);
+  color: var(--link-color);
   text-decoration: none;
+  text-shadow: var(--link-glow);
   transition: color var(--duration-fast) var(--easing-standard);
 }
 
 .link:hover {
-  color: var(--color-phosphor);
+  --link-color: var(--color-phosphor);
 }
 
 .active,
 .active:hover {
-  color: var(--color-phosphor);
-  font-weight: 600;
-  text-shadow: 0 0 calc(4px * var(--phosphor-glow-strength))
+  --link-color: var(--color-phosphor);
+  --link-weight: var(--typography-weight-semibold);
+  --link-glow: 0 0 calc(4px * var(--phosphor-glow-strength))
     var(--color-phosphor-glow);
 }
 
 .menuButton {
+  --menu-border-color: var(--color-border-primary);
+
   display: none;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--color-border-primary);
+  width: var(--size-control);
+  height: var(--size-control);
+  border: var(--border-width-thin) solid var(--menu-border-color);
   border-radius: var(--radius-none);
   background: transparent;
   color: var(--color-phosphor);
@@ -88,7 +100,7 @@
 }
 
 .menuButton:hover {
-  border-color: var(--color-phosphor);
+  --menu-border-color: var(--color-phosphor);
 }
 
 .burgerBar,
@@ -154,7 +166,7 @@
     gap: var(--spacing-xxs);
     flex-basis: 100%;
     order: 3;
-    border-top: 1px solid var(--color-divider);
+    border-top: var(--border-width-thin) solid var(--color-divider);
     margin-top: var(--spacing-sm);
     padding-top: var(--spacing-sm);
   }

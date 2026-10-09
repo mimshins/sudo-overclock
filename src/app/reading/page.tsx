@@ -25,9 +25,13 @@ const BookRow = ({ book }: { readonly book: Book }) => (
     className={styles.book}
     data-slot="reading-book"
   >
-    <div className={styles.coverFrame}>
+    <div
+      className={styles.coverFrame}
+      data-slot="reading-cover-frame"
+    >
       <span
         className={styles.coverFallback}
+        data-slot="reading-cover-fallback"
         aria-hidden="true"
       >
         {initials(book.title)}
@@ -42,9 +46,24 @@ const BookRow = ({ book }: { readonly book: Book }) => (
       className={styles.bookBody}
       data-slot="reading-book-body"
     >
-      <h3 className={styles.bookTitle}>{book.title}</h3>
-      <p className={styles.bookAuthors}>{book.authors}</p>
-      <p className={styles.review}>{book.review}</p>
+      <h3
+        className={styles.bookTitle}
+        data-slot="reading-book-title"
+      >
+        {book.title}
+      </h3>
+      <p
+        className={styles.bookAuthors}
+        data-slot="reading-book-authors"
+      >
+        {book.authors}
+      </p>
+      <p
+        className={styles.review}
+        data-slot="reading-review"
+      >
+        {book.review}
+      </p>
     </div>
   </li>
 );

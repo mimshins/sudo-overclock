@@ -6,6 +6,7 @@
  */
 
 import { Caption } from "@repo/shared/ui/caption";
+import { Heading } from "@repo/shared/ui/heading";
 import { Leader } from "@repo/shared/ui/leader";
 
 import type { Post } from "../domain/post.ts";
@@ -22,7 +23,14 @@ const PostHeader = ({ post }: PostHeaderProps) => (
     data-slot="post-header"
   >
     <Leader>{post.frontmatter.slug}.md</Leader>
-    <h1 className={styles.title}>{post.frontmatter.title}</h1>
+    <Heading
+      as="h1"
+      size="h1"
+      glow
+      className={styles.title}
+    >
+      {post.frontmatter.title}
+    </Heading>
     <div
       className={styles.meta}
       data-slot="post-meta"
@@ -31,7 +39,12 @@ const PostHeader = ({ post }: PostHeaderProps) => (
       <Caption variant="default">{post.readingTimeMinutes} min read</Caption>
     </div>
     {post.frontmatter.description !== undefined && (
-      <p className={styles.description}>{post.frontmatter.description}</p>
+      <p
+        className={styles.description}
+        data-slot="post-description"
+      >
+        {post.frontmatter.description}
+      </p>
     )}
   </header>
 );

@@ -131,16 +131,17 @@
   --color-backdrop-overlay: rgb(0 0 0 / 0.7);
 
   /* === TYPOGRAPHY (TYPEFACES) ============================================= */
-  /* Text face: JetBrains Mono (prose, UI, code, h3-h6). */
+  /* Text face: JetBrains Mono (prose, UI, code, h3-h6), self-hosted by
+     next/font/google, which injects the family name on <html>. */
   --typography-typeface-rtl:
-    "JetBrains Mono", "Vazirmatn", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    var(--font-mono-family), ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, monospace;
   --typography-typeface-ltr:
-    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    monospace;
+    var(--font-mono-family), ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, monospace;
   --typography-typeface-mono:
-    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    monospace;
+    var(--font-mono-family), ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, monospace;
   /* Display face: undefined medium (pixel grid, OFL). Wordmark + h1/h2 only.
      The family name is injected by next/font/local on <html>. */
   --typography-typeface-display:
@@ -159,7 +160,7 @@
   --typography-display-h3-size: 20px;
   --typography-display-brand-size: 20px;
   --typography-display-leading: 1.4;
-  --typography-display-weight: 400;
+  --typography-display-weight: var(--typography-weight-regular);
 
   --typography-h1-size: var(--typography-display-h1-size);
   --typography-h1-leading: var(--typography-display-leading);
@@ -171,39 +172,66 @@
 
   --typography-h3-size: 1.75rem;
   --typography-h3-leading: 1.2857142857;
-  --typography-h3-weight: 700;
+  --typography-h3-weight: var(--typography-weight-bold);
 
   --typography-h4-size: 1.375rem;
   --typography-h4-leading: 1.3636363636;
-  --typography-h4-weight: 700;
+  --typography-h4-weight: var(--typography-weight-bold);
 
   --typography-h5-size: 1.125rem;
   --typography-h5-leading: 1.4444444444;
-  --typography-h5-weight: 700;
+  --typography-h5-weight: var(--typography-weight-bold);
 
   --typography-h6-size: 1rem;
   --typography-h6-leading: 1.5;
-  --typography-h6-weight: 700;
+  --typography-h6-weight: var(--typography-weight-bold);
 
   --typography-subheading1-size: 0.9375rem;
   --typography-subheading1-leading: 1.6;
-  --typography-subheading1-weight: 500;
+  --typography-subheading1-weight: var(--typography-weight-medium);
 
   --typography-subheading2-size: 0.8125rem;
   --typography-subheading2-leading: 1.6923076923;
-  --typography-subheading2-weight: 500;
+  --typography-subheading2-weight: var(--typography-weight-medium);
 
   --typography-body1-size: 0.9375rem;
   --typography-body1-leading: 1.6;
-  --typography-body1-weight: 400;
+  --typography-body1-weight: var(--typography-weight-regular);
 
   --typography-body2-size: 0.8125rem;
   --typography-body2-leading: 1.6923076923;
-  --typography-body2-weight: 400;
+  --typography-body2-weight: var(--typography-weight-regular);
 
   --typography-caption-size: 0.6875rem;
   --typography-caption-leading: 1.6363636364;
-  --typography-caption-weight: 400;
+  --typography-caption-weight: var(--typography-weight-regular);
+
+  /* === TYPOGRAPHY (WEIGHT, TRACKING, CODE) ================================ */
+  --typography-weight-regular: 400;
+  --typography-weight-medium: 500;
+  --typography-weight-semibold: 600;
+  --typography-weight-bold: 700;
+
+  --typography-tracking-tight: -0.02em;
+  --typography-tracking-snug: 0.02em;
+  --typography-tracking-wide: 0.05em;
+  --typography-tracking-wider: 0.1em;
+  --typography-tracking-widest: 0.15em;
+
+  /* Code listings, and leading 1 for glyph art that must touch line to line */
+  --typography-code-size: 0.875rem;
+  --typography-code-leading: 1.55;
+  --typography-code-inline-size: 0.875em;
+  --typography-glyph-leading: 1;
+
+  /* === BORDERS ============================================================ */
+  --border-width-thin: 1px;
+  --border-width-thick: 2px;
+
+  /* === SIZES ============================================================== */
+  --size-control: 32px;
+  --size-cover-sm: 72px;
+  --size-cover-md: 96px;
 
   /* === FOCUS RING ========================================================= */
   --focus-ring-stroke: 1px;

@@ -12,13 +12,16 @@
 }
 
 .link {
+  --card-border-color: var(--color-border-primary);
+  --card-background: var(--color-glass-surface);
+
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
   padding: var(--spacing-md);
-  border: 1px solid var(--color-border-primary);
+  border: var(--border-width-thin) solid var(--card-border-color);
   border-radius: var(--radius-none);
-  background-color: var(--color-glass-surface);
+  background-color: var(--card-background);
   -webkit-backdrop-filter: var(--glass-filter);
   backdrop-filter: var(--glass-filter);
   color: var(--color-foreground);
@@ -29,8 +32,8 @@
 }
 
 .link:hover {
-  border-color: var(--color-phosphor);
-  background-color: var(--color-glass-surface-hover);
+  --card-border-color: var(--color-phosphor);
+  --card-background: var(--color-glass-surface-hover);
 }
 
 .header {
@@ -44,7 +47,7 @@
   margin: 0;
   font-size: var(--typography-subheading1-size);
   line-height: var(--typography-subheading1-leading);
-  font-weight: 500;
+  font-weight: var(--typography-weight-medium);
 }
 
 .meta {
@@ -52,7 +55,7 @@
   font-size: var(--typography-caption-size);
   line-height: var(--typography-caption-leading);
   color: var(--color-foreground-tertiary);
-  letter-spacing: 0.05em;
+  letter-spacing: var(--typography-tracking-wide);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -75,5 +78,5 @@
   color: var(--color-foreground-tertiary);
   text-align: center;
   padding: var(--spacing-xl);
-  border: 1px dashed var(--color-border-primary);
+  border: var(--border-width-thin) dashed var(--color-border-primary);
 }

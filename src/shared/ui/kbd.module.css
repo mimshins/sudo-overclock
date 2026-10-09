@@ -4,8 +4,8 @@
   --kbd-font-family: var(--font-mono);
   --kbd-font-size: 0.8em;
   --kbd-line-height: 1.6;
-  --kbd-border: 1px solid var(--color-border-primary);
-  --kbd-border-bottom-width: 2px;
+  --kbd-border: var(--border-width-thin) solid var(--color-border-primary);
+  --kbd-border-bottom-width: var(--border-width-thick);
   --kbd-border-radius: var(--radius-sm);
   --kbd-background: var(--color-background-elevated);
   --kbd-color: var(--color-foreground);
@@ -28,10 +28,10 @@
 
 .variantDefault {
   --kbd-color: var(--color-foreground);
-  --kbd-border: 1px solid var(--color-border-primary);
+  --kbd-border: var(--border-width-thin) solid var(--color-border-primary);
 }
 
 .variantPhosphor {
   --kbd-color: var(--color-phosphor);
-  --kbd-border: 1px solid var(--color-phosphor);
+  --kbd-border: var(--border-width-thin) solid var(--color-phosphor);
 }

@@ -59,8 +59,8 @@ const CodeBlock = <T extends ElementType = "pre">({
       )}
       <Component
         className={styles.pre}
-        data-slot="code-block-pre"
         {...rest}
+        data-slot="code-block-pre"
       >
         {children}
       </Component>

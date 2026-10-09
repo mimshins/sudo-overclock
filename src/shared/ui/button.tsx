@@ -60,8 +60,8 @@ const Button = <T extends React.ElementType = typeof BaseButton>({
         sizeClass[size],
         className,
       )}
-      data-slot="button"
       {...rest}
+      data-slot="button"
     >
       {children}
     </Component>

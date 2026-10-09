@@ -1,5 +1,5 @@
 .frame {
-  --block-border: 1px solid var(--color-border-primary);
+  --block-border: var(--border-width-thin) solid var(--color-border-primary);
   --block-background: var(--color-background-elevated);
 
   border: var(--block-border);
@@ -19,14 +19,14 @@
   justify-content: space-between;
   gap: var(--spacing-sm);
   padding: var(--spacing-xs) var(--spacing-sm);
-  border-bottom: 1px solid var(--color-border-primary);
+  border-bottom: var(--border-width-thin) solid var(--color-border-primary);
   background-color: var(--header-background);
   font-size: var(--header-size);
   line-height: var(--header-line-height);
   font-family: var(--header-font-family);
   color: var(--header-color);
   text-transform: lowercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--typography-tracking-wide);
 }
 
 .filename {
@@ -43,8 +43,8 @@
   --pre-padding-x: var(--spacing-sm);
   --pre-padding-y: var(--spacing-md);
   --pre-font-family: var(--font-mono);
-  --pre-font-size: 0.875rem;
-  --pre-line-height: 1.55;
+  --pre-font-size: var(--typography-code-size);
+  --pre-line-height: var(--typography-code-leading);
   --pre-color: var(--color-foreground);
 
   margin: 0;

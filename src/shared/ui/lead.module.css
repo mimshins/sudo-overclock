@@ -1,7 +1,7 @@
 .lead {
   --lead-size: var(--text-subheading1);
   --lead-line-height: 1.4;
-  --lead-font-weight: 400;
+  --lead-font-weight: var(--typography-weight-regular);
   --lead-color: var(--color-foreground);
   --lead-text-transform: none;
   --lead-letter-spacing: normal;
@@ -27,7 +27,7 @@
   --lead-line-height: var(--leading-subheading2);
   --lead-font-weight: var(--font-weight-subheading2);
   --lead-text-transform: uppercase;
-  --lead-letter-spacing: 0.1em;
+  --lead-letter-spacing: var(--typography-tracking-wider);
 }
 
 .variantDefault {

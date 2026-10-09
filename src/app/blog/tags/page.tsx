@@ -23,9 +23,15 @@ const TagItem = ({ tag }: { readonly tag: string }) => {
       <Link
         href={`/blog/tags/${tag}/`}
         className={styles.link}
+        data-slot="tags-link"
       >
         <Tag>{tag}</Tag>
-        <span className={styles.count}>[ {count} ]</span>
+        <span
+          className={styles.count}
+          data-slot="tags-count"
+        >
+          [ {count} ]
+        </span>
       </Link>
     </li>
   );

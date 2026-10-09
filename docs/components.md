@@ -28,7 +28,7 @@ context/DI wired in `app/`).
 | `Heading`           | `size: h1…h6`, `variant: default\|muted\|phosphor`, `glow`                                                                     | Polymorphic, defaults to `h2`                                                      |
 | `Paragraph`         | `size: body1\|body2`, `variant: default\|muted`                                                                                | Body copy                                                                          |
 | `Lead`              | `size: subheading1\|subheading2`, `variant: default\|muted\|phosphor`                                                          | Intro/standfirst paragraphs                                                        |
-| `Caption`           | `variant: default\|muted`, `uppercase`                                                                                         | Small labels                                                                       |
+| `Caption`           | `variant: default`, `uppercase`                                                                                                | Small labels                                                                       |
 | `Leader`            | `as` (default `div`; `h2` for section heads), `children` (label)                                                               | `──── label ────` ASCII section title                                              |
 | `Tag`               | `active`, `onClick`                                                                                                            | Chip; a `<button>` with `aria-pressed` when `onClick` is set                       |
 | `Kbd`               | `variant: default\|phosphor`                                                                                                   | Keyboard key                                                                       |
@@ -46,7 +46,7 @@ All primitives are polymorphic where it makes sense and expose a
 | Component         | Kind   | Role                                                                                                                    |
 | ----------------- | ------ | ----------------------------------------------------------------------------------------------------------------------- |
 | `PostList`        | server | Renders `PostSummary[]` as post cards; empty state included                                                             |
-| `PostHeader`      | server | Post title block: slug leader, `h1`, date + reading time, description                                                   |
+| `PostHeader`      | server | Post title block: slug leader, `Heading as="h1" glow`, date + reading time, description                                 |
 | `PostBody`        | server | Prose wrapper around the compiled post HTML                                                                             |
 | `PostImages`      | client | Wraps post images in a skeleton frame + fade-in (progressive)                                                           |
 | `TableOfContents` | client | TOC list with its own "on this page" caption + scroll-spy (`aria-current="location"`); renders nothing without headings |

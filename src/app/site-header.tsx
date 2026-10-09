@@ -42,6 +42,7 @@ const NavLinks = ({ pathname, onNavigate }: NavLinksProps) => (
           href={link.href}
           aria-current={active ? "page" : undefined}
           className={cx(styles.link, active && styles.active)}
+          data-slot="header-link"
           onClick={onNavigate}
         >
           [ {link.label} ]
@@ -78,6 +79,7 @@ const MenuButton = ({ open, onToggle, onClose }: MenuButtonProps) => {
       ref={button}
       type="button"
       className={cx(styles.menuButton, open && styles.menuButtonOpen)}
+      data-slot="header-menu-button"
       aria-expanded={open}
       aria-controls="site-nav"
       aria-label={open ? "close menu" : "open menu"}
@@ -85,6 +87,7 @@ const MenuButton = ({ open, onToggle, onClose }: MenuButtonProps) => {
     >
       <span
         className={styles.burgerBar}
+        data-slot="header-burger"
         aria-hidden="true"
       />
     </button>
@@ -114,9 +117,11 @@ const SiteHeader = () => {
         <Link
           href="/"
           className={styles.brand}
+          data-slot="header-brand"
         >
           <span
             className={styles.brandPrompt}
+            data-slot="header-brand-prompt"
             aria-hidden="true"
           >
             &gt;

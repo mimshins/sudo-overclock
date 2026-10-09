@@ -22,7 +22,10 @@ const HomePage = () => (
     >
       sudo-overclock
     </Heading>
-    <p className={styles.subtitle}>
+    <p
+      className={styles.subtitle}
+      data-slot="home-subtitle"
+    >
       $ cat /dev/brain &gt; engineering.log &amp;&amp; ./sudo-overclock --ship
     </p>
     <div

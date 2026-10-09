@@ -43,8 +43,8 @@ const Lead = <T extends ElementType = "p">({
         variantClass[variant],
         className,
       )}
-      data-slot="lead"
       {...rest}
+      data-slot="lead"
     >
       {children}
     </Component>

@@ -1,5 +1,5 @@
 .footer {
-  --footer-border: 1px solid var(--color-border-primary);
+  --footer-border: var(--border-width-thin) solid var(--color-border-primary);
 
   flex-shrink: 0;
   border-top: var(--footer-border);
@@ -20,7 +20,7 @@
 }
 
 .copy {
-  letter-spacing: 0.05em;
+  letter-spacing: var(--typography-tracking-wide);
 }
 
 .version {

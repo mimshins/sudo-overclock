@@ -45,8 +45,8 @@ const Paragraph = <T extends ElementType = "p">({
         variantClass[variant],
         className,
       )}
-      data-slot="paragraph"
       {...rest}
+      data-slot="paragraph"
     >
       {children}
     </Component>

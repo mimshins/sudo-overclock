@@ -38,9 +38,22 @@ const WhoAmI = () => (
     className={styles.panel}
     data-slot="about-whoami"
   >
-    <h2 className={styles.name}>Mostafa Shamsitabar</h2>
-    <p className={styles.role}>platform &amp; software engineer</p>
-    <p className={styles.blurb}>
+    <h2
+      className={styles.name}
+      data-slot="about-name"
+    >
+      Mostafa Shamsitabar
+    </h2>
+    <p
+      className={styles.role}
+      data-slot="about-role"
+    >
+      platform &amp; software engineer
+    </p>
+    <p
+      className={styles.blurb}
+      data-slot="about-blurb"
+    >
       highly accomplished and results-driven lead/senior engineer with
       sre/platform engineer mindset and a proven track record in architecting,
       building, and scaling complex platforms and user-facing products.
@@ -54,11 +67,25 @@ const Now = () => (
     data-slot="about-now"
   >
     <Leader as="h2">now</Leader>
-    <p className={styles.current}>
+    <p
+      className={styles.current}
+      data-slot="about-current"
+    >
       founding engineer
-      <span className={styles.accent}> @ interaverse</span>
+      <span
+        className={styles.accent}
+        data-slot="about-accent"
+      >
+        {" "}
+        @ interaverse
+      </span>
     </p>
-    <p className={styles.since}>since sep 2026</p>
+    <p
+      className={styles.since}
+      data-slot="about-since"
+    >
+      since sep 2026
+    </p>
   </section>
 );
 
@@ -78,10 +105,24 @@ const History = () => (
           className={styles.entry}
           data-slot="about-history-entry"
         >
-          <span className={styles.period}>{entry.period}</span>
-          <span className={styles.entryRole}>
+          <span
+            className={styles.period}
+            data-slot="about-period"
+          >
+            {entry.period}
+          </span>
+          <span
+            className={styles.entryRole}
+            data-slot="about-entry-role"
+          >
             {entry.role}
-            <span className={styles.accent}> @ {entry.company}</span>
+            <span
+              className={styles.accent}
+              data-slot="about-accent"
+            >
+              {" "}
+              @ {entry.company}
+            </span>
           </span>
         </li>
       ))}

@@ -25,15 +25,15 @@
   font-family: var(--typography-typeface-mono);
   font-size: var(--button-font-size);
   line-height: var(--button-line-height);
-  font-weight: 500;
+  font-weight: var(--typography-weight-medium);
   border-radius: var(--radius-none);
-  border: 1px solid var(--button-border-color);
+  border: var(--border-width-thin) solid var(--button-border-color);
   background-color: var(--button-background);
   -webkit-backdrop-filter: var(--button-backdrop);
   backdrop-filter: var(--button-backdrop);
   cursor: pointer;
   color: var(--button-color);
-  letter-spacing: 0.02em;
+  letter-spacing: var(--typography-tracking-snug);
   text-decoration: none;
   text-transform: lowercase;
   transition:

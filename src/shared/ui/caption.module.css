@@ -4,7 +4,7 @@
   --caption-font-weight: var(--font-weight-caption);
   --caption-color: var(--color-foreground-tertiary);
   --caption-text-transform: uppercase;
-  --caption-letter-spacing: 0.1em;
+  --caption-letter-spacing: var(--typography-tracking-wider);
 
   color: var(--caption-color);
   font-family: var(--font-mono);
@@ -17,10 +17,6 @@
 
 .variantDefault {
   --caption-color: var(--color-foreground-tertiary);
-}
-
-.variantMuted {
-  --caption-color: var(--color-foreground-muted);
 }
 
 .normalCase {

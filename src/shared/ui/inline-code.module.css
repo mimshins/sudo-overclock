@@ -1,10 +1,10 @@
 .inlineCode {
   --code-padding-x: 0.35em;
   --code-padding-y: 0.1em;
-  --code-border: 1px solid var(--color-border-primary);
+  --code-border: var(--border-width-thin) solid var(--color-border-primary);
   --code-background: var(--color-background-elevated);
   --code-color: var(--color-foreground);
-  --code-font-size: 0.875em;
+  --code-font-size: var(--typography-code-inline-size);
 
   font-family: var(--font-mono);
   font-size: var(--code-font-size);
@@ -18,10 +18,10 @@
 
 .variantDefault {
   --code-color: var(--color-foreground);
-  --code-border: 1px solid var(--color-border-primary);
+  --code-border: var(--border-width-thin) solid var(--color-border-primary);
 }
 
 .variantPhosphor {
   --code-color: var(--color-phosphor);
-  --code-border: 1px solid var(--color-phosphor);
+  --code-border: var(--border-width-thin) solid var(--color-phosphor);
 }

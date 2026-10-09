@@ -26,8 +26,8 @@ const List = <T extends ElementType = "ul">({
   return (
     <Component
       className={cx(styles.list, tight && styles.tight, className)}
-      data-slot="list"
       {...rest}
+      data-slot="list"
     >
       {children}
     </Component>
@@ -52,8 +52,8 @@ const ListItem = <T extends ElementType = "li">({
   return (
     <Component
       className={cx(styles.item, className)}
-      data-slot="list-item"
       {...rest}
+      data-slot="list-item"
     >
       {children}
     </Component>

@@ -28,6 +28,7 @@ const CoverImage = ({ src, alt, className }: CoverImageProps) => {
       alt={alt}
       loading="lazy"
       className={className}
+      data-slot="reading-cover"
       onError={handleError}
     />
   );

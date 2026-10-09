@@ -6,7 +6,7 @@
   align-items: center;
   gap: var(--spacing-xxs);
   padding: var(--spacing-xxs) var(--spacing-sm);
-  border: 1px solid transparent;
+  border: var(--border-width-thin) solid transparent;
   border-radius: var(--radius-full);
   background-color: var(--tag-background);
   -webkit-backdrop-filter: var(--glass-filter);

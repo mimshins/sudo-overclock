@@ -88,7 +88,10 @@ only.
 Two faces, never a third ([ADR-007](../decisions/ADR-007-display-typeface.md)):
 
 - **Text face — JetBrains Mono** (`--typography-typeface-ltr` /
-  `--typography-typeface-mono`): prose, UI, code, metadata, `h3`–`h6`.
+  `--typography-typeface-mono`): prose, UI, code, metadata, `h3`–`h6`. The
+  variable font (with italics) is self-hosted through `next/font/google`, which
+  downloads it at build time; readers never request a third-party font host
+  ([ADR-016](../decisions/ADR-016-design-drift-cleanup.md)).
 - **Display face — undefined medium** (`--typography-typeface-display`): only
   the brand wordmark and `h1`/`h2`. Sizes come from the 10px grid (40 / 30 /
   20px), with `letter-spacing: 0` and `-webkit-font-smoothing: none`. Never
@@ -109,7 +112,7 @@ Two faces, never a third ([ADR-007](../decisions/ADR-007-display-typeface.md)):
 | Display h1       | `--typography-display-h1-size`                | 40px                | 400    |
 | Display h2       | `--typography-display-h2-size`                | 30px                | 400    |
 | Display h3/brand | `--typography-display-h3-size`, `-brand-size` | 20px                | 400    |
-| h3 … h6          | `--typography-h3-size` … `h6-size`            | 28 / 22 / 18 / 16px | 500    |
+| h3 … h6          | `--typography-h3-size` … `h6-size`            | 28 / 22 / 18 / 16px | 700    |
 | Subheading 1/2   | `--typography-subheading1-size`, `2`          | 15 / 13px           | 500    |
 | Body 1/2         | `--typography-body1-size`, `2`                | 15 / 13px           | 400    |
 | Caption          | `--typography-caption-size`                   | 11px                | 400    |
@@ -117,9 +120,19 @@ Two faces, never a third ([ADR-007](../decisions/ADR-007-display-typeface.md)):
 Each size has a matching `-leading` and `-weight` token; use them together.
 Mobile (≤ 640px): display h1 → 30px, h2 → 20px (handled by `Heading`).
 
-The **tracked label** style (uppercase caption with letter-spacing) is currently
-built with raw `letter-spacing` values; reuse `Caption` instead of re-creating
-it.
+Weights, tracking, and code type have their own scales; stylelint rejects raw
+`letter-spacing` and `font-weight` values outside `globals.css`:
+
+| Scale    | Tokens                                                                                       | Values                         |
+| -------- | -------------------------------------------------------------------------------------------- | ------------------------------ |
+| Weight   | `--typography-weight-regular`, `-medium`, `-semibold`, `-bold`                               | 400 / 500 / 600 / 700          |
+| Tracking | `--typography-tracking-tight`, `-snug`, `-wide`, `-wider`, `-widest` (plus literal `0`)      | −0.02 / .02 / .05 / .1 / .15em |
+| Code     | `--typography-code-size`, `-code-leading`, `-code-inline-size`; `--typography-glyph-leading` | .875rem / 1.55 / .875em / 1    |
+
+The **tracked label** style (uppercase caption with letter-spacing) is
+`Caption`; reuse it instead of re-creating it. `--typography-glyph-leading` is
+for glyph art that must touch line to line (the 404 block letters, the quote
+mark).
 
 ### Spacing, radius, borders
 
@@ -138,8 +151,11 @@ it.
 - Radius: `--radius-none` for panels, buttons, and cards; `--radius-sm` for
   small inline chrome; `--radius-full` only for tag/status pills. Other radius
   tokens exist but are not part of the identity.
-- Borders are `1px solid` (quotes use `2px`). There is no border-width token
-  yet; use only these two widths.
+- Borders use `--border-width-thin` (1px) or `--border-width-thick` (2px:
+  quotes, the TOC rail, the key cap's bottom edge); stylelint rejects raw widths
+  outside `globals.css`.
+- Fixed component sizes are tokens: `--size-control` (32px icon buttons),
+  `--size-cover-md` / `-sm` (96 / 72px book covers, 2:3).
 
 ### Elevation and glow
 
@@ -242,19 +258,19 @@ Rules:
 
 ## Patterns
 
-| Pattern          | How it is built today                                                                                                       | Rule                                                                                             |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| ASCII affordance | Bracketed lowercase labels: `[ home ]`, `[ read the blog ]`, `[ copy ]` → `[ copied ]`                                      | All actions and nav links; lowercase; one space inside brackets                                  |
-| Leader           | `Leader` primitive: `──── name.md ────` — rules in tertiary ink, the label a bold phosphor tab (`--color-on-phosphor`)      | Page and section heads (`as="h2"` for sections); filename-style label; reads on any background   |
-| Floating button  | Soft `Button` (`variant="soft"`): frosted raised fill, no border; hover frosts with the tint; pressed is inverse video      | Bracketed actions that sit on content or the field (CTAs, sort, `[ copy ]`); bars stay text-only |
-| Prompt glyph     | `>` before the brand and the active TOC item                                                                                | Marks "current"/"command"; `aria-hidden`                                                         |
-| Tag chip         | `Tag`: borderless pill with the floating button's frosted fill and hover; the active chip is inverse video (`aria-pressed`) | Filters and taxonomy only                                                                        |
-| Glitch           | Button hover chromatic shift; `.glitch-once` / `.glitch-on-hover` utilities                                                 | Button hover, the 404 heading, future hero/header moments; one-shot, never looping               |
-| Scanlines        | `.scanlines` utility (`::after` gradient overlay, `--scanline-*`)                                                           | Hero and error surfaces only (today: 404); never behind long-form reading                        |
-| Glow             | `Heading glow` (headings), `.phosphor-glow` utility (other text)                                                            | Emphasis on one element per view; never on body text or long-form reading                        |
-| Glass panel      | Post cards, about/reading panels: `--color-glass-surface` (90% elevated) + `--glass-filter`; dividers use `--color-divider` | Use the tokens; never mix your own translucency                                                  |
-| Phosphor field   | `PhosphorField` canvas: procedural (home) or image-sampled (blog/about/reading)                                             | Background only; one per page; `glowOnHover` only where the page is mostly empty                 |
-| Code             | `CodeBlock` / Shiki frames on `--color-background-elevated`, soft `[ copy ]` button (inverse once copied)                   | Every fence has a language                                                                       |
+| Pattern          | How it is built today                                                                                                       | Rule                                                                                                         |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| ASCII affordance | Bracketed lowercase labels: `[ home ]`, `[ read the blog ]`, `[ copy ]` → `[ copied ]`                                      | All actions and nav links; lowercase; one space inside brackets                                              |
+| Leader           | `Leader` primitive: `──── name.md ────` — rules in tertiary ink, the label a bold phosphor tab (`--color-on-phosphor`)      | Page and section heads (`as="h2"` for sections); filename-style label, written lowercase (CSS uppercases it) |
+| Floating button  | Soft `Button` (`variant="soft"`): frosted raised fill, no border; hover frosts with the tint; pressed is inverse video      | Bracketed actions that sit on content or the field (CTAs, sort, `[ copy ]`); bars stay text-only             |
+| Prompt glyph     | `>` before the brand and the active TOC item                                                                                | Marks "current"/"command"; `aria-hidden`                                                                     |
+| Tag chip         | `Tag`: borderless pill with the floating button's frosted fill and hover; the active chip is inverse video (`aria-pressed`) | Filters and taxonomy only                                                                                    |
+| Glitch           | Button hover chromatic shift; `.glitch-once` / `.glitch-on-hover` utilities                                                 | Button hover, the 404 heading, future hero/header moments; one-shot, never looping                           |
+| Scanlines        | `.scanlines` utility (`::after` gradient overlay, `--scanline-*`)                                                           | Hero and error surfaces only (today: 404); never behind long-form reading                                    |
+| Glow             | `Heading glow` (headings), `.phosphor-glow` utility (other text)                                                            | Emphasis on one element per view; never on body text or long-form reading                                    |
+| Glass panel      | Post cards, about/reading panels: `--color-glass-surface` (90% elevated) + `--glass-filter`; dividers use `--color-divider` | Use the tokens; never mix your own translucency                                                              |
+| Phosphor field   | `PhosphorField` canvas: procedural (home) or image-sampled (blog/about/reading)                                             | Background only; one per page; `glowOnHover` only where the page is mostly empty                             |
+| Code             | `CodeBlock` / Shiki frames on `--color-background-elevated`, soft `[ copy ]` button (inverse once copied)                   | Every fence has a language                                                                                   |
 
 Seven shared primitives (`Blockquote`, `CodeBlock`, `InlineCode`, `Kbd`, `Lead`,
 `List`, `Paragraph`) are currently unused by the app because post prose styles
@@ -281,13 +297,16 @@ primitives; post bodies keep the prose styles.
 
   ```css
   .tag {
+    --tag-color: var(--color-foreground);
+    --tag-background: var(--color-glass-control);
+
     color: var(--tag-color);
-    border-color: var(--tag-border);
+    background-color: var(--tag-background);
   }
 
   .active {
-    --tag-color: var(--color-phosphor-text);
-    --tag-border: var(--color-phosphor);
+    --tag-color: var(--color-on-phosphor);
+    --tag-background: var(--color-phosphor);
   }
   ```
 
@@ -335,27 +354,18 @@ Compose the standard page pattern (leader, glowing `h1`, narrow column); add
 Current code that does not meet this system; do not copy these patterns. Each
 fix removes its entry here in the same change.
 
-- **Contrast:** `--color-foreground-muted` is 2.2:1 in dark; muted text is used
-  for tag counts and `Caption` muted.
-- **Missing `data-slot`:** some route and blog presentation elements (site
-  header/footer internals, page wrappers, post list cards, post header title and
-  description, cover image).
-- **State classes setting properties directly:** site header links, TOC links,
-  code copy, post-list cards.
-- **Raw values without tokens:** letter-spacing (`.02em`–`.15em`, including the
-  `Leader`), font weights 500/600/700, code font size `.875rem`/line-height
-  `1.55` (duplicated), fixed reading-cover sizes, the 404 art's unitless
-  `line-height: 1`.
-- **Copy-pasted patterns:** post title and prose headings re-implementing
-  `Heading`.
-- **Fonts:** JetBrains Mono loads from the Google Fonts CDN (not self-hosted);
-  the RTL stack names `Vazirmatn`, which is never loaded.
-- **Enforcement:** stylelint blocks colors, `color-mix` (no exemptions),
-  primitive color tokens, and raw durations outside `globals.css`, but not yet
-  raw lengths, letter-spacing, or weights (no tokens exist for them);
-  `data-slot` is a review rule. The CSS-module contract test
-  (`css-module-contract.test.ts`) fails on a local custom property nobody reads
-  or a `styles.<name>` with no class.
+- **Drawn chrome:** the burger icon bars (16 × 2px, 6px apart), glow radii, and
+  the button glitch offsets are raw pixel values; they draw an icon or an effect
+  rather than lay out a component.
+- **Prose headings:** `post-body.module.css` styles the compiler's raw `h1`–`h6`
+  instead of using `Heading` (the HTML comes from markdown, so the component
+  cannot be used); they read the same `--display-*` and `--typography-*` tokens.
+- **Enforcement:** stylelint blocks colors, `color-mix`, primitive color tokens,
+  raw durations, and raw `letter-spacing`, `font-weight`, and border widths
+  outside `globals.css`; other raw lengths are not linted. `data-slot` is a
+  review rule (shared primitives write theirs last, so callers cannot override
+  it). The CSS-module contract test (`css-module-contract.test.ts`) fails on a
+  local custom property nobody reads or a `styles.<name>` with no class.
 
 ## Design decisions
 

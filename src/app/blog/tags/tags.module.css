@@ -37,6 +37,12 @@
 .count {
   font-family: var(--font-mono);
   font-size: var(--text-caption);
-  color: var(--color-foreground-muted);
-  letter-spacing: 0.05em;
+  color: var(--color-foreground-tertiary);
+  letter-spacing: var(--typography-tracking-wide);
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding-inline: var(--spacing-md);
+  }
 }

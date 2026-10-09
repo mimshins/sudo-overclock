@@ -40,27 +40,27 @@
 }
 
 .link {
+  --toc-link-color: var(--toc-color);
   --toc-rail: transparent;
-  --toc-weight: 400;
+  --toc-weight: var(--typography-weight-regular);
 
   display: inline-block;
   padding-inline-start: var(--spacing-xs);
-  box-shadow: inset 2px 0 0 var(--toc-rail);
-  color: inherit;
+  box-shadow: inset var(--border-width-thick) 0 0 var(--toc-rail);
+  color: var(--toc-link-color);
   font-weight: var(--toc-weight);
   text-decoration: none;
   transition: color var(--duration-fast) var(--easing-standard);
 }
 
 .link:hover {
-  color: var(--toc-active-color);
+  --toc-link-color: var(--toc-active-color);
 }
 
 .active {
+  --toc-link-color: var(--toc-active-color);
   --toc-rail: var(--toc-active-color);
-  --toc-weight: 700;
-
-  color: var(--toc-active-color);
+  --toc-weight: var(--typography-weight-bold);
 }
 
 .active::before {

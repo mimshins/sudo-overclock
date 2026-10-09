@@ -120,7 +120,7 @@ const percent = (theme: Theme, value: string): number => {
   const resolved =
     reference?.[1] === undefined ? value : color(theme, reference[1]);
 
-  return Number.parseFloat(resolved) / 100;
+  return Number(resolved.replace("%", "")) / 100;
 };
 
 const composite = (top: string, alpha: number, bottom: string): string => {

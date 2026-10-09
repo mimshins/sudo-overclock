@@ -33,8 +33,8 @@ const InlineCode = <T extends ElementType = "code">({
   return (
     <Component
       className={cx(styles.inlineCode, variantClass[variant], className)}
-      data-slot="inline-code"
       {...rest}
+      data-slot="inline-code"
     >
       {children}
     </Component>

@@ -4,7 +4,7 @@ import type { ElementType } from "react";
 
 import styles from "./caption.module.css";
 
-type CaptionVariant = "default" | "muted";
+type CaptionVariant = "default";
 
 type CaptionOwnProps = {
   readonly variant?: CaptionVariant;
@@ -18,7 +18,6 @@ type CaptionProps<T extends ElementType = "span"> = PolymorphicProps<
 
 const variantClass: Record<CaptionVariant, ClassValue> = {
   default: styles.variantDefault,
-  muted: styles.variantMuted,
 };
 
 const Caption = <T extends ElementType = "span">({
@@ -39,8 +38,8 @@ const Caption = <T extends ElementType = "span">({
         !uppercase && styles.normalCase,
         className,
       )}
-      data-slot="caption"
       {...rest}
+      data-slot="caption"
     >
       {children}
     </Component>

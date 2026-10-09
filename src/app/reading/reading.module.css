@@ -40,7 +40,7 @@
   display: flex;
   align-items: flex-start;
   gap: var(--spacing-md);
-  border: 1px solid var(--color-border-primary);
+  border: var(--border-width-thin) solid var(--color-border-primary);
   border-radius: var(--radius-none);
   background-color: var(--color-glass-surface);
   -webkit-backdrop-filter: var(--glass-filter);
@@ -51,8 +51,8 @@
 .coverFrame {
   position: relative;
   flex: 0 0 auto;
-  width: 96px;
-  height: 144px;
+  width: var(--size-cover-md);
+  aspect-ratio: 2 / 3;
   background-color: var(--color-placeholder);
 }
 
@@ -64,7 +64,7 @@
   justify-content: center;
   font-size: var(--typography-h3-size);
   color: var(--color-foreground-tertiary);
-  letter-spacing: 0.05em;
+  letter-spacing: var(--typography-tracking-wide);
   padding: var(--spacing-xs);
   text-align: center;
 }
@@ -88,7 +88,7 @@
   margin: 0;
   font-size: var(--typography-subheading2-size);
   line-height: var(--typography-subheading2-leading);
-  font-weight: 500;
+  font-weight: var(--typography-weight-medium);
 }
 
 .bookAuthors {
@@ -96,7 +96,7 @@
   font-size: var(--typography-caption-size);
   line-height: var(--typography-caption-leading);
   color: var(--color-foreground-tertiary);
-  letter-spacing: 0.05em;
+  letter-spacing: var(--typography-tracking-wide);
 }
 
 .review {
@@ -117,8 +117,7 @@
   }
 
   .coverFrame {
-    width: 72px;
-    height: 108px;
+    width: var(--size-cover-sm);
   }
 }
 

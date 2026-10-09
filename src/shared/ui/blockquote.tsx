@@ -27,8 +27,8 @@ const Blockquote = <T extends ElementType = "blockquote">({
     <Component
       className={cx(styles.blockquote, className)}
       cite={cite}
-      data-slot="blockquote"
       {...rest}
+      data-slot="blockquote"
     >
       <span
         className={styles.marker}

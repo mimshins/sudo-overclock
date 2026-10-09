@@ -30,7 +30,7 @@
  * Block glyphs only join vertically when each line box is exactly one em.
  */
 .artText {
-  --art-leading: 1;
+  --art-leading: var(--typography-glyph-leading);
 
   margin: 0;
   font-family: var(--typography-typeface-mono);

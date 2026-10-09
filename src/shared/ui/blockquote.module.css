@@ -1,5 +1,5 @@
 .blockquote {
-  --quote-border: 2px solid var(--color-phosphor);
+  --quote-border: var(--border-width-thick) solid var(--color-phosphor);
   --quote-background: var(--color-background-elevated);
   --quote-size: var(--text-body1);
   --quote-line-height: var(--leading-body1);
@@ -25,7 +25,7 @@
   --marker-color: var(--color-phosphor);
 
   font-size: var(--marker-size);
-  line-height: 1;
+  line-height: var(--typography-glyph-leading);
   color: var(--marker-color);
   user-select: none;
 }

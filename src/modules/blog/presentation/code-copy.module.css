@@ -23,7 +23,7 @@
   line-height: var(--leading-caption);
   color: var(--code-copy-color);
   text-transform: lowercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--typography-tracking-wide);
   cursor: pointer;
   transition:
     color var(--duration-fast) var(--easing-standard),

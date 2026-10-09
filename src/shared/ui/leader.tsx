@@ -22,8 +22,8 @@ const Leader = <T extends ElementType = "div">({
   return (
     <Component
       className={cx(styles.leader, className)}
-      data-slot="leader"
       {...rest}
+      data-slot="leader"
     >
       <span
         className={styles.rule}

@@ -1,3 +1,5 @@
+import { cx } from "@repo/shared/lib/cx";
+import { JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
@@ -35,6 +37,26 @@ const displayFont = localFont({
   ],
 });
 
+/*
+ * Text face: JetBrains Mono (SIL OFL-1.1), the variable font with italics.
+ * next/font downloads it at build time and serves it from this origin, so
+ * readers never request Google Fonts.
+ */
+const monoFont = JetBrains_Mono({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  variable: "--font-mono-family",
+  display: "swap",
+  fallback: [
+    "ui-monospace",
+    "SFMono-Regular",
+    "Menlo",
+    "Monaco",
+    "Consolas",
+    "monospace",
+  ],
+});
+
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -61,9 +83,6 @@ export const metadata = {
 
 const themeScriptProp = { __html: THEME_INIT_SCRIPT } as const;
 
-const fontLinkHref =
-  "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap";
-
 type RootLayoutProps = {
   readonly children: ReactNode;
 };
@@ -73,24 +92,11 @@ const RootLayout = (props: RootLayoutProps): ReactNode => {
   return (
     <html
       lang="en"
-      className={displayFont.variable}
+      className={cx(displayFont.variable, monoFont.variable)}
       suppressHydrationWarning
     >
       <head>
         <script dangerouslySetInnerHTML={themeScriptProp} />
-        <link
-          rel="preconnect"
-          href="https://fonts.googleapis.com"
-        />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        />
-        <link
-          rel="stylesheet"
-          href={fontLinkHref}
-        />
       </head>
       <body>
         <SkipLink />

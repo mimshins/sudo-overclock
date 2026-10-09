@@ -48,4 +48,4 @@ A design brief, or a conformance report with findings ordered by severity.
 ## References
 
 - [designer agent](../../agents/designer.md),
-  [design-system drift](../../memories/working/design-system-drift.md)
+  [known deviations](../../../docs/design-system.md#known-deviations)

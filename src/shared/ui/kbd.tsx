@@ -27,8 +27,8 @@ const Kbd = <T extends ElementType = "kbd">({
   return (
     <Component
       className={cx(styles.kbd, variantClass[variant], className)}
-      data-slot="kbd"
       {...rest}
+      data-slot="kbd"
     >
       {children}
     </Component>

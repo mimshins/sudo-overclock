@@ -22,7 +22,7 @@
 }
 
 .panel {
-  border: 1px solid var(--color-border-primary);
+  border: var(--border-width-thin) solid var(--color-border-primary);
   border-radius: var(--radius-none);
   background-color: var(--color-glass-surface);
   -webkit-backdrop-filter: var(--glass-filter);
@@ -37,7 +37,7 @@
   margin: 0;
   font-size: var(--typography-subheading1-size);
   line-height: var(--typography-subheading1-leading);
-  font-weight: 500;
+  font-weight: var(--typography-weight-medium);
 }
 
 .role {
@@ -46,7 +46,7 @@
   font-size: var(--typography-body2-size);
   line-height: var(--typography-body2-leading);
   color: var(--color-phosphor);
-  letter-spacing: 0.15em;
+  letter-spacing: var(--typography-tracking-widest);
 }
 
 .blurb {
@@ -69,7 +69,7 @@
   line-height: var(--typography-caption-leading);
   color: var(--color-foreground-tertiary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--typography-tracking-wide);
 }
 
 .projectLabel {
@@ -78,14 +78,14 @@
   line-height: var(--typography-caption-leading);
   color: var(--color-foreground-tertiary);
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: var(--typography-tracking-widest);
 }
 
 .projectName {
   margin: 0;
   font-size: var(--typography-subheading1-size);
   line-height: var(--typography-subheading1-leading);
-  font-weight: 500;
+  font-weight: var(--typography-weight-medium);
   color: var(--color-phosphor);
 }
 
@@ -112,7 +112,7 @@
 }
 
 .entry + .entry {
-  border-top: 1px solid var(--color-divider);
+  border-top: var(--border-width-thin) solid var(--color-divider);
 }
 
 .period {
@@ -122,7 +122,7 @@
   line-height: var(--typography-caption-leading);
   color: var(--color-foreground-tertiary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--typography-tracking-wide);
 }
 
 .entryRole {
