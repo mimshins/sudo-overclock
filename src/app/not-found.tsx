@@ -89,7 +89,7 @@ const NotFound = () => (
       >
         <LinkButton
           href="/"
-          variant="ghost"
+          variant="soft"
           color="phosphor"
           size="md"
         >
@@ -97,7 +97,7 @@ const NotFound = () => (
         </LinkButton>
         <LinkButton
           href="/blog/"
-          variant="ghost"
+          variant="soft"
           color="phosphor"
           size="md"
         >

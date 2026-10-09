@@ -15,6 +15,7 @@
   --button-padding-x: var(--spacing-sm);
   --button-font-size: var(--typography-body1-size);
   --button-line-height: var(--typography-body1-leading);
+  --button-backdrop: none;
 
   display: inline-flex;
   align-items: center;
@@ -28,6 +29,8 @@
   border-radius: var(--radius-none);
   border: 1px solid var(--button-border-color);
   background-color: var(--button-background);
+  -webkit-backdrop-filter: var(--button-backdrop);
+  backdrop-filter: var(--button-backdrop);
   cursor: pointer;
   color: var(--button-color);
   letter-spacing: 0.02em;
@@ -133,6 +136,8 @@
   --button-on-soft: var(--color-foreground);
   --button-border: var(--color-border-primary);
   --button-border-hover: var(--color-foreground-tertiary);
+  --button-tint: var(--color-glass-control-hover);
+  --button-on-tint: var(--color-on-tint);
   --button-glow: none;
 }
 
@@ -146,6 +151,8 @@
   --button-on-soft: var(--color-on-phosphor);
   --button-border: var(--color-phosphor);
   --button-border-hover: var(--color-phosphor);
+  --button-tint: var(--color-glass-control-hover);
+  --button-on-tint: var(--color-on-tint);
   --button-glow: 0 0 12px var(--color-phosphor-shadow);
 }
 
@@ -159,6 +166,8 @@
   --button-on-soft: var(--color-on-positive);
   --button-border: var(--color-positive);
   --button-border-hover: var(--color-positive);
+  --button-tint: var(--button-soft);
+  --button-on-tint: var(--button-on-soft);
   --button-glow: none;
 }
 
@@ -172,6 +181,8 @@
   --button-on-soft: var(--color-on-negative);
   --button-border: var(--color-negative);
   --button-border-hover: var(--color-negative);
+  --button-tint: var(--button-soft);
+  --button-on-tint: var(--button-on-soft);
   --button-glow: none;
 }
 
@@ -185,6 +196,8 @@
   --button-on-soft: var(--color-on-warn);
   --button-border: var(--color-warn);
   --button-border-hover: var(--color-warn);
+  --button-tint: var(--button-soft);
+  --button-on-tint: var(--button-on-soft);
   --button-glow: none;
 }
 
@@ -198,6 +211,8 @@
   --button-on-soft: var(--color-on-info);
   --button-border: var(--color-info);
   --button-border-hover: var(--color-info);
+  --button-tint: var(--button-soft);
+  --button-on-tint: var(--button-on-soft);
   --button-glow: none;
 }
 
@@ -240,4 +255,21 @@
   --button-active-background: var(--button-solid-active);
   --button-active-color: var(--button-on-solid);
   --button-active-border-color: var(--button-solid-active);
+}
+
+/* Soft: a borderless frosted fill. ASCII brackets already draw the edge, so a
+   border would draw it twice. The fill stays opaque enough that an unblurred
+   field dot behind the label keeps 4.5:1 (the theme contrast test checks it). */
+.variantSoft {
+  --button-background: var(--color-glass-control);
+  --button-backdrop: var(--glass-filter);
+  --button-border-color: transparent;
+  --button-color: var(--button-solid);
+  --button-hover-background: var(--button-tint);
+  --button-hover-color: var(--button-on-tint);
+  --button-hover-border-color: transparent;
+  --button-hover-shadow: none;
+  --button-active-background: var(--button-solid);
+  --button-active-color: var(--button-on-solid);
+  --button-active-border-color: transparent;
 }

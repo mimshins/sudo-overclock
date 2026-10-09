@@ -40,16 +40,11 @@
   display: flex;
   align-items: flex-start;
   gap: var(--spacing-md);
-  border: 1px solid
-    color-mix(in srgb, var(--color-border-primary) 60%, transparent);
+  border: 1px solid var(--color-border-primary);
   border-radius: var(--radius-none);
-  background-color: color-mix(
-    in srgb,
-    var(--color-background-elevated) 48%,
-    transparent
-  );
-  -webkit-backdrop-filter: blur(8px) saturate(1.4);
-  backdrop-filter: blur(8px) saturate(1.4);
+  background-color: var(--color-glass-surface);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
   padding: var(--spacing-md);
 }
 
@@ -58,11 +53,7 @@
   flex: 0 0 auto;
   width: 96px;
   height: 144px;
-  background-color: color-mix(
-    in srgb,
-    var(--color-foreground-tertiary) 12%,
-    transparent
-  );
+  background-color: var(--color-placeholder);
 }
 
 .coverFallback {

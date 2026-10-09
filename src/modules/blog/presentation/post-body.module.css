@@ -1,5 +1,5 @@
 .prose {
-  --prose-color: var(--color-foreground);
+  --prose-color: var(--color-text-body);
 
   width: 100%;
   color: var(--prose-color);
@@ -30,9 +30,7 @@
   font-weight: var(--typography-h1-weight);
   letter-spacing: 0;
   -webkit-font-smoothing: none;
-  text-shadow:
-    0 0 calc(4px * var(--phosphor-glow-strength)) var(--color-phosphor-glow),
-    0 0 calc(10px * var(--phosphor-glow-strength)) var(--color-phosphor-shadow);
+  text-shadow: var(--display-strike), var(--display-glow);
 }
 
 .prose :global(h2) {
@@ -42,6 +40,7 @@
   font-weight: var(--typography-h2-weight);
   letter-spacing: 0;
   -webkit-font-smoothing: none;
+  text-shadow: var(--display-strike);
   padding-bottom: var(--spacing-xs);
   border-bottom: 1px solid var(--color-border-primary);
 }
@@ -92,6 +91,13 @@
 }
 
 /* --- Paragraphs & inline ------------------------------------------------ */
+.prose :global(p):not(:has(img)),
+.prose :global(ul),
+.prose :global(ol),
+.prose :global(blockquote) {
+  max-width: var(--container-prose);
+}
+
 .prose :global(p) {
   margin: 0 0 var(--spacing-md);
 }

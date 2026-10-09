@@ -71,8 +71,10 @@ only.
 | ------------------------ | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | Text                     | `--color-foreground`, `-secondary`, `-tertiary`                                              | Body, secondary meta, tertiary hints                                                               |
 | Text (decorative only)   | `--color-foreground-muted`                                                                   | Fails contrast (2.2:1) — never for information-bearing text                                        |
-| Surfaces                 | `--color-background`, `--color-background-elevated`, `--color-background-raised`             | Page; panels and code frames; headers inside an elevated surface                                   |
-| Borders                  | `--color-border-primary`, `-secondary`, `-tertiary`, `--color-border-focus`                  | Dividers and outlines; `-primary` is 2.2:1, see deviations                                         |
+| Surfaces                 | `--color-background`, `--color-background-elevated`, `--color-background-raised`             | Page; panels and code frames; headers inside an elevated surface and soft-button fills             |
+| Tint                     | `--color-background-tint`, `--color-on-tint`                                                 | Phosphor-tinted raised fill and its text: the hover state of contained controls                    |
+| Frosted control          | `--color-glass-control`, `-hover`, `--glass-control-opacity`, `--glass-filter`               | Contained controls over the field; opacity keeps 4.5:1 over an unblurred dot (contrast-tested)     |
+| Borders                  | `--color-border-primary`, `-secondary`, `-tertiary`, `--color-border-focus`                  | Dividers and outlines; `-primary` is ≥3:1 in both themes                                           |
 | Accent                   | `--color-phosphor`, `-hover`, `-active`, `-muted`                                            | Interactive emphasis, active state, glow source                                                    |
 | Accent text              | `--color-phosphor-text`, `-secondary`, `-tertiary`, `-muted`                                 | Links, green headings, code accents                                                                |
 | Content on a filled role | `--color-on-neutral`, `-on-phosphor`, `-on-positive`, `-on-negative`, `-on-warn`, `-on-info` | Text/icons placed on a solid role fill                                                             |
@@ -90,7 +92,17 @@ Two faces, never a third ([ADR-007](../decisions/ADR-007-display-typeface.md)):
 - **Display face — undefined medium** (`--typography-typeface-display`): only
   the brand wordmark and `h1`/`h2`. Sizes come from the 10px grid (40 / 30 /
   20px), with `letter-spacing: 0` and `-webkit-font-smoothing: none`. Never
-  subset, modify, bold, or italicize it.
+  subset, modify, synthetically bold, or italicize it. Weight comes from the
+  pixel **double-strike** — the glyph drawn again `--display-strike-offset`
+  (0.06em) to the right in `currentColor` via `--display-strike`
+  ([ADR-015](../decisions/ADR-015-readability-pass.md)); every display heading
+  uses it.
+- **Body copy** uses `--color-text-body`: the foreground on dark, one ink step
+  lighter (`--color-foreground-secondary`) on paper, so headings stay the
+  darkest ink. Prose paragraphs and lists cap at `--container-prose` (65ch).
+- **Smoothing** comes from `--font-smoothing-webkit` / `-moz`: `antialiased` on
+  dark, the platform default on paper (antialiased thins dark-on-light text).
+- `h3`–`h6` (JetBrains Mono) are weight 700.
 
 | Role             | Size token                                    | Size                | Weight |
 | ---------------- | --------------------------------------------- | ------------------- | ------ |
@@ -133,9 +145,10 @@ it.
 
 - No drop shadows. Depth comes from `--color-background-elevated`, borders, and
   phosphor glow.
-- **Canonical glow** (text): two layers driven by `--phosphor-glow-strength` —
-  `0 0 calc(4px * strength) var(--color-phosphor-glow), 0 0 calc(10px * strength) var(--color-phosphor-shadow)`.
-  Headings get it through `Heading glow` (today only `h1`); other text uses the
+- **Canonical glow** (text) is the `--display-glow` token — two layers driven by
+  `--phosphor-glow-strength`. Headings get it through `Heading glow`, the post
+  title and prose `h1` through
+  `text-shadow: var(--display-strike), var(--display-glow)`; other text uses the
   `.phosphor-glow` utility (the 404 art). Never re-declare the recipe.
   `.phosphor-glow-strong` exists but is unused and not part of the identity.
 - `--shadow-sm|md|lg` exist but are unused; prefer not to introduce them.
@@ -188,9 +201,11 @@ Two themes ([ADR-014](../decisions/ADR-014-paper-crt-light-theme.md)):
 
 `src/app/theme.ts` holds the boot script (stored choice, else
 `prefers-color-scheme`, else dark; set before paint) and the `ThemeToggle` in
-the header (`[ light ]`, `aria-pressed`, remembered; follows the OS until the
-reader chooses). Theme changes are a `data-theme` attribute swap — CSS does the
-rest; `PhosphorField` re-reads its colors on the swap.
+the header (labeled with the theme it switches to — `[ light ]` on dark,
+`[ dark ]` on paper — swapped in CSS from `data-theme` so it is right before
+hydration; remembered; follows the OS until the reader chooses). Theme changes
+are a `data-theme` attribute swap — CSS does the rest; `PhosphorField` re-reads
+its colors on the swap.
 
 Rules:
 
@@ -227,18 +242,19 @@ Rules:
 
 ## Patterns
 
-| Pattern          | How it is built today                                                                  | Rule                                                                               |
-| ---------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| ASCII affordance | Bracketed lowercase labels: `[ home ]`, `[ read the blog ]`, `[ copy ]` → `[ copied ]` | All actions and nav links; lowercase; one space inside brackets                    |
-| Leader           | `Leader` primitive: `──── name.md ────` (U+2500 rules, `aria-hidden`)                  | Page and section heads (`as="h2"` for sections); filename-style lowercase label    |
-| Prompt glyph     | `>` before the brand and the active TOC item                                           | Marks "current"/"command"; `aria-hidden`                                           |
-| Tag chip         | `Tag` (pill, `--radius-full`), no brackets                                             | Filters and taxonomy only                                                          |
-| Glitch           | Button hover chromatic shift; `.glitch-once` / `.glitch-on-hover` utilities            | Button hover, the 404 heading, future hero/header moments; one-shot, never looping |
-| Scanlines        | `.scanlines` utility (`::after` gradient overlay, `--scanline-*`)                      | Hero and error surfaces only (today: 404); never behind long-form reading          |
-| Glow             | `Heading glow` (headings), `.phosphor-glow` utility (other text)                       | Emphasis on one element per view; never on body text or long-form reading          |
-| Glass panel      | Post cards, about/reading panels: translucent background + `backdrop-filter`           | Reuse the existing recipe; do not invent new blur/opacity values (see deviations)  |
-| Phosphor field   | `PhosphorField` canvas: procedural (home) or image-sampled (blog/about/reading)        | Background only; one per page; `glowOnHover` only where the page is mostly empty   |
-| Code             | `CodeBlock` / Shiki frames on `--color-background-elevated`, `[ copy ]` button         | Every fence has a language                                                         |
+| Pattern          | How it is built today                                                                                                       | Rule                                                                                             |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| ASCII affordance | Bracketed lowercase labels: `[ home ]`, `[ read the blog ]`, `[ copy ]` → `[ copied ]`                                      | All actions and nav links; lowercase; one space inside brackets                                  |
+| Leader           | `Leader` primitive: `──── name.md ────` — rules in tertiary ink, the label a bold phosphor tab (`--color-on-phosphor`)      | Page and section heads (`as="h2"` for sections); filename-style label; reads on any background   |
+| Floating button  | Soft `Button` (`variant="soft"`): frosted raised fill, no border; hover frosts with the tint; pressed is inverse video      | Bracketed actions that sit on content or the field (CTAs, sort, `[ copy ]`); bars stay text-only |
+| Prompt glyph     | `>` before the brand and the active TOC item                                                                                | Marks "current"/"command"; `aria-hidden`                                                         |
+| Tag chip         | `Tag`: borderless pill with the floating button's frosted fill and hover; the active chip is inverse video (`aria-pressed`) | Filters and taxonomy only                                                                        |
+| Glitch           | Button hover chromatic shift; `.glitch-once` / `.glitch-on-hover` utilities                                                 | Button hover, the 404 heading, future hero/header moments; one-shot, never looping               |
+| Scanlines        | `.scanlines` utility (`::after` gradient overlay, `--scanline-*`)                                                           | Hero and error surfaces only (today: 404); never behind long-form reading                        |
+| Glow             | `Heading glow` (headings), `.phosphor-glow` utility (other text)                                                            | Emphasis on one element per view; never on body text or long-form reading                        |
+| Glass panel      | Post cards, about/reading panels: `--color-glass-surface` (90% elevated) + `--glass-filter`; dividers use `--color-divider` | Use the tokens; never mix your own translucency                                                  |
+| Phosphor field   | `PhosphorField` canvas: procedural (home) or image-sampled (blog/about/reading)                                             | Background only; one per page; `glowOnHover` only where the page is mostly empty                 |
+| Code             | `CodeBlock` / Shiki frames on `--color-background-elevated`, soft `[ copy ]` button (inverse once copied)                   | Every fence has a language                                                                       |
 
 Seven shared primitives (`Blockquote`, `CodeBlock`, `InlineCode`, `Kbd`, `Lead`,
 `List`, `Paragraph`) are currently unused by the app because post prose styles
@@ -319,32 +335,27 @@ Compose the standard page pattern (leader, glowing `h1`, narrow column); add
 Current code that does not meet this system; do not copy these patterns. Each
 fix removes its entry here in the same change.
 
-- **Contrast:** `--color-foreground-muted` and `--color-border-primary` are
-  2.2:1 in dark; muted text is used for tag counts and `Caption` muted.
+- **Contrast:** `--color-foreground-muted` is 2.2:1 in dark; muted text is used
+  for tag counts and `Caption` muted.
 - **Missing `data-slot`:** some route and blog presentation elements (site
   header/footer internals, page wrappers, post list cards, post header title and
   description, cover image).
 - **State classes setting properties directly:** site header links, TOC links,
   code copy, post-list cards.
 - **Raw values without tokens:** letter-spacing (`.02em`–`.15em`, including the
-  `Leader`), font weights 500/600, glass-panel blur/opacity percentages, code
-  font size `.875rem`/line-height `1.55` (duplicated), fixed reading-cover
-  sizes, the 404 art's unitless `line-height: 1`.
-- **Copy-pasted patterns:** the glow recipe (3 places), post title and prose
-  headings re-implementing `Heading`.
+  `Leader`), font weights 500/600/700, code font size `.875rem`/line-height
+  `1.55` (duplicated), fixed reading-cover sizes, the 404 art's unitless
+  `line-height: 1`.
+- **Copy-pasted patterns:** post title and prose headings re-implementing
+  `Heading`.
 - **Fonts:** JetBrains Mono loads from the Google Fonts CDN (not self-hosted);
   the RTL stack names `Vazirmatn`, which is never loaded.
-- **`color-mix` tints:** glass panels, translucent borders, and the image sheen
-  mix semantic colors with `transparent` at ad-hoc percentages in
-  `about.module.css`, `reading.module.css`, `site-header.module.css`,
-  `post-images.module.css`, and `post-list.module.css`. stylelint forbids
-  `color-mix` everywhere else; these files are exempt until a glass-panel token
-  recipe exists.
-- **Enforcement:** stylelint blocks colors, `color-mix`, primitive color tokens,
-  and raw durations outside `globals.css`, but not yet raw lengths,
-  letter-spacing, or weights (no tokens exist for them); `data-slot` is a review
-  rule. The CSS-module contract test (`css-module-contract.test.ts`) fails on a
-  local custom property nobody reads or a `styles.<name>` with no class.
+- **Enforcement:** stylelint blocks colors, `color-mix` (no exemptions),
+  primitive color tokens, and raw durations outside `globals.css`, but not yet
+  raw lengths, letter-spacing, or weights (no tokens exist for them);
+  `data-slot` is a review rule. The CSS-module contract test
+  (`css-module-contract.test.ts`) fails on a local custom property nobody reads
+  or a `styles.<name>` with no class.
 
 ## Design decisions
 

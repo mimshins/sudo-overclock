@@ -1,6 +1,6 @@
 .nav {
   --toc-color: var(--color-foreground-secondary);
-  --toc-active-color: var(--color-phosphor);
+  --toc-active-color: var(--color-phosphor-text);
 
   font-size: var(--text-body2);
   line-height: var(--leading-body2);
@@ -40,7 +40,14 @@
 }
 
 .link {
+  --toc-rail: transparent;
+  --toc-weight: 400;
+
+  display: inline-block;
+  padding-inline-start: var(--spacing-xs);
+  box-shadow: inset 2px 0 0 var(--toc-rail);
   color: inherit;
+  font-weight: var(--toc-weight);
   text-decoration: none;
   transition: color var(--duration-fast) var(--easing-standard);
 }
@@ -50,6 +57,9 @@
 }
 
 .active {
+  --toc-rail: var(--toc-active-color);
+  --toc-weight: 700;
+
   color: var(--toc-active-color);
 }
 

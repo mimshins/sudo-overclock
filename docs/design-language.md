@@ -22,7 +22,9 @@ silently redefining the identity; identity decisions are ADRs
    pixel-grid monospace) is the **display face**, used only for the brand
    wordmark and `h1`/`h2`. The pairing is deliberate and narrow: it gives the
    brand a distinctive pixel voice without changing how the prose reads. Never a
-   third typeface, and never the display face outside those roles.
+   third typeface, and never the display face outside those roles. Display
+   headings carry weight through a pixel double-strike, the way bitmap fonts
+   were emboldened on terminals — never synthetic bold.
 2. **Mono palette with phosphor accent.** Background and foreground use neutral
    scale only. The single accent color is **phosphor green**
    (`--color-phosphor`, `#00ff9c`). Status roles (positive, negative, warn,
@@ -67,7 +69,7 @@ silently redefining the identity; identity decisions are ADRs
   `src/modules/<x>/presentation/`. App routes live in `src/app/`.
 - Components reference **semantic tokens** (`--color-phosphor`,
   `--color-foreground`) in their CSS Modules. They never inline hex.
-- Variant props (`variant="outlined" | "ghost"`) map to CSS Module classes via a
+- Variant props (`variant="soft" | "ghost"`) map to CSS Module classes via a
   static lookup — never string interpolation.
 - Button affordance text uses ASCII brackets: `[ read more ]`, `[ ok ]`.
 
@@ -77,10 +79,10 @@ Two themes, one identity. **Dark** is phosphor on near-black — the screen
 glowing in a dark room, and the default. **Light** is paper-CRT — the same
 terminal printed on green-bar listing paper: deep ink green instead of emitted
 light, a faint ink halo instead of glow, and pointillism drawn as ink dots.
-First visits follow the reader's OS; the `[ light ]` toggle in the header
-overrides and is remembered. Token swapping happens in CSS only — no React state
-for theming primitives. Details:
-[`design-system.md#theme`](./design-system.md#theme).
+First visits follow the reader's OS; the header toggle, labeled with the theme
+it switches to (`[ light ]` on dark, `[ dark ]` on paper), overrides and is
+remembered. Token swapping happens in CSS only — no React state for theming
+primitives. Details: [`design-system.md#theme`](./design-system.md#theme).
 
 ## Asset Notes
 

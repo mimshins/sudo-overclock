@@ -91,34 +91,38 @@ describe("theme boot script", () => {
 });
 
 describe("ThemeToggle", () => {
-  it("is a pressed toggle when the light theme is on", () => {
+  it("names the theme it switches to", () => {
     mockSystem(false);
     document.documentElement.dataset.theme = "light";
     render(<ThemeToggle />);
 
-    expect(screen.getByRole("button", { name: "[ light ]" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
+    const toggle = screen.getByRole("button", {
+      name: "switch to dark theme",
+    });
+
+    expect(toggle).not.toHaveAttribute("aria-pressed");
+    expect(toggle).toHaveTextContent("[ light ][ dark ]");
   });
 
   it("switches themes and remembers the choice", async () => {
     mockSystem(false);
     document.documentElement.dataset.theme = "dark";
     render(<ThemeToggle />);
-    const toggle = screen.getByRole("button", { name: "[ light ]" });
+    const toggle = screen.getByRole("button", {
+      name: "switch to light theme",
+    });
 
     await userEvent.setup().click(toggle);
     expect(theme()).toBe("light");
     await waitFor(() => {
-      expect(toggle).toHaveAttribute("aria-pressed", "true");
+      expect(toggle).toHaveAccessibleName("switch to dark theme");
     });
     expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe("light");
 
     await userEvent.setup().click(toggle);
     expect(theme()).toBe("dark");
     await waitFor(() => {
-      expect(toggle).toHaveAttribute("aria-pressed", "false");
+      expect(toggle).toHaveAccessibleName("switch to light theme");
     });
     expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe("dark");
   });
@@ -133,9 +137,8 @@ describe("ThemeToggle", () => {
     });
     expect(theme()).toBe("light");
     await waitFor(() => {
-      expect(screen.getByRole("button")).toHaveAttribute(
-        "aria-pressed",
-        "true",
+      expect(screen.getByRole("button")).toHaveAccessibleName(
+        "switch to dark theme",
       );
     });
 

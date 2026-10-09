@@ -1,6 +1,7 @@
 # ADR-014 — Paper-CRT Light Theme
 
-- **Status:** Accepted
+- **Status:** Accepted; toggle label amended by
+  [ADR-015](./ADR-015-readability-pass.md) (names the theme it switches to)
 - **Date:** 2026-10-09
 - **Topic:** design
 - **RFC:** [RFC-010](../rfcs/archived/RFC-010-paper-crt-light-theme.md)

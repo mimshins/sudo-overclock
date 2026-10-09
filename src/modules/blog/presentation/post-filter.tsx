@@ -66,7 +66,7 @@ const Toolbar = ({
       ))}
     </div>
     <Button
-      variant="ghost"
+      variant="soft"
       color="neutral"
       size="sm"
       className={styles.sort}

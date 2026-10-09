@@ -85,6 +85,7 @@ describe("CodeCopy", () => {
     await user.click(first);
 
     expect(first).toHaveAccessibleName("[ copied ]");
+    expect(first).toHaveAttribute("data-state", "copied");
     expect(status).toHaveTextContent("code copied");
 
     act(() => {
@@ -92,6 +93,7 @@ describe("CodeCopy", () => {
     });
 
     expect(first).toHaveAccessibleName("[ copy ]");
+    expect(first).not.toHaveAttribute("data-state");
     expect(status).toBeEmptyDOMElement();
   });
 

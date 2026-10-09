@@ -1,6 +1,7 @@
 # ADR-007 — Display Typeface: undefined medium
 
-- **Status:** Accepted
+- **Status:** Accepted; display weight amended by
+  [ADR-015](./ADR-015-readability-pass.md) (pixel double-strike)
 - **Date:** 2026-09-16
 - **Topic:** design / brand
 - **RFC:** [RFC-007](../rfcs/archived/RFC-007-display-typeface.md)

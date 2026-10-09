@@ -1,4 +1,19 @@
-.toggle[aria-pressed="true"] {
-  --button-color: var(--color-phosphor-text);
-  --button-hover-color: var(--color-phosphor-text);
+/* The label is swapped from data-theme, which the boot script sets before
+   paint, so it is right before hydration. */
+.toggle {
+  --theme-toggle-to-light: inline;
+  --theme-toggle-to-dark: none;
+}
+
+:global(:root[data-theme="light"]) .toggle {
+  --theme-toggle-to-light: none;
+  --theme-toggle-to-dark: inline;
+}
+
+.toLight {
+  display: var(--theme-toggle-to-light);
+}
+
+.toDark {
+  display: var(--theme-toggle-to-dark);
 }

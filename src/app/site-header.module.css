@@ -154,8 +154,7 @@
     gap: var(--spacing-xxs);
     flex-basis: 100%;
     order: 3;
-    border-top: 1px solid
-      color-mix(in srgb, var(--color-border-primary) 60%, transparent);
+    border-top: 1px solid var(--color-divider);
     margin-top: var(--spacing-sm);
     padding-top: var(--spacing-sm);
   }

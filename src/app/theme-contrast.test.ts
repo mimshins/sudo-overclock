@@ -75,10 +75,14 @@ const color = (
     : color(theme, reference[1], new Set([...seen, name]));
 };
 
-const luminance = (hex: string): number => {
+const channels = (hex: string): number[] => {
   const value = Number.parseInt(hex.slice(1), 16);
-  const channels = [(value >> 16) & 255, (value >> 8) & 255, value & 255];
-  const [r = 0, g = 0, b = 0] = channels.map(channel => {
+
+  return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
+};
+
+const luminance = (hex: string): number => {
+  const [r = 0, g = 0, b = 0] = channels(hex).map(channel => {
     const c = channel / 255;
 
     return c <= 0.039_28 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
@@ -87,24 +91,76 @@ const luminance = (hex: string): number => {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
 
+const hexLuminance = (theme: Theme, label: string, hex: string): number => {
+  if (!/^#[\da-f]{6}$/iu.test(hex)) {
+    throw new Error(`${theme}: ${label} is not hex`);
+  }
+
+  return luminance(hex);
+};
+
+const contrast = (a: number, b: number): number =>
+  (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+
 const ratio = (
   theme: Theme,
   foreground: string,
   background: string,
 ): number => {
-  const [a, b] = [color(theme, foreground), color(theme, background)].map(
-    hex => {
-      if (!/^#[\da-f]{6}$/iu.test(hex)) {
-        throw new Error(`${theme}: ${foreground}/${background} is not hex`);
-      }
+  const label = `${foreground}/${background}`;
 
-      return luminance(hex);
-    },
+  return contrast(
+    hexLuminance(theme, label, color(theme, foreground)),
+    hexLuminance(theme, label, color(theme, background)),
   );
-  const high = Math.max(a ?? 0, b ?? 0);
-  const low = Math.min(a ?? 0, b ?? 0);
+};
 
-  return (high + 0.05) / (low + 0.05);
+const percent = (theme: Theme, value: string): number => {
+  const reference = /^var\(\s*(--[\w-]+)\s*\)$/u.exec(value);
+  const resolved =
+    reference?.[1] === undefined ? value : color(theme, reference[1]);
+
+  return Number.parseFloat(resolved) / 100;
+};
+
+const composite = (top: string, alpha: number, bottom: string): string => {
+  const below = channels(bottom);
+
+  return `#${channels(top)
+    .map((channel, index) =>
+      Math.round(channel * alpha + (below[index] ?? 0) * (1 - alpha))
+        .toString(16)
+        .padStart(2, "0"),
+    )
+    .join("")}`;
+};
+
+const glassRatio = (
+  theme: Theme,
+  foreground: string,
+  glass: string,
+  backdrop: string,
+): number => {
+  const mix =
+    /^color-mix\(\s*in srgb,\s*var\(\s*(--[\w-]+)\s*\)\s+([^,]+?),\s*transparent\s*\)$/u.exec(
+      color(theme, glass).replaceAll(/\s+/gu, " "),
+    );
+
+  if (mix?.[1] === undefined || mix[2] === undefined) {
+    throw new Error(`${theme}: ${glass} is not a color-mix over transparent`);
+  }
+
+  const label = `${foreground}/${glass}`;
+  const fill = composite(
+    color(theme, mix[1]),
+    percent(theme, mix[2]),
+    color(theme, backdrop),
+  );
+
+  return contrast(
+    hexLuminance(theme, label, color(theme, foreground)),
+    hexLuminance(theme, label, fill),
+  );
 };
 
 const TEXT = 4.5;
@@ -133,6 +189,7 @@ const pairs: ReadonlyArray<readonly [string, string, number]> = [
   ].flatMap(text => SURFACES.map(surface => [text, surface, TEXT] as const)),
   ["--color-selection-foreground", "--color-selection-background", TEXT],
   ["--color-on-phosphor", "--color-phosphor", TEXT],
+  ["--color-on-tint", "--color-background-tint", TEXT],
   ["--color-neutral-text", "--color-neutral", TEXT],
   ["--focus-ring-color", "--color-background", NON_TEXT],
   ["--color-border-focus", "--color-background", NON_TEXT],
@@ -141,20 +198,35 @@ const pairs: ReadonlyArray<readonly [string, string, number]> = [
   ...shikiTokens.map(name => [name, "--shiki-background", TEXT] as const),
 ];
 
-const KNOWN_DEVIATIONS = new Set([
-  "dark --color-border-primary on --color-background",
-]);
-
 describe.each(["dark", "light"] as const)("%s theme contrast", theme => {
   it.each(pairs)("%s on %s meets %d:1", (foreground, background, minimum) => {
-    const key = `${theme} ${foreground} on ${background}`;
-    const value = ratio(theme, foreground, background);
-
-    if (KNOWN_DEVIATIONS.has(key)) {
-      expect(value).toBeLessThan(minimum);
-      return;
-    }
-
-    expect(value).toBeGreaterThanOrEqual(minimum);
+    expect(ratio(theme, foreground, background)).toBeGreaterThanOrEqual(
+      minimum,
+    );
   });
 });
+
+const glassPairs: ReadonlyArray<readonly [string, string]> = [
+  ...[
+    "--color-foreground",
+    "--color-foreground-secondary",
+    "--color-phosphor",
+  ].map(text => [text, "--color-glass-control"] as const),
+  ["--color-on-tint", "--color-glass-control-hover"],
+];
+const BACKDROPS = ["--color-background", "--color-phosphor"];
+
+describe.each(["dark", "light"] as const)(
+  "%s theme frosted controls, unblurred over a field dot",
+  theme => {
+    it.each(
+      glassPairs.flatMap(([text, glass]) =>
+        BACKDROPS.map(backdrop => [text, glass, backdrop] as const),
+      ),
+    )("%s on %s over %s meets 4.5:1", (text, glass, backdrop) => {
+      expect(glassRatio(theme, text, glass, backdrop)).toBeGreaterThanOrEqual(
+        TEXT,
+      );
+    });
+  },
+);

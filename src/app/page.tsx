@@ -31,7 +31,7 @@ const HomePage = () => (
     >
       <LinkButton
         href="/blog/"
-        variant="ghost"
+        variant="soft"
         color="phosphor"
         size="md"
       >
@@ -39,7 +39,7 @@ const HomePage = () => (
       </LinkButton>
       <LinkButton
         href="/about/"
-        variant="ghost"
+        variant="soft"
         color="phosphor"
         size="md"
       >

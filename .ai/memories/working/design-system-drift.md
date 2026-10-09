@@ -23,25 +23,20 @@ issues below remain.
 Anchored to symbols and selectors, not line numbers; verified against the code
 on 2026-10-09.
 
-- **Contrast (dark only):** `--color-foreground-muted` /
-  `--color-border-primary` are 2.2:1 (the theme contrast test lists the border
-  as a known deviation); muted text is used by `.count` in `tags.module.css` and
-  by `Caption variant="muted"`.
+- **Contrast (dark only):** `--color-foreground-muted` is 2.2:1; muted text is
+  used by `.count` in `tags.module.css` and by `Caption variant="muted"`.
 - **`data-slot` missing:** `PostHeader` title `<h1>` and description `<p>`
   (`post-header.tsx`); `PostList` card internals; `SiteHeader` and `SiteFooter`
   internals; route page wrappers (`src/app/**/page.tsx`); `CoverImage`.
 - **State classes declaring properties:** `.link:hover` / `.active` in
   `site-header.module.css` and `table-of-contents.module.css`; the copied state
   in `code-copy.module.css`; card hover in `post-list.module.css`.
-- **Duplication → primitives:** the glow recipe in `post-header.module.css`
-  (`.title`) and `post-body.module.css` (`h1`) instead of `Heading glow` /
-  `.phosphor-glow`; code font size/leading duplicated between
+- **Duplication → primitives:** code font size/leading duplicated between
   `code-block.module.css` (`.pre`) and `post-body.module.css` (`pre`).
-- **Missing tokens:** letter-spacing, generic font weights, border widths, a
-  glass-panel recipe (removes the `color-mix` exemptions in
-  `stylelint.config.mjs`). Adding them unlocks stylelint length rules.
+- **Missing tokens:** letter-spacing, generic font weights, border widths.
+  Adding them unlocks stylelint length rules.
 - **Layout:** `tags.module.css` / `tag.module.css` lack the ≤640px
-  `padding-inline` rule; prose has no measure cap (`--container-prose` unused).
+  `padding-inline` rule.
 
 ## Review follow-ups (nits from the 2026-10-09 review)
 

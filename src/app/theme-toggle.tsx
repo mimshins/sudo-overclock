@@ -53,10 +53,21 @@ const ThemeToggle = ({ className }: ThemeToggleProps) => {
       color="neutral"
       size="sm"
       className={cx(styles.toggle, className)}
-      aria-pressed={theme === "light"}
+      aria-label={`switch to ${theme === "light" ? "dark" : "light"} theme`}
       onClick={toggle}
     >
-      [ light ]
+      <span
+        className={styles.toLight}
+        data-slot="theme-toggle-light"
+      >
+        [ light ]
+      </span>
+      <span
+        className={styles.toDark}
+        data-slot="theme-toggle-dark"
+      >
+        [ dark ]
+      </span>
     </Button>
   );
 };

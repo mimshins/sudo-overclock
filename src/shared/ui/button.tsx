@@ -5,7 +5,7 @@ import type * as React from "react";
 
 import styles from "./button.module.css";
 
-type Variant = "ghost" | "outlined" | "filled";
+type Variant = "ghost" | "outlined" | "filled" | "soft";
 type Color = "neutral" | "phosphor" | "positive" | "negative" | "warn" | "info";
 type Size = "sm" | "md" | "lg";
 
@@ -22,6 +22,7 @@ const variantClass: Record<Variant, ClassValue> = {
   ghost: styles.variantGhost,
   outlined: styles.variantOutlined,
   filled: styles.variantFilled,
+  soft: styles.variantSoft,
 };
 
 const colorClass: Record<Color, ClassValue> = {

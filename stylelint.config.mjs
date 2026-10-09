@@ -48,17 +48,5 @@ export default {
         "declaration-property-value-disallowed-list": null,
       },
     },
-    {
-      files: [
-        "src/app/about/about.module.css",
-        "src/app/reading/reading.module.css",
-        "src/app/site-header.module.css",
-        "src/modules/blog/presentation/post-images.module.css",
-        "src/modules/blog/presentation/post-list.module.css",
-      ],
-      rules: {
-        "function-disallowed-list": COLOR_FUNCTIONS,
-      },
-    },
   ],
 };

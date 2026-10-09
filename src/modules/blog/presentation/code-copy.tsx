@@ -55,10 +55,12 @@ const attachCopyButton = (
     if (!(await copyText(code))) return;
 
     button.textContent = COPIED_LABEL;
+    button.dataset.state = "copied";
     onCopied();
     window.clearTimeout(resetTimer);
     resetTimer = window.setTimeout(() => {
       button.textContent = COPY_LABEL;
+      delete button.dataset.state;
     }, RESET_DELAY_MS);
   };
 

@@ -1,9 +1,10 @@
 .leader {
   --leader-size: var(--typography-caption-size);
-  --leader-font-weight: var(--typography-caption-weight);
+  --leader-font-weight: 700;
   --leader-letter-spacing: 0.15em;
-  --leader-label-color: var(--color-phosphor);
-  --leader-rule-color: var(--color-foreground-muted);
+  --leader-label-color: var(--color-on-phosphor);
+  --leader-rule-color: var(--color-foreground-tertiary);
+  --leader-plate: var(--color-phosphor);
 
   margin: 0;
   display: inline-flex;
@@ -26,5 +27,7 @@
 }
 
 .label {
+  padding: var(--spacing-xxs) var(--spacing-xs);
+  background-color: var(--leader-plate);
   color: var(--leader-label-color);
 }

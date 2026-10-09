@@ -22,21 +22,21 @@ context/DI wired in `app/`).
 
 ### Shared primitives — `src/shared/ui/`
 
-| Component           | Props                                                                                                                    | Notes                                                                              |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
-| `Button`            | `variant: ghost\|outlined\|filled`, `color: neutral\|phosphor\|positive\|negative\|warn\|info`, `size: sm\|md\|lg`, `as` | Base UI button, polymorphic; `size` sets padding and type (sm caption, md/lg body) |
-| `Heading`           | `size: h1…h6`, `variant: default\|muted\|phosphor`, `glow`                                                               | Polymorphic, defaults to `h2`                                                      |
-| `Paragraph`         | `size: body1\|body2`, `variant: default\|muted`                                                                          | Body copy                                                                          |
-| `Lead`              | `size: subheading1\|subheading2`, `variant: default\|muted\|phosphor`                                                    | Intro/standfirst paragraphs                                                        |
-| `Caption`           | `variant: default\|muted`, `uppercase`                                                                                   | Small labels                                                                       |
-| `Leader`            | `as` (default `div`; `h2` for section heads), `children` (label)                                                         | `──── label ────` ASCII section title                                              |
-| `Tag`               | `active`, `onClick`                                                                                                      | Chip; a `<button>` with `aria-pressed` when `onClick` is set                       |
-| `Kbd`               | `variant: default\|phosphor`                                                                                             | Keyboard key                                                                       |
-| `InlineCode`        | `variant: default\|phosphor`                                                                                             | Inline code snippet                                                                |
-| `CodeBlock`         | `language`, `filename`                                                                                                   | Framed `<pre>` with optional header chips                                          |
-| `Blockquote`        | `cite`                                                                                                                   | Quote with a phosphor marker (`aria-hidden`) and nesting support                   |
-| `List` / `ListItem` | `ordered`, `tight`, `as`                                                                                                 | `ul`/`ol` and `li` wrappers; both polymorphic                                      |
-| `PhosphorField`     | `src`, `glowOnHover`                                                                                                     | Client canvas dot field (procedural or image)                                      |
+| Component           | Props                                                                                                                          | Notes                                                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| `Button`            | `variant: ghost\|outlined\|filled\|soft`, `color: neutral\|phosphor\|positive\|negative\|warn\|info`, `size: sm\|md\|lg`, `as` | Base UI button, polymorphic; `size` sets padding and type (sm caption, md/lg body) |
+| `Heading`           | `size: h1…h6`, `variant: default\|muted\|phosphor`, `glow`                                                                     | Polymorphic, defaults to `h2`                                                      |
+| `Paragraph`         | `size: body1\|body2`, `variant: default\|muted`                                                                                | Body copy                                                                          |
+| `Lead`              | `size: subheading1\|subheading2`, `variant: default\|muted\|phosphor`                                                          | Intro/standfirst paragraphs                                                        |
+| `Caption`           | `variant: default\|muted`, `uppercase`                                                                                         | Small labels                                                                       |
+| `Leader`            | `as` (default `div`; `h2` for section heads), `children` (label)                                                               | `──── label ────` ASCII section title                                              |
+| `Tag`               | `active`, `onClick`                                                                                                            | Chip; a `<button>` with `aria-pressed` when `onClick` is set                       |
+| `Kbd`               | `variant: default\|phosphor`                                                                                                   | Keyboard key                                                                       |
+| `InlineCode`        | `variant: default\|phosphor`                                                                                                   | Inline code snippet                                                                |
+| `CodeBlock`         | `language`, `filename`                                                                                                         | Framed `<pre>` with optional header chips                                          |
+| `Blockquote`        | `cite`                                                                                                                         | Quote with a phosphor marker (`aria-hidden`) and nesting support                   |
+| `List` / `ListItem` | `ordered`, `tight`, `as`                                                                                                       | `ul`/`ol` and `li` wrappers; both polymorphic                                      |
+| `PhosphorField`     | `src`, `glowOnHover`                                                                                                           | Client canvas dot field (procedural or image)                                      |
 
 All primitives are polymorphic where it makes sense and expose a
 `data-slot="<name>"` hook.
@@ -59,29 +59,30 @@ compiled-content adapter into the application services and exports
 
 ### App shell — `src/app/`
 
-| Component     | Kind   | Role                                                                                     |
-| ------------- | ------ | ---------------------------------------------------------------------------------------- |
-| `SiteHeader`  | client | Brand, primary nav, responsive menu (Esc closes + refocus)                               |
-| `SiteFooter`  | server | Copyright, ASCII tagline, social links                                                   |
-| `LinkButton`  | client | `Button` rendered `as={Link}` (functions can't cross RSC)                                |
-| `CoverImage`  | server | Book cover image for the reading list                                                    |
-| `NotFound`    | server | 404 page (`not-found.tsx`); exported as `404.html`                                       |
-| `SkipLink`    | server | "skip to content" link to `#main` (`data-slot="skip-link"`)                              |
-| `ThemeToggle` | client | `[ light ]` toggle (`aria-pressed`); stores the choice, follows the OS until one is made |
+| Component     | Kind   | Role                                                                                                                                             |
+| ------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `SiteHeader`  | client | Brand, primary nav, responsive menu (Esc closes + refocus)                                                                                       |
+| `SiteFooter`  | server | Copyright, ASCII tagline, social links                                                                                                           |
+| `LinkButton`  | client | `Button` rendered `as={Link}` (functions can't cross RSC)                                                                                        |
+| `CoverImage`  | server | Book cover image for the reading list                                                                                                            |
+| `NotFound`    | server | 404 page (`not-found.tsx`); exported as `404.html`                                                                                               |
+| `SkipLink`    | server | "skip to content" link to `#main` (`data-slot="skip-link"`)                                                                                      |
+| `ThemeToggle` | client | `[ light ]` / `[ dark ]`: names the theme it switches to (`aria-label` "switch to … theme"); stores the choice, follows the OS until one is made |
 
 ### `Leader`
 
 The ASCII section title from the design language. Renders `──── label ────`: two
 rules of four U+2500 BOX DRAWINGS LIGHT HORIZONTAL characters around the label,
-uppercase caption type, phosphor label, muted rules.
+uppercase caption type, the label a bold phosphor tab, tertiary rules.
 
 - **Slots:** `leader` (root), `leader-rule` (each rule, `aria-hidden`),
   `leader-label` (the label — the only text exposed to assistive tech).
 - **Element:** a `div` above a page `h1`; `as="h2"` when it is the heading of a
   section (about and reading panels).
 - **Styling:** local `--leader-size`, `--leader-font-weight`,
-  `--leader-letter-spacing`, `--leader-label-color`, and `--leader-rule-color`;
-  the rules drop letter-spacing so the box-drawing cells join into one line.
+  `--leader-letter-spacing`, `--leader-label-color`, `--leader-plate`, and
+  `--leader-rule-color`; the rules drop letter-spacing so the box-drawing cells
+  join into one line.
 
 ```tsx
 <Leader>about.md</Leader>
@@ -100,7 +101,7 @@ by the global reduced-motion rule) → a narrow column with:
   glyph;
 - terminal copy (`$ cd ./this-page` → `no such file or directory`), with the `$`
   prompt `aria-hidden`;
-- `[ home ]` and `[ read the blog ]` as ghost phosphor `LinkButton`s.
+- `[ home ]` and `[ read the blog ]` as soft phosphor `LinkButton`s.
 
 Root `not-found.tsx` also handles unmatched URLs, and the static export writes
 it to `out/404.html`. Next adds `noindex` to it automatically.
