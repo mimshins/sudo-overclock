@@ -22,3 +22,8 @@
 .variantMuted {
   --caption-color: var(--color-foreground-muted);
 }
+
+.normalCase {
+  --caption-text-transform: none;
+  --caption-letter-spacing: normal;
+}

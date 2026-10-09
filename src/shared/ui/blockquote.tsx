@@ -33,6 +33,7 @@ const Blockquote = <T extends ElementType = "blockquote">({
       <span
         className={styles.marker}
         data-slot="blockquote-marker"
+        aria-hidden="true"
       >
         {"“"}
       </span>

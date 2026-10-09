@@ -6,16 +6,18 @@
  * Enhances server-rendered Shiki code blocks with a copy-to-clipboard button.
  * The post body HTML is rendered by PostBody (a server component) and stays out
  * of the client bundle; this component only adds the interactive button after
- * mount by wrapping each `<pre>` in a positioned container.
+ * mount by wrapping each `<pre>` in a positioned container, and renders the
+ * polite live region that announces a successful copy.
  */
 
 import { cx } from "@repo/shared/lib/cx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./code-copy.module.css";
 
 const COPY_LABEL = "[ copy ]";
 const COPIED_LABEL = "[ copied ]";
+const COPIED_MESSAGE = "code copied";
 const RESET_DELAY_MS = 1500;
 
 const copyText = async (text: string): Promise<boolean> => {
@@ -27,9 +29,13 @@ const copyText = async (text: string): Promise<boolean> => {
   }
 };
 
-const attachCopyButton = (block: HTMLElement): (() => void) => {
+const attachCopyButton = (
+  block: HTMLElement,
+  onCopied: () => void,
+): (() => void) => {
   const wrapper = document.createElement("div");
   wrapper.className = cx(styles.wrapper);
+  wrapper.dataset.slot = "code-copy";
   block.parentNode?.insertBefore(wrapper, block);
   wrapper.append(block);
   block.style.margin = "0";
@@ -37,8 +43,10 @@ const attachCopyButton = (block: HTMLElement): (() => void) => {
   const button = document.createElement("button");
   button.type = "button";
   button.className = cx(styles.button);
+  button.dataset.slot = "code-copy-button";
   button.textContent = COPY_LABEL;
-  button.setAttribute("aria-label", "copy code");
+
+  let resetTimer: number | undefined;
 
   const handleCopy = async () => {
     const code =
@@ -47,7 +55,9 @@ const attachCopyButton = (block: HTMLElement): (() => void) => {
     if (!(await copyText(code))) return;
 
     button.textContent = COPIED_LABEL;
-    window.setTimeout(() => {
+    onCopied();
+    window.clearTimeout(resetTimer);
+    resetTimer = window.setTimeout(() => {
       button.textContent = COPY_LABEL;
     }, RESET_DELAY_MS);
   };
@@ -60,6 +70,7 @@ const attachCopyButton = (block: HTMLElement): (() => void) => {
   wrapper.append(button);
 
   return () => {
+    window.clearTimeout(resetTimer);
     button.removeEventListener("click", onClick);
     wrapper.parentNode?.insertBefore(block, wrapper);
     wrapper.remove();
@@ -67,18 +78,41 @@ const attachCopyButton = (block: HTMLElement): (() => void) => {
 };
 
 const CodeCopy = () => {
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
+    let clearTimer: number | undefined;
+
+    const announceCopied = (): void => {
+      setMessage(COPIED_MESSAGE);
+      window.clearTimeout(clearTimer);
+      clearTimer = window.setTimeout(() => {
+        setMessage("");
+      }, RESET_DELAY_MS);
+    };
+
     const blocks = Array.from(
       document.querySelectorAll<HTMLElement>('[data-slot="post-body"] pre'),
     );
-    const teardowns = blocks.map(block => attachCopyButton(block));
+    const teardowns = blocks.map(block =>
+      attachCopyButton(block, announceCopied),
+    );
 
     return () => {
+      window.clearTimeout(clearTimer);
       for (const teardown of teardowns) teardown();
     };
   }, []);
 
-  return null;
+  return (
+    <output
+      aria-live="polite"
+      className={styles.status}
+      data-slot="code-copy-status"
+    >
+      {message}
+    </output>
+  );
 };
 
 export { CodeCopy };

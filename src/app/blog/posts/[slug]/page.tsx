@@ -4,7 +4,6 @@ import { PostBody } from "@repo/modules/blog/presentation/post-body";
 import { PostHeader } from "@repo/modules/blog/presentation/post-header";
 import { PostImages } from "@repo/modules/blog/presentation/post-images";
 import { TableOfContents } from "@repo/modules/blog/presentation/table-of-contents";
-import { Caption } from "@repo/shared/ui/caption";
 import { notFound } from "next/navigation";
 
 import styles from "./post.module.css";
@@ -53,12 +52,6 @@ const PostPage = async ({ params }: PostPageProps) => {
         className={styles.aside}
         data-slot="post-aside"
       >
-        <Caption
-          variant="default"
-          className={styles.tocTitle}
-        >
-          on this page
-        </Caption>
         <TableOfContents items={post.toc} />
       </aside>
     </main>

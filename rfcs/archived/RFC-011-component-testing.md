@@ -1,6 +1,6 @@
 # RFC-011 — Component Testing with Vitest and Testing Library
 
-- **Status:** Accepted
+- **Status:** Implemented
 - **Date:** 2026-10-09
 - **Supersedes:** —
 - **Superseded by:** —
@@ -102,3 +102,10 @@ environment.
 - `jest-dom` and `user-event`, already installed, finally earn their place.
 - Vite joins the toolchain for tests only; the app build is unchanged.
 - Playwright (Option C) remains a possible later layer for visual checks.
+
+## Resolution
+
+Implemented on 2026-10-09; recorded in
+[ADR-013](../../decisions/ADR-013-component-testing.md). The third wave (shared
+primitives) also added a static CSS-module contract test that catches the
+no-op-prop class of bug the DOM cannot observe.

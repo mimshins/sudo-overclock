@@ -7,6 +7,11 @@
   color: var(--toc-color);
 }
 
+.title {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+}
+
 .list {
   list-style: none;
   margin: 0;

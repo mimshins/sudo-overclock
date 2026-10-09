@@ -1,4 +1,5 @@
 .lead {
+  --lead-size: var(--text-subheading1);
   --lead-line-height: 1.4;
   --lead-font-weight: 400;
   --lead-color: var(--color-foreground);
@@ -8,6 +9,7 @@
   margin: 0;
   color: var(--lead-color);
   font-family: var(--font-ltr);
+  font-size: var(--lead-size);
   font-weight: var(--lead-font-weight);
   line-height: var(--lead-line-height);
   letter-spacing: var(--lead-letter-spacing);

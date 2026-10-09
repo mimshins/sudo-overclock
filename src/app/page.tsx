@@ -34,7 +34,6 @@ const HomePage = () => (
         variant="ghost"
         color="phosphor"
         size="md"
-        ariaLabel="read more"
       >
         [ read the blog ]
       </LinkButton>
@@ -43,7 +42,6 @@ const HomePage = () => (
         variant="ghost"
         color="phosphor"
         size="md"
-        ariaLabel="read more"
       >
         [ who am i ]
       </LinkButton>

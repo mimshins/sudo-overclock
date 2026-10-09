@@ -308,10 +308,27 @@ as part of `pnpm check:lint`.
 
 ## Testing Strategy
 
-- Unit tests for compiler logic.
-- Integration tests for the content pipeline.
-- Component tests for React components.
-- No E2E tests (static site).
+Tests run on **Vitest** (`pnpm test`, wireit-cached) in two projects defined in
+`vitest.config.ts` ([ADR-013](../decisions/ADR-013-component-testing.md)):
+
+| Project | Files               | Environment | For                                                 |
+| ------- | ------------------- | ----------- | --------------------------------------------------- |
+| `node`  | `src/**/*.test.ts`  | Node        | compiler, authoring CLI, image store, domain logic  |
+| `ui`    | `src/**/*.test.tsx` | happy-dom   | components, with React Testing Library and jest-dom |
+
+- Tests live beside the code they cover.
+- Component tests query the way a reader does — by role, accessible name, label,
+  or text — and interact through `@testing-library/user-event`. They do not
+  assert generated class names or exact markup; `data-slot` hooks and ARIA
+  attributes are contracts and may be asserted.
+- Next.js modules (`next/navigation`, …) are mocked with `vi.mock`; build-time
+  env is stubbed with `vi.stubEnv`.
+- `src/shared/ui/css-module-contract.test.ts` checks every CSS Module
+  statically: each local custom property a module sets must be read in that
+  module, and each `styles.<name>` a component uses must exist. It is what keeps
+  variant and size props from silently doing nothing.
+- No end-to-end tests (static site); the static export is verified by
+  `pnpm build` in CI.
 
 ## Performance Considerations
 

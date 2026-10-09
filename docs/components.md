@@ -22,36 +22,36 @@ context/DI wired in `app/`).
 
 ### Shared primitives — `src/shared/ui/`
 
-| Component           | Props                                                                                                                    | Notes                                          |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
-| `Button`            | `variant: ghost\|outlined\|filled`, `color: neutral\|phosphor\|positive\|negative\|warn\|info`, `size: sm\|md\|lg`, `as` | Base UI button, polymorphic                    |
-| `Heading`           | `size: h1…h6`, `variant: default\|muted\|phosphor`, `glow`                                                               | Polymorphic, defaults to `h2`                  |
-| `Paragraph`         | `size: body1\|body2`, `variant: default\|muted`                                                                          | Body copy                                      |
-| `Lead`              | `size: subheading1\|subheading2`, `variant: default\|muted\|phosphor`                                                    | Intro/standfirst paragraphs                    |
-| `Caption`           | `variant: default\|muted`, `uppercase`                                                                                   | Small labels                                   |
-| `Leader`            | `as` (default `div`; `h2` for section heads), `children` (label)                                                         | `──── label ────` ASCII section title          |
-| `Tag`               | `active`, `onClick`                                                                                                      | Chip; renders `<button>` when `onClick` is set |
-| `Kbd`               | `variant: default\|phosphor`                                                                                             | Keyboard key                                   |
-| `InlineCode`        | `variant: default\|phosphor`                                                                                             | Inline code snippet                            |
-| `CodeBlock`         | `language`, `filename`                                                                                                   | Framed `<pre>` with optional header chips      |
-| `Blockquote`        | `cite`                                                                                                                   | Quote with phosphor marker and nesting support |
-| `List` / `ListItem` | `ordered`, `tight`                                                                                                       | `ul`/`ol` and `li` wrappers                    |
-| `PhosphorField`     | `src`, `glowOnHover`                                                                                                     | Client canvas dot field (procedural or image)  |
+| Component           | Props                                                                                                                    | Notes                                                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| `Button`            | `variant: ghost\|outlined\|filled`, `color: neutral\|phosphor\|positive\|negative\|warn\|info`, `size: sm\|md\|lg`, `as` | Base UI button, polymorphic; `size` sets padding and type (sm caption, md/lg body) |
+| `Heading`           | `size: h1…h6`, `variant: default\|muted\|phosphor`, `glow`                                                               | Polymorphic, defaults to `h2`                                                      |
+| `Paragraph`         | `size: body1\|body2`, `variant: default\|muted`                                                                          | Body copy                                                                          |
+| `Lead`              | `size: subheading1\|subheading2`, `variant: default\|muted\|phosphor`                                                    | Intro/standfirst paragraphs                                                        |
+| `Caption`           | `variant: default\|muted`, `uppercase`                                                                                   | Small labels                                                                       |
+| `Leader`            | `as` (default `div`; `h2` for section heads), `children` (label)                                                         | `──── label ────` ASCII section title                                              |
+| `Tag`               | `active`, `onClick`                                                                                                      | Chip; a `<button>` with `aria-pressed` when `onClick` is set                       |
+| `Kbd`               | `variant: default\|phosphor`                                                                                             | Keyboard key                                                                       |
+| `InlineCode`        | `variant: default\|phosphor`                                                                                             | Inline code snippet                                                                |
+| `CodeBlock`         | `language`, `filename`                                                                                                   | Framed `<pre>` with optional header chips                                          |
+| `Blockquote`        | `cite`                                                                                                                   | Quote with a phosphor marker (`aria-hidden`) and nesting support                   |
+| `List` / `ListItem` | `ordered`, `tight`, `as`                                                                                                 | `ul`/`ol` and `li` wrappers; both polymorphic                                      |
+| `PhosphorField`     | `src`, `glowOnHover`                                                                                                     | Client canvas dot field (procedural or image)                                      |
 
 All primitives are polymorphic where it makes sense and expose a
 `data-slot="<name>"` hook.
 
 ### Blog components — `src/modules/blog/presentation/`
 
-| Component         | Kind   | Role                                                                  |
-| ----------------- | ------ | --------------------------------------------------------------------- |
-| `PostList`        | server | Renders `PostSummary[]` as post cards; empty state included           |
-| `PostHeader`      | server | Post title block: slug leader, `h1`, date + reading time, description |
-| `PostBody`        | server | Prose wrapper around the compiled post HTML                           |
-| `PostImages`      | client | Wraps post images in a skeleton frame + fade-in (progressive)         |
-| `TableOfContents` | client | TOC list + scroll-spy active-section highlight                        |
-| `PostFilter`      | client | Tag filter + sort toolbar for the blog index                          |
-| `CodeCopy`        | client | Mounts copy-to-clipboard buttons on rendered Shiki blocks             |
+| Component         | Kind   | Role                                                                                                                    |
+| ----------------- | ------ | ----------------------------------------------------------------------------------------------------------------------- |
+| `PostList`        | server | Renders `PostSummary[]` as post cards; empty state included                                                             |
+| `PostHeader`      | server | Post title block: slug leader, `h1`, date + reading time, description                                                   |
+| `PostBody`        | server | Prose wrapper around the compiled post HTML                                                                             |
+| `PostImages`      | client | Wraps post images in a skeleton frame + fade-in (progressive)                                                           |
+| `TableOfContents` | client | TOC list with its own "on this page" caption + scroll-spy (`aria-current="location"`); renders nothing without headings |
+| `PostFilter`      | client | Tag filter + sort toolbar for the blog index                                                                            |
+| `CodeCopy`        | client | Adds `[ copy ]` → `[ copied ]` buttons to post code blocks; announces the copy in a polite live region                  |
 
 `blog-module.ts` is the module's server-safe composition root. It wires the
 compiled-content adapter into the application services and exports
@@ -59,13 +59,14 @@ compiled-content adapter into the application services and exports
 
 ### App shell — `src/app/`
 
-| Component    | Kind   | Role                                                       |
-| ------------ | ------ | ---------------------------------------------------------- |
-| `SiteHeader` | client | Brand, primary nav, responsive menu (Esc closes + refocus) |
-| `SiteFooter` | server | Copyright, ASCII tagline, social links                     |
-| `LinkButton` | client | `Button` rendered `as={Link}` (functions can't cross RSC)  |
-| `CoverImage` | server | Book cover image for the reading list                      |
-| `NotFound`   | server | 404 page (`not-found.tsx`); exported as `404.html`         |
+| Component    | Kind   | Role                                                        |
+| ------------ | ------ | ----------------------------------------------------------- |
+| `SiteHeader` | client | Brand, primary nav, responsive menu (Esc closes + refocus)  |
+| `SiteFooter` | server | Copyright, ASCII tagline, social links                      |
+| `LinkButton` | client | `Button` rendered `as={Link}` (functions can't cross RSC)   |
+| `CoverImage` | server | Book cover image for the reading list                       |
+| `NotFound`   | server | 404 page (`not-found.tsx`); exported as `404.html`          |
+| `SkipLink`   | server | "skip to content" link to `#main` (`data-slot="skip-link"`) |
 
 ### `Leader`
 
@@ -102,6 +103,22 @@ by the global reduced-motion rule) → a narrow column with:
 
 Root `not-found.tsx` also handles unmatched URLs, and the static export writes
 it to `out/404.html`. Next adds `noindex` to it automatically.
+
+## Testing a component
+
+Every component ships a `*.test.tsx` beside it (Vitest `ui` project, happy-dom,
+React Testing Library — see
+[`architecture.md#testing-strategy`](./architecture.md#testing-strategy)). Test
+what a reader can observe: the element's role and accessible name, state exposed
+through ARIA (`aria-pressed`, `aria-expanded`, `aria-current`), slots, and the
+behavior of interactions. A variant or size whose effect is purely visual is
+covered by the CSS-module contract test instead.
+
+```tsx
+render(<Tag onClick={onToggle}>go</Tag>);
+await userEvent.setup().click(screen.getByRole("button", { name: "go" }));
+expect(onToggle).toHaveBeenCalledOnce();
+```
 
 ## Building a component
 

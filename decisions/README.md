@@ -39,3 +39,4 @@ Current-state behavior belongs in [`docs/`](../docs/); proposals belong in
 | [010](./ADR-010-design-system-foundations.md)      | Design system foundations: root, chrome, status, imagery, enforcement | Accepted | —                                                                 |
 | [011](./ADR-011-build-caching.md)                  | Content-addressed build caching                                       | Accepted | [009](../rfcs/archived/RFC-009-build-caching.md)                  |
 | [012](./ADR-012-release-gated-code-deploys.md)     | Release-gated code deploys, continuous posts                          | Accepted | —                                                                 |
+| [013](./ADR-013-component-testing.md)              | Component testing with Vitest and Testing Library                     | Accepted | [011](../rfcs/archived/RFC-011-component-testing.md)              |

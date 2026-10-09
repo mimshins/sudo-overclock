@@ -36,7 +36,7 @@ const Caption = <T extends ElementType = "span">({
       className={cx(
         styles.caption,
         variantClass[variant],
-        uppercase && styles.uppercase,
+        !uppercase && styles.normalCase,
         className,
       )}
       data-slot="caption"

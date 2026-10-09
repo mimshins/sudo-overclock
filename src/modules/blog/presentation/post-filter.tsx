@@ -71,7 +71,6 @@ const Toolbar = ({
       size="sm"
       className={styles.sort}
       onClick={onToggleOrder}
-      aria-label="toggle sort order"
     >
       {order === "newest" ? "[ newest ]" : "[ oldest ]"}
     </Button>

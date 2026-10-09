@@ -21,11 +21,6 @@
   align-self: start;
 }
 
-.tocTitle {
-  display: block;
-  margin-bottom: var(--spacing-sm);
-}
-
 @media (max-width: 64rem) {
   .main {
     grid-template-columns: 1fr;

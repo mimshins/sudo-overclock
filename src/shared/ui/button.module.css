@@ -11,12 +11,19 @@
   --button-active-border-color: var(--color-border-primary);
   --button-glitch-a: var(--color-phosphor);
   --button-glitch-b: var(--color-on-neutral);
+  --button-padding-y: var(--spacing-xs);
+  --button-padding-x: var(--spacing-sm);
+  --button-font-size: var(--typography-body1-size);
+  --button-line-height: var(--typography-body1-leading);
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-xs);
+  padding: var(--button-padding-y) var(--button-padding-x);
   font-family: var(--typography-typeface-mono);
+  font-size: var(--button-font-size);
+  line-height: var(--button-line-height);
   font-weight: 500;
   border-radius: var(--radius-none);
   border: 1px solid var(--button-border-color);
@@ -99,16 +106,16 @@
 
 .sizeMd {
   --button-padding-y: var(--spacing-xs);
-  --button-padding-x: var(--spacing-md);
-  --button-font-size: var(--typography-body2-size);
-  --button-line-height: var(--typography-body2-leading);
+  --button-padding-x: var(--spacing-sm);
+  --button-font-size: var(--typography-body1-size);
+  --button-line-height: var(--typography-body1-leading);
 }
 
 .sizeLg {
   --button-padding-y: var(--spacing-sm);
-  --button-padding-x: var(--spacing-lg);
-  --button-font-size: var(--typography-body1-size);
-  --button-line-height: var(--typography-body1-leading);
+  --button-padding-x: var(--spacing-md);
+  --button-font-size: var(--typography-subheading1-size);
+  --button-line-height: var(--typography-subheading1-leading);
 }
 
 /* === COLORS =============================================================

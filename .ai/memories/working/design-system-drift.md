@@ -23,26 +23,14 @@ issues below remain.
 Anchored to symbols and selectors, not line numbers; verified against the code
 on 2026-10-09.
 
-- **Bugs (no-op props):** `Button` size classes set `--button-padding-*`,
-  `--button-font-size`, `--button-line-height` but `.button` never reads them
-  (`button.module.css`); `Lead` sets `--lead-size`, never read
-  (`lead.module.css`); `Caption` references a missing `styles.uppercase`
-  (`caption.tsx`); `ListItem` hard-codes `"li"` and leaks `as` into the DOM
-  (`list.tsx`). RFC-011 wave 3 covers these.
-- **Accessibility:** both home CTAs pass `ariaLabel="read more"`
-  (`src/app/page.tsx`); the `PostFilter` sort button hides its state; `CodeCopy`
-  has no live region for `[ copied ]`; filter tags lack `aria-pressed`; the TOC
-  caption renders when the TOC is empty; hover-mode `PhosphorField` animates
-  under reduced motion (`phosphor-field-hover.ts`). RFC-011 wave 4 covers the
-  first four.
+- **Accessibility:** hover-mode `PhosphorField` animates under reduced motion
+  (`phosphor-field-hover.ts`).
 - **Contrast:** `--color-foreground-muted` / `--color-border-primary` are 2.2:1;
   muted text is used by `.count` in `tags.module.css` and by
   `Caption variant="muted"`.
 - **`data-slot` missing:** `PostHeader` title `<h1>` and description `<p>`
-  (`post-header.tsx`); `CodeBlock` inner `<pre>`; `PostList` card internals;
-  `TableOfContents` links; `CodeCopy` wrapper and button; `SiteHeader` and
-  `SiteFooter` internals; route page wrappers (`src/app/**/page.tsx`);
-  `CoverImage`; the skip link in `layout.tsx`.
+  (`post-header.tsx`); `PostList` card internals; `SiteHeader` and `SiteFooter`
+  internals; route page wrappers (`src/app/**/page.tsx`); `CoverImage`.
 - **State classes declaring properties:** `.link:hover` / `.active` in
   `site-header.module.css` and `table-of-contents.module.css`; the copied state
   in `code-copy.module.css`; card hover in `post-list.module.css`.

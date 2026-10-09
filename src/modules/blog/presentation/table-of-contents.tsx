@@ -3,16 +3,18 @@
 /*
  * TableOfContents — client component.
  *
- * Renders the post's heading anchors as an ordered list and highlights the
- * section currently being read. A section is "active" from when its heading
- * crosses a reference line near the top of the viewport until the next
- * heading crosses it, so the entry stays selected while you read the body,
- * not only while the header itself is on screen. The `toc` items are passed
- * in as props (server-rendered); only the scroll tracking + active state are
- * hydrated on the client.
+ * Renders the post's heading anchors as a captioned ordered list (nothing at
+ * all when the post has no headings) and highlights the section currently
+ * being read. A section is "active" from when its heading crosses a reference
+ * line near the top of the viewport until the next heading crosses it, so the
+ * entry stays selected while you read the body, not only while the header
+ * itself is on screen. The `toc` items are passed in as props
+ * (server-rendered); only the scroll tracking + active state are hydrated on
+ * the client.
  */
 
 import { cx } from "@repo/shared/lib/cx";
+import { Caption } from "@repo/shared/ui/caption";
 import { useEffect, useState } from "react";
 
 import type { PostTocItem } from "../domain/post.ts";
@@ -95,6 +97,12 @@ const TableOfContents = ({ items, className }: TableOfContentsProps) => {
       aria-label="table of contents"
       data-slot="toc"
     >
+      <Caption
+        variant="default"
+        className={styles.title}
+      >
+        on this page
+      </Caption>
       <ol
         className={styles.list}
         data-slot="toc-list"
@@ -110,6 +118,7 @@ const TableOfContents = ({ items, className }: TableOfContentsProps) => {
               href={`#${item.id}`}
               className={cx(styles.link, item.id === activeId && styles.active)}
               aria-current={item.id === activeId ? "location" : undefined}
+              data-slot="toc-link"
             >
               {item.text}
             </a>

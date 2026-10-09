@@ -100,6 +100,7 @@ are architectural. UI work starts from a design brief
 | images, illustrations, icons, backgrounds    | `docs/imagery.md`, `docs/design-system.md`                                                                          |
 | a component (new, variant, slot)             | `docs/components.md`, `docs/design-system.md`                                                                       |
 | scripts, CI, deploy, hooks                   | `docs/runbook.md`, `README.md`, `CONTRIBUTING.md`, `.ai/memories/development-workflow.md`                           |
+| tests or test tooling                        | `docs/architecture.md#testing-strategy`, `vitest.config.ts`, `docs/components.md#testing-a-component`               |
 | a dependency                                 | an ADR for runtime `dependencies`; `README.md` tech stack                                                           |
 | releases, versioning, changesets             | `docs/runbook.md#release`, `.changeset/config.json`, ADR-009                                                        |
 | a shipped RFC                                | its ADR, `rfcs/README.md` and `decisions/README.md` indexes                                                         |

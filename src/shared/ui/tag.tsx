@@ -18,6 +18,7 @@ const Tag = ({ active = false, onClick, className, children }: TagProps) => {
       <button
         type="button"
         onClick={onClick}
+        aria-pressed={active}
         className={classes}
         data-slot="tag"
       >

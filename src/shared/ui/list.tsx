@@ -34,7 +34,7 @@ const List = <T extends ElementType = "ul">({
   );
 };
 
-type ListItemOwnProps = Record<string, never>;
+type ListItemOwnProps = Record<never, never>;
 
 type ListItemProps<T extends ElementType = "li"> = PolymorphicProps<
   T,
@@ -42,11 +42,12 @@ type ListItemProps<T extends ElementType = "li"> = PolymorphicProps<
 >;
 
 const ListItem = <T extends ElementType = "li">({
+  as,
   className,
   children,
   ...rest
 }: ListItemProps<T>) => {
-  const Component = "li";
+  const Component = as ?? "li";
 
   return (
     <Component

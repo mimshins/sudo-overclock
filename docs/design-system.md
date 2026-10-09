@@ -253,7 +253,7 @@ primitives; post bodies keep the prose styles.
 
 - State selectors (`:hover`, `.active`) also set variables, not properties.
 - Verify the variant actually changes rendering — a variable nobody reads is a
-  silent no-op (see deviations).
+  silent no-op, and the CSS-module contract test fails on it.
 
 ### Adding a component
 
@@ -294,13 +294,11 @@ Compose the standard page pattern (leader, glowing `h1`, narrow column); add
 Current code that does not meet this system; do not copy these patterns. Each
 fix removes its entry here in the same change.
 
-- **No-op props:** `Button` `size` (size variables never read), `Lead` `size`
-  (`--lead-size` never read), `Caption` `uppercase={false}` (missing class);
-  `ListItem` ignores `as`.
 - **Contrast:** `--color-foreground-muted` and `--color-border-primary` are
   2.2:1 in dark; muted text is used for tag counts and `Caption` muted.
-- **Missing `data-slot`:** many route and blog presentation elements (site
-  header/footer, pages, post list/header, TOC, code copy, cover image).
+- **Missing `data-slot`:** some route and blog presentation elements (site
+  header/footer internals, page wrappers, post list cards, post header title and
+  description, cover image).
 - **State classes setting properties directly:** site header links, TOC links,
   code copy, post-list cards.
 - **Raw values without tokens:** letter-spacing (`.02em`–`.15em`, including the
@@ -309,9 +307,7 @@ fix removes its entry here in the same change.
   sizes, the 404 art's unitless `line-height: 1`.
 - **Copy-pasted patterns:** the glow recipe (3 places), post title and prose
   headings re-implementing `Heading`.
-- **Accessibility:** identical `aria-label="read more"` on both home CTAs; sort
-  toggle hides its state; `[ copied ]` not announced; filter tags lack
-  `aria-pressed`; hover-mode `PhosphorField` still animates under reduced
+- **Accessibility:** hover-mode `PhosphorField` still animates under reduced
   motion.
 - **Fonts:** JetBrains Mono loads from the Google Fonts CDN (not self-hosted);
   the RTL stack names `Vazirmatn`, which is never loaded.
@@ -324,7 +320,8 @@ fix removes its entry here in the same change.
 - **Enforcement:** stylelint blocks colors, `color-mix`, primitive color tokens,
   and raw durations outside `globals.css`, but not yet raw lengths,
   letter-spacing, or weights (no tokens exist for them); `data-slot` is a review
-  rule.
+  rule. The CSS-module contract test (`css-module-contract.test.ts`) fails on a
+  local custom property nobody reads or a `styles.<name>` with no class.
 
 ## Design decisions
 

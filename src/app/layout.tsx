@@ -3,9 +3,6 @@ import type { ReactNode } from "react";
 
 import { SiteFooter } from "./site-footer.tsx";
 import { SiteHeader } from "./site-header.tsx";
-
-import "./globals.css";
-
 import {
   AUTHOR_NAME,
   SITE_DESCRIPTION,
@@ -13,6 +10,9 @@ import {
   SITE_URL,
   TWITTER_HANDLE,
 } from "./site.ts";
+import { SkipLink } from "./skip-link.tsx";
+
+import "./globals.css";
 
 /*
  * Display face: undefined medium (SIL OFL-1.1). Self-hosted, unmodified.
@@ -101,12 +101,7 @@ const RootLayout = (props: RootLayoutProps): ReactNode => {
         />
       </head>
       <body>
-        <a
-          className="skip-link"
-          href="#main"
-        >
-          skip to content
-        </a>
+        <SkipLink />
         <SiteHeader />
         {children}
         <SiteFooter />
