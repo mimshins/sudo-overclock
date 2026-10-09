@@ -62,7 +62,10 @@ jobs:
           path: node_modules/.cache/sudo-overclock
           key:
             images-${{ runner.os }}-${{
-            hashFiles('src/modules/blog/content/raw/**', 'pnpm-lock.yaml') }}
+            hashFiles('src/modules/blog/content/raw/**',
+            '!src/modules/blog/content/raw/**/*.md',
+            'node_modules/sharp/package.json',
+            'src/modules/blog/infrastructure/compiler/image-encoder.ts') }}
           restore-keys: images-${{ runner.os }}-
 
       - name: Build

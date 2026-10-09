@@ -86,7 +86,9 @@ release** ([ADR-012](../decisions/ADR-012-release-gated-code-deploys.md)):
 - `.github/workflows/ci.yml` runs a `quality` job (lint, format, styles, tests)
   and a `build` job on every push and PR. CI restores the wireit task cache, the
   compiler image store, and `.next/cache`; a weekly scheduled run builds with no
-  caches at all to catch a stale cache.
+  caches at all to catch a stale cache. The image store's key hashes the post
+  images (not the markdown), `sharp`'s `package.json`, and `image-encoder.ts`,
+  so editing text or bumping an unrelated dependency reuses the saved store.
 - On a push to `main` that changes `src/modules/blog/content/raw/`, CI calls
   `.github/workflows/deploy.yml`. A push that only changes code deploys nothing.
 - When a release is cut (the version PR is merged), `release.yml` calls the same

@@ -14,6 +14,12 @@
  * and are renamed into place, variants first and the sidecar last, so a reader
  * sees either a complete entry or a miss.
  *
+ * Pruning ages entries by their newest file, but ages a temporary file by its
+ * own time with a short grace period, so an orphan left by a crashed write goes
+ * even while its entry is in use, and a write in progress in a concurrent
+ * compile survives. Each file is re-checked just before removal, so an entry
+ * another compile restored after the scan is kept.
+ *
  * Every store failure is non-fatal: a broken entry is a miss, and a failed write
  * or prune warns and the compile carries on.
  */
@@ -76,6 +82,8 @@ type ImageStoreOptions = {
 };
 
 const DEFAULT_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
+const TEMP_GRACE_MS = 60 * 60 * 1000;
+const TEMP_SUFFIX = ".tmp";
 
 const HASH_PATTERN = /^[a-f0-9]+$/u;
 
@@ -128,7 +136,7 @@ const createImageStore = (options: ImageStoreOptions): ImageStore => {
     finalPath: string,
     write: (tempPath: string) => Promise<void>,
   ): Promise<void> => {
-    const tempPath = join(encoderDir, `${hash}.${randomUUID()}.tmp`);
+    const tempPath = join(encoderDir, `${hash}.${randomUUID()}${TEMP_SUFFIX}`);
 
     try {
       await write(tempPath);
@@ -198,24 +206,49 @@ const createImageStore = (options: ImageStoreOptions): ImageStore => {
         const path = join(encoderDir, fileName);
         const stats = await stat(path).catch(ignoreFailure);
 
-        return { path, key: entryKey(fileName), mtimeMs: stats?.mtimeMs };
+        return {
+          path,
+          key: entryKey(fileName),
+          temp: fileName.endsWith(TEMP_SUFFIX),
+          mtimeMs: stats?.mtimeMs,
+        };
       }),
     );
 
     const lastUsed = new Map<string, number>();
 
-    for (const { key, mtimeMs } of files) {
-      if (mtimeMs !== undefined) {
+    for (const { key, temp, mtimeMs } of files) {
+      if (!temp && mtimeMs !== undefined) {
         lastUsed.set(key, Math.max(lastUsed.get(key) ?? 0, mtimeMs));
       }
     }
 
-    const cutoff = now() - maxAgeMs;
+    const entryCutoff = now() - maxAgeMs;
+    const tempCutoff = now() - TEMP_GRACE_MS;
+
+    const removeIfUnused = async (
+      path: string,
+      cutoff: number,
+    ): Promise<void> => {
+      const stats = await stat(path).catch(ignoreFailure);
+
+      if (stats !== null && stats.mtimeMs < cutoff) {
+        await rm(path, { force: true });
+      }
+    };
 
     await Promise.all(
-      files
-        .filter(({ key }) => (lastUsed.get(key) ?? cutoff) < cutoff)
-        .map(({ path }) => rm(path, { force: true })),
+      files.flatMap(({ path, key, temp, mtimeMs }) => {
+        if (temp) {
+          return (mtimeMs ?? tempCutoff) < tempCutoff
+            ? [removeIfUnused(path, tempCutoff)]
+            : [];
+        }
+
+        return (lastUsed.get(key) ?? entryCutoff) < entryCutoff
+          ? [removeIfUnused(path, entryCutoff)]
+          : [];
+      }),
     );
   };
 

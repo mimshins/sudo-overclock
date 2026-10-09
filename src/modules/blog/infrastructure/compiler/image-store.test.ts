@@ -217,6 +217,38 @@ describe("createImageStore", () => {
     assert.ok(kept.every(Boolean));
   });
 
+  it("prunes an orphaned temp file by its own age, even beside a live entry", async () => {
+    const { store, encoderDir, written } = await createFixture();
+
+    await store.save(HASH, PICTURE, written);
+    const orphan = join(encoderDir, `${HASH}.dead.tmp`);
+    const inFlight = join(encoderDir, `${HASH}.live.tmp`);
+    await Promise.all([writeFile(orphan, "x"), writeFile(inFlight, "x")]);
+    await age([orphan], 1);
+
+    await store.prune();
+
+    assert.equal(await exists(orphan), false);
+    assert.equal(await exists(inFlight), true);
+    assert.equal(await exists(join(encoderDir, `${HASH}.json`)), true);
+  });
+
+  it("keeps an old temp file's entry alive only by its own files", async () => {
+    const { store, encoderDir, written } = await createFixture();
+
+    await store.save(HASH, PICTURE, written);
+    const entry = (await readdir(encoderDir)).map(name =>
+      join(encoderDir, name),
+    );
+    await age(entry, 31);
+    await writeFile(join(encoderDir, `${HASH}.live.tmp`), "x");
+
+    await store.prune();
+
+    const left = await Promise.all(entry.map(path => exists(path)));
+    assert.ok(left.every(present => !present));
+  });
+
   it("never throws when the store root is unusable", async () => {
     const { written, target, storeRoot } = await createFixture();
     await writeFile(storeRoot, "not a directory");
