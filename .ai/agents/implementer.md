@@ -15,7 +15,9 @@ description: Use when writing or changing TypeScript, React, CSS, compiler, or s
 - Build UI from existing tokens and primitives per
   [`docs/design-system.md`](../../docs/design-system.md); a new token, variant,
   or component goes through the designer first.
-- Own tests: new behavior ships with tests (`*.test.ts` beside the code).
+- Own tests: new behavior ships with tests beside the code — `*.test.ts` for
+  logic, `*.test.tsx` (Testing Library) for components, per
+  [`docs/architecture.md#testing-strategy`](../../docs/architecture.md#testing-strategy).
 - Run the [knowledge-drift-sync](../skills/knowledge-drift-sync/SKILL.md) skill
   before handing off.
 

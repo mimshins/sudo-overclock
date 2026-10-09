@@ -19,5 +19,7 @@ The rules are in [`AGENTS.md`](../../AGENTS.md#non-negotiables),
 - ASCII affordances (`[ read more ]`); no emoji in UI chrome.
 - Comments: only file headers in scripts/infrastructure and short constraint
   comments — the rule is `docs/architecture.md#comments`.
-- Tests: `node:test` via `tsx --test`, `*.test.ts` beside the code.
+- Tests: Vitest — `*.test.ts` (node) and `*.test.tsx` (happy-dom + Testing
+  Library) beside the code; query by role/name, never by class.
+  `docs/architecture.md#testing-strategy`.
 - Commits (only when asked): Conventional Commits, imperative, ≤ 72 chars.

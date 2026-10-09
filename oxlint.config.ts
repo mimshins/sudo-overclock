@@ -68,6 +68,7 @@ export default defineConfig({
           "**/*.sass",
           "**/*.d.ts",
           ".next/types/**/*.ts",
+          "@testing-library/jest-dom/vitest",
         ],
       },
     ],

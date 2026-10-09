@@ -37,7 +37,7 @@ markdown, its assets, or the compiler changed.
 | `pnpm dev`                     | Start the Next.js dev server.                                                                 |
 | `pnpm compile`                 | Compile `content/raw/**` → `content/compiled/index.ts`; optimize assets into `public/posts/`. |
 | `pnpm build`                   | `pnpm compile` (when stale), then Next.js static export to `out/`.                            |
-| `pnpm test`                    | Unit/integration tests (`tsx --test 'src/**/*.test.ts'`).                                     |
+| `pnpm test`                    | All tests (`vitest run`; `node` and `ui` projects). `pnpm exec vitest` watches.               |
 | `pnpm check:lint`              | `oxlint` + `stylelint` + `oxfmt --check`. Run before committing (pre-push runs it).           |
 | `pnpm format`                  | Auto-fix (`oxfmt --write` + `oxlint --fix` + `stylelint --fix`).                              |
 | `pnpm author:new <slug>`       | Scaffold a draft in `content/drafts/<slug>/`.                                                 |

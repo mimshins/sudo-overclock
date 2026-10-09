@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { describe, it } from "node:test";
+
+import { describe, it } from "vitest";
 
 import type { AuthoringContext } from "./context.ts";
 import {

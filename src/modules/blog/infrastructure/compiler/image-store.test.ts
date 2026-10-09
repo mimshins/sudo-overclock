@@ -12,7 +12,8 @@ import {
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { after, describe, it } from "node:test";
+
+import { afterAll, describe, it } from "vitest";
 
 import type { StoredImage } from "./image-sidecar.ts";
 import { createImageStore, sanitizeEncoderId } from "./image-store.ts";
@@ -36,7 +37,7 @@ const VARIANTS = ["avif", "webp", "png"] as const;
 
 const root = await mkdtemp(join(tmpdir(), "image-store-test-"));
 
-after(async () => {
+afterAll(async () => {
   await rm(root, { recursive: true, force: true });
 });
 

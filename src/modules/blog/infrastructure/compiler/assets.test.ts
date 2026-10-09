@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { access, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { after, describe, it } from "node:test";
 
 import sharp from "sharp";
+import { afterAll, describe, it } from "vitest";
 
 import { createMarkdownCompiler } from "./pipeline.ts";
 import { getHighlighter } from "./shiki.ts";
@@ -31,7 +31,7 @@ const highlighter = await getHighlighter();
 
 const root = await mkdtemp(join(tmpdir(), "assets-test-"));
 
-after(async () => {
+afterAll(async () => {
   await rm(root, { recursive: true, force: true });
 });
 

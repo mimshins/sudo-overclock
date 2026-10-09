@@ -10,9 +10,9 @@ import {
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { after, describe, it } from "node:test";
 
 import sharp from "sharp";
+import { afterAll, describe, it } from "vitest";
 
 import { compileAll } from "./compile.ts";
 import { sharpImageEncoder, type ImageEncoder } from "./image-encoder.ts";
@@ -43,7 +43,7 @@ const POST =
 
 const root = await mkdtemp(join(tmpdir(), "compile-test-"));
 
-after(async () => {
+afterAll(async () => {
   await rm(root, { recursive: true, force: true });
 });
 
