@@ -66,5 +66,5 @@ No real alternatives → a spec alone is enough.
 | [007](./archived/RFC-007-display-typeface.md)               | Display Typeface: undefined medium for Wordmark & Display Headings | Implemented |
 | [008](./archived/RFC-008-agent-agnostic-knowledge-layer.md) | Agent-Agnostic Knowledge Layer and Guardrails                      | Implemented |
 | [009](./archived/RFC-009-build-caching.md)                  | Content-Addressed Build Caching: Compiler, Tasks, and CI           | Implemented |
-| [010](./active/RFC-010-paper-crt-light-theme.md)            | Paper-CRT Light Theme                                              | Proposed    |
+| [010](./active/RFC-010-paper-crt-light-theme.md)            | Paper-CRT Light Theme                                              | Accepted    |
 | [011](./active/RFC-011-component-testing.md)                | Component Testing with Vitest and Testing Library                  | Accepted    |

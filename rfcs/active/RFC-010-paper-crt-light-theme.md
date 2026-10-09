@@ -1,6 +1,6 @@
 # RFC-010 — Paper-CRT Light Theme
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-10-09
 - **Supersedes:** —
 - **Superseded by:** —
@@ -52,7 +52,7 @@ Same palette, chosen only by `prefers-color-scheme`.
 - **Pros:** one theme to maintain; smallest CSS.
 - **Cons:** drops the paper-CRT identity the author wants.
 
-## Proposed decision
+## Decision
 
 **Option A** (the first-visit default is open question 1).
 
@@ -85,10 +85,15 @@ Scope of the work once accepted:
 - ADR on acceptance; `docs/design-language.md` (Theme System) and
   `docs/design-system.md` (Theme) updated.
 
-## Open questions
+## Resolved questions (author, 2026-10-09)
 
-1. Default for visitors with no stored choice: always dark, or follow
-   `prefers-color-scheme`?
-2. Glow in light: a faint ink halo, or none?
-3. Background imagery in light: re-grade the sources for paper, or render the
-   same sources as dark-ink pointillism?
+1. **First-visit default:** follow `prefers-color-scheme`; the toggle overrides
+   it and the choice is remembered in `localStorage`.
+2. **Glow in light:** a faint, single-layer, low-alpha dark-green ink halo — the
+   CRT metaphor kept, without washing out on paper.
+3. **Background imagery in light:** the same `bg.jpg` sources, rendered by
+   `PhosphorField` as dark phosphor-ink dots on paper (luminance inverted at
+   sampling); `docs/imagery.md` gains the light-ground rules. No new assets.
+
+Sequencing: implemented after RFC-011, so the second theme lands on a tested
+component base.
