@@ -10,8 +10,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-import matter from "gray-matter";
-
+import { stringifyFrontmatter } from "../frontmatter.ts";
 import type { AuthoringContext } from "./context.ts";
 import { effectiveDraftSlug, parseDraft, stripDraftKeys } from "./draft.ts";
 import { copyDirectoryContents, pathExists } from "./fs-utils.ts";
@@ -58,7 +57,7 @@ const publishDraft = async (
 
   await mkdir(targetDir, { recursive: true });
 
-  const published = matter.stringify(
+  const published = stringifyFrontmatter(
     content.replace(/^\n+/u, ""),
     stripDraftKeys(data),
   );

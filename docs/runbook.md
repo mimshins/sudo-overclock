@@ -152,6 +152,13 @@ Dependabot PRs are exempt from the changeset check (the bot cannot write one);
 their updates ship with the next release. For an update that should ship on its
 own (a security fix), add a `patch` changeset on `main` to open a release.
 
+When the Dependabot security job reports `security_update_not_possible`, the
+vulnerable package is transitive and its parent's range does not allow the fix.
+Add a range override to `pnpm-workspace.yaml` (`overrides:`), run
+`pnpm install`, and remove the override once the parent catches up
+([ADR-017](../decisions/ADR-017-frontmatter-and-dependency-overrides.md)).
+`pnpm audit` lists what remains.
+
 Requirements: the repository setting _Actions → General → Allow GitHub Actions
 to create and approve pull requests_ must be on. PRs opened by the workflow's
 token do not trigger other workflows, so CI does not run on the version PR

@@ -1,0 +1,5 @@
+overrides:
+  brace-expansion@1: ^1.1.21
+  shell-quote: ^1.11.0
+  source-map-js: ^1.2.2
+  tinypool: ^2.1.2

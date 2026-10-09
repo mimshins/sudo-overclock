@@ -43,3 +43,4 @@ Current-state behavior belongs in [`docs/`](../docs/); proposals belong in
 | [014](./ADR-014-paper-crt-light-theme.md)                | Paper-CRT light theme                                                  | Accepted | [010](../rfcs/archived/RFC-010-paper-crt-light-theme.md)          |
 | [015](./ADR-015-readability-pass.md)                     | Readability pass: type weight, leaders, chips, glass                   | Accepted | —                                                                 |
 | [016](./ADR-016-design-drift-cleanup.md)                 | Design drift cleanup: type, border, size tokens; self-hosted text face | Accepted | —                                                                 |
+| [017](./ADR-017-frontmatter-and-dependency-overrides.md) | Front matter on `yaml`; overrides for vulnerable transitive deps       | Accepted | —                                                                 |

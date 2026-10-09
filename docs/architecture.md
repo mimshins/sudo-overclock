@@ -123,12 +123,14 @@ Drafts live in `modules/blog/content/drafts/<slug>/` — a sibling of `raw/`. Th
 compiler globs only `raw/**`, so drafts are excluded from the build for free.
 See [`docs/authoring.md`](./authoring.md).
 
-Pipeline stages: `compile.ts` orchestrates; `pipeline.ts` runs remark-parse →
-remark-gfm → remark-rehype → Shiki → assets → headings → rehype-stringify;
-`reading-time.ts` estimates reading time; `headings.ts` adds anchors and TOC;
-`assets.ts` resolves and rewrites images; `image-optimizer.ts` hashes and
-encodes them; `image-store.ts` / `image-sidecar.ts` keep encoded variants
-between runs; `concurrency.ts` bounds the CPU-bound work.
+Pipeline stages: `compile.ts` orchestrates and reads front matter through
+`../frontmatter.ts` (shared with the authoring CLI; YAML 1.2 via `yaml`, so
+unquoted dates stay strings); `pipeline.ts` runs remark-parse → remark-gfm →
+remark-rehype → Shiki → assets → headings → rehype-stringify; `reading-time.ts`
+estimates reading time; `headings.ts` adds anchors and TOC; `assets.ts` resolves
+and rewrites images; `image-optimizer.ts` hashes and encodes them;
+`image-store.ts` / `image-sidecar.ts` keep encoded variants between runs;
+`concurrency.ts` bounds the CPU-bound work.
 
 Two compiler-level details are worth knowing. **Shiki grammars load lazily**:
 the highlighter starts with none, and each post's fences are scanned

@@ -13,8 +13,7 @@
 import { glob, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { basename, dirname, extname, join, resolve } from "node:path";
 
-import matter from "gray-matter";
-
+import { parseFrontmatter } from "../frontmatter.ts";
 import { withPipelineSlot } from "./concurrency.ts";
 import {
   createImageOptimizer,
@@ -55,11 +54,30 @@ const GENERATED_HEADER = `/*
 const findMarkdownFiles = async (rawDir: string): Promise<string[]> =>
   (await Array.fromAsync(glob("**/*.md", { cwd: rawDir }))).toSorted();
 
+const text = (value: unknown): string | undefined =>
+  typeof value === "string" ? value : undefined;
+
+const textList = (value: unknown): RawFrontmatter["tags"] =>
+  Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : text(value);
+
 const readRawFrontmatter = (
   source: string,
 ): { readonly data: RawFrontmatter; readonly content: string } => {
-  const { data, content } = matter(source);
-  return { data, content };
+  const { data, content } = parseFrontmatter(source);
+
+  return {
+    data: {
+      title: text(data["title"]),
+      date: text(data["date"]),
+      slug: text(data["slug"]),
+      description: text(data["description"]),
+      tags: textList(data["tags"]),
+      author: text(data["author"]),
+    },
+    content,
+  };
 };
 
 const normalizeTags = (tags: RawFrontmatter["tags"]): readonly string[] => {

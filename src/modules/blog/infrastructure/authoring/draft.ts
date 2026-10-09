@@ -5,9 +5,8 @@
  * Filesystem checks live in `preflight.ts` / `publish.ts`.
  */
 
-import matter from "gray-matter";
-
 import { slugify } from "../compiler/slug.ts";
+import { parseFrontmatter } from "../frontmatter.ts";
 
 const DRAFT_STAGES = [
   "seed",
@@ -55,7 +54,7 @@ type DraftIssue = {
 };
 
 const parseDraft = (source: string): ParsedDraft => {
-  const { data, content } = matter(source);
+  const { data, content } = parseFrontmatter(source);
   return { data, content };
 };
 
