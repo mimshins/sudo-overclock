@@ -1,5 +1,24 @@
 # sudo-overclock
 
+## 0.2.1
+
+### Patch Changes
+
+- [`a4246bb`](https://github.com/mimshins/sudo-overclock/commit/a4246bb79d7d348d3fc264f1e9ca182addbcd405) Thanks [@mimshins](https://github.com/mimshins)! - Serve the JetBrains Mono text face from the site itself instead of Google
+  Fonts, make tag counts readable on the dark theme, and tidy the styles behind
+  headers, links, cards, and covers so they follow the design system.
+
+- [`2ebb7e4`](https://github.com/mimshins/sudo-overclock/commit/2ebb7e4947551f477717f9bf82b585f0274a8720) Thanks [@mimshins](https://github.com/mimshins)! - Parse post front matter with the maintained `yaml` package instead of
+  gray-matter, and force patched versions of vulnerable build-time dependencies.
+
+- [`799ec44`](https://github.com/mimshins/sudo-overclock/commit/799ec44abb60a841250463a4cccc9f7aeeaf4303) Thanks [@mimshins](https://github.com/mimshins)! - Make the site easier to read: heavier display headings (pixel double-strike),
+  fuller body text on the light theme with a 65-character measure, leaders as
+  bold phosphor tabs, a clearly marked current section in the table of contents,
+  frosted, borderless filter chips and bracket buttons with a readable hover,
+  more opaque panels over the background, crisper borders on dark, a theme toggle
+  that names the theme it switches to, and no stray border above the first
+  history entry.
+
 ## 0.2.0
 
 ### Minor Changes
