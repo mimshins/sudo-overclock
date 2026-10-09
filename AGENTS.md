@@ -75,6 +75,11 @@ are architectural.
   handing off; use the table below. Update `.ai/memories/` (and their
   `last-verified`) when orientation changes; resolve working memories tied to
   the change. A change that leaves docs stale is incomplete.
+- **Add a changeset** for any change to code, public assets, build config, or
+  dependencies: `pnpm changesets:create` with the bump from
+  [`docs/runbook.md#release`](./docs/runbook.md#release) (on `0.x`, never
+  `major`), or `pnpm changesets:empty` for internal-only work. Posts and docs
+  need none.
 - **Verify before finishing.** `pnpm check:lint` and `pnpm test`; also
   `pnpm build` when the compiler, content, or app is touched.
 
@@ -89,6 +94,7 @@ are architectural.
 | a component (new, variant, slot)             | `docs/components.md`                                                                                                |
 | scripts, CI, deploy, hooks                   | `docs/runbook.md`, `README.md`, `CONTRIBUTING.md`, `.ai/memories/development-workflow.md`                           |
 | a dependency                                 | an ADR for runtime `dependencies`; `README.md` tech stack                                                           |
+| releases, versioning, changesets             | `docs/runbook.md#release`, `.changeset/config.json`, ADR-009                                                        |
 | a shipped RFC                                | its ADR, `rfcs/README.md` and `decisions/README.md` indexes                                                         |
 | the AI layer (skills, agents, adapters)      | `.ai/README.md`, this file, `CONTRIBUTING.md#working-with-ai-agents`                                                |
 
@@ -164,6 +170,8 @@ pnpm format           # auto-fix formatting
 pnpm author:new       # scaffold a draft
 pnpm author:preflight # validate a draft
 pnpm author:publish   # move a ready draft to content/raw/ (author only)
+pnpm changesets:create # describe a change and its semver bump
+pnpm changesets:empty  # internal-only change, no release
 ```
 
 Full reference, prerequisites, and troubleshooting:

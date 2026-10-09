@@ -35,3 +35,4 @@ Current-state behavior belongs in [`docs/`](../docs/); proposals belong in
 | [006](./ADR-006-compiler-pipeline-scheduling.md)   | Compiler pipeline: lazy Shiki grammars + scheduler | Accepted | [006](../rfcs/archived/RFC-006-compiler-pipeline-scheduling.md)   |
 | [007](./ADR-007-display-typeface.md)               | Display typeface: undefined medium                 | Accepted | [007](../rfcs/archived/RFC-007-display-typeface.md)               |
 | [008](./ADR-008-agent-agnostic-knowledge-layer.md) | Agent-agnostic knowledge layer and guardrails      | Accepted | [008](../rfcs/archived/RFC-008-agent-agnostic-knowledge-layer.md) |
+| [009](./ADR-009-changesets-semver-releases.md)     | Semver releases with changesets                    | Accepted | —                                                                 |

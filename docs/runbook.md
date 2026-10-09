@@ -70,14 +70,51 @@ root-relative paths for the custom-domain apex.
 
 ## Release
 
-Versioning uses changesets:
+The site's **code** is versioned with semver and
+[changesets](https://changesets.dev)
+([ADR-009](../decisions/ADR-009-changesets-semver-releases.md)). Deploys are
+independent: every push to `main` deploys, while releases mark versions and
+produce `CHANGELOG.md` and GitHub Releases.
+
+### What gets a changeset
+
+Files matching `changedFilePatterns` in `.changeset/config.json` (`src/**`
+except tests, posts, and drafts; `scripts/**`; `public/**`; build config;
+`package.json`; the lockfile) need a changeset. Posts, drafts, `docs/`,
+`decisions/`, `rfcs/`, `.ai/`, and CI do not.
+
+| Bump    | When                                                                                                                             |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `major` | Breaks a public contract: URLs/permalinks, RSS feed shape, `llms.txt` structure, heading-anchor scheme, or an identity overhaul. |
+| `minor` | A new reader-visible feature, page, section, or component.                                                                       |
+| `patch` | Fixes, performance, styling refinements, reader-visible dependency updates.                                                      |
+| empty   | Internal-only code changes (refactors, tooling, tests) — `pnpm changesets:empty`.                                                |
+
+**While on `0.x`:** never use `major`; breaking changes are `minor`. The site
+moves to `1.0.0` with a `major` changeset when the first real post is published
+(`hello-world` does not count).
+
+### Flow
 
 ```sh
-pnpm changesets:create   # add a changeset
+pnpm changesets:create   # in the change: describe it, pick the bump
 pnpm changesets:status   # inspect pending changesets
-pnpm changesets:apply    # version packages
-pnpm release             # build + publish
 ```
+
+1. Changesets land on `main` with their changes. CI fails a PR that touches
+   tracked files without one (`pnpm changesets:check`).
+2. The `release` workflow keeps a **"chore(release): version packages"** PR open
+   that bumps `package.json` and writes `CHANGELOG.md`
+   (`@changesets/changelog-github`: PR links and authors).
+3. Merging that PR tags `vX.Y.Z` and creates the GitHub Release (`pnpm release`
+   → `changeset publish`; the package is private, so nothing goes to npm).
+
+Requirements: the repository setting _Actions → General → Allow GitHub Actions
+to create and approve pull requests_ must be on. PRs opened by the workflow's
+token do not trigger other workflows, so CI does not run on the version PR
+itself. `pnpm changesets:apply` needs `GITHUB_TOKEN` for the GitHub changelog
+format; run it locally only if needed, as
+`GITHUB_TOKEN=$(gh auth token) pnpm changesets:apply`.
 
 ## Troubleshooting
 

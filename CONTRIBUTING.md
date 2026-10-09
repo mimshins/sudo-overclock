@@ -116,6 +116,10 @@ stages). A typical change: documenter → implementer → your review → review
 - Keep them small and focused — one feature or fix per Pull Request.
 - Describe what changed and why, and link the related issue.
 - Make sure `pnpm check:lint` and `pnpm test` pass; CI runs both plus a build.
+- Add a changeset when the PR touches code, public assets, build config, or
+  dependencies: `pnpm changesets:create` (or `pnpm changesets:empty` for
+  internal-only work). CI checks for it; the bump rules are in
+  [`docs/runbook.md#release`](./docs/runbook.md#release).
 - Fill in the [PR template](./.github/PULL_REQUEST_TEMPLATE.md) definition of
   done.
 

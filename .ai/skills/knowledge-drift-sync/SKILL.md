@@ -24,12 +24,14 @@ description: Use before finishing any non-trivial change. Reconciles code with d
 3. Decisions: an RFC that shipped gets an ADR in `decisions/`, Status
    `Implemented`, and moves to `rfcs/archived/`; both indexes are updated. A new
    runtime `dependencies` entry has an ADR.
-4. Memories: update `last-verified` on each memory you re-checked; fix or delete
+4. Releases: code, public-asset, build-config, or dependency changes carry a
+   changeset with the right bump (`pnpm changesets:check`).
+5. Memories: update `last-verified` on each memory you re-checked; fix or delete
    stale statements. Memories state the present and link out.
-5. Resolve working memories in `.ai/memories/working/` tied to this change
+6. Resolve working memories in `.ai/memories/working/` tied to this change
    (promote durable parts, delete the file).
-6. Links: every relative link in changed `*.md` files resolves.
-7. Report what was synchronized, or state "no drift" with the evidence.
+7. Links: every relative link in changed `*.md` files resolves.
+8. Report what was synchronized, or state "no drift" with the evidence.
 
 ## Constraints
 

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@4.0.0/schema.json",
+  "baseBranch": "main",
+  "changelog": [
+    "@changesets/changelog-github",
+    {
+      "repo": "mimshins/sudo-overclock"
+    }
+  ],
+  "commit": false,
+  "access": "restricted",
+  "privatePackages": {
+    "version": true,
+    "tag": true
+  },
+  "changedFilePatterns": [
+    "src/**",
+    "!src/**/*.test.{ts,tsx}",
+    "!src/modules/blog/content/raw/**",
+    "!src/modules/blog/content/drafts/**",
+    "scripts/**",
+    "public/**",
+    "next.config.ts",
+    "postcss.config.mjs",
+    "tsconfig.json",
+    "package.json",
+    "pnpm-lock.yaml"
+  ],
+  "format": "oxfmt",
+  "ignore": []
+}

@@ -19,6 +19,8 @@
       knowledge drift sync done.
 - [ ] Shipped RFCs have an ADR in `decisions/` and are moved to
       `rfcs/archived/`; indexes updated.
+- [ ] A changeset is included (or an empty one for internal-only work) when
+      code, public assets, build config, or dependencies changed.
 - [ ] A new runtime `dependencies` entry has an ADR.
 - [ ] `.ai/memories/` updated where orientation changed; linked working memories
       resolved.

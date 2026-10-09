@@ -18,6 +18,11 @@ contribution flow: [`CONTRIBUTING.md`](../../CONTRIBUTING.md).
 - `pnpm install` sets `core.hooksPath=.githooks`; `pre-push` compiles if the
   compiled content is missing, then lints and tests. Never bypass with
   `--no-verify` unless the author asks.
+- Code, public-asset, build-config, or dependency changes carry a changeset
+  (`pnpm changesets:create`; `pnpm changesets:empty` if internal). Posts and
+  docs do not. Bump rules: `docs/runbook.md#release`
+  ([ADR-009](../../decisions/ADR-009-changesets-semver-releases.md)); never
+  `major` while on `0.x`.
 - Before handing off:
   [knowledge-drift-sync](../skills/knowledge-drift-sync/SKILL.md); resolve
   working memories tied to the change.

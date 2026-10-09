@@ -46,7 +46,8 @@ appears).
 
 ## Expected outputs
 
-- Code + tests, one logical change.
+- Code + tests, one logical change, with a changeset (or an empty one) per
+  `docs/runbook.md#release`.
 - `pnpm check:lint` and `pnpm test` green; `pnpm build` when the compiler,
   content, or app changed.
 - A short report: files touched, spec sections implemented, verification run.
