@@ -4,15 +4,22 @@
  * Walks `content/raw/**`, compiles each markdown file, copies referenced
  * assets into `public/posts/<slug>/`, and writes a single generated TypeScript
  * module to `content/compiled/index.ts` exporting every post.
+ *
+ * When `imageCacheDir` is set, prepared images are kept in a persistent
+ * content-addressed store there, so unchanged images are copied rather than
+ * re-encoded; the store is pruned once the compile finishes.
  */
 
-import { globSync } from "node:fs";
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { glob, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { basename, dirname, extname, join, resolve } from "node:path";
 
 import matter from "gray-matter";
 
 import { withPipelineSlot } from "./concurrency.ts";
+import {
+  createImageOptimizer,
+  type PrepareImageOptions,
+} from "./image-optimizer.ts";
 import { createMarkdownCompiler } from "./pipeline.ts";
 import { estimateReadingTimeMinutes } from "./reading-time.ts";
 import { getHighlighter, type Highlighter } from "./shiki.ts";
@@ -26,6 +33,13 @@ type CompileOptions = {
   readonly compiledDir: string;
   /** Absolute path to the Next.js `public/` directory. */
   readonly publicDir: string;
+  /**
+   * Absolute path to the persistent image store root. `null` or absent disables
+   * the store and every image is encoded on every run.
+   */
+  readonly imageCacheDir?: string | null;
+  /** Image encoder; defaults to sharp. */
+  readonly imageEncoder?: PrepareImageOptions["encoder"];
 };
 
 const COMPILED_FILE_NAME = "index.ts";
@@ -38,8 +52,8 @@ const GENERATED_HEADER = `/*
  */
 `;
 
-const findMarkdownFiles = (rawDir: string): string[] =>
-  globSync("**/*.md", { cwd: rawDir }).toSorted();
+const findMarkdownFiles = async (rawDir: string): Promise<string[]> =>
+  (await Array.fromAsync(glob("**/*.md", { cwd: rawDir }))).toSorted();
 
 const readRawFrontmatter = (
   source: string,
@@ -100,11 +114,13 @@ const compileOnePost = async ({
   rawDir,
   publicDir,
   highlighter,
+  images,
 }: {
   readonly filePath: string;
   readonly rawDir: string;
   readonly publicDir: string;
   readonly highlighter: Highlighter;
+  readonly images: PrepareImageOptions;
 }): Promise<CompiledPost> => {
   const absolutePath = resolve(rawDir, filePath);
   const source = await readFile(absolutePath, "utf8");
@@ -119,7 +135,12 @@ const compileOnePost = async ({
 
   const compile = createMarkdownCompiler({
     highlighter,
-    assets: { postDir: dirname(absolutePath), slug, publicDir },
+    assets: {
+      postDir: dirname(absolutePath),
+      slug,
+      publicDir,
+      images,
+    },
     stripTitleHeading: true,
   });
   const { html, toc } = await compile(content);
@@ -152,9 +173,15 @@ const compileAll = async (
   options: CompileOptions,
 ): Promise<readonly CompiledPost[]> => {
   const { rawDir, compiledDir, publicDir } = options;
+  const imageOptimizer = createImageOptimizer({
+    cacheDir: options.imageCacheDir ?? null,
+    ...(options.imageEncoder === undefined
+      ? {}
+      : { encoder: options.imageEncoder }),
+  });
 
   const highlighter = await getHighlighter();
-  const markdownFiles = findMarkdownFiles(rawDir);
+  const markdownFiles = await findMarkdownFiles(rawDir);
 
   // Clear stale output before compiling: asset copies accumulate in
   // `public/posts/`, and the compiled module is rewritten wholesale.
@@ -163,7 +190,13 @@ const compileAll = async (
   const compiledPosts = await Promise.all(
     markdownFiles.map(filePath =>
       withPipelineSlot(() =>
-        compileOnePost({ filePath, rawDir, publicDir, highlighter }),
+        compileOnePost({
+          filePath,
+          rawDir,
+          publicDir,
+          highlighter,
+          images: imageOptimizer.options,
+        }),
       ),
     ),
   );
@@ -175,6 +208,8 @@ const compileAll = async (
     renderCompiledModule(compiledPosts),
     "utf8",
   );
+
+  await imageOptimizer.prune();
 
   return compiledPosts;
 };

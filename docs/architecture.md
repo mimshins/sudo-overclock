@@ -116,7 +116,8 @@ The project uses a two-stage content pipeline, owned by `modules/blog/`:
 The compiler lives at `modules/blog/infrastructure/compiler/` and uses
 Unified.js, Rehype, and Remark plugins. It is invoked from a build-time script
 (`scripts/compile.ts`) and writes to `modules/blog/content/compiled/`.
-`pnpm build` runs `pnpm compile` via the `prebuild` hook.
+`pnpm build` depends on `pnpm compile` through wireit, which re-runs it only
+when its inputs changed.
 
 Drafts live in `modules/blog/content/drafts/<slug>/` — a sibling of `raw/`. The
 compiler globs only `raw/**`, so drafts are excluded from the build for free.
@@ -126,7 +127,8 @@ Pipeline stages: `compile.ts` orchestrates; `pipeline.ts` runs remark-parse →
 remark-gfm → remark-rehype → Shiki → assets → headings → rehype-stringify;
 `reading-time.ts` estimates reading time; `headings.ts` adds anchors and TOC;
 `assets.ts` resolves and rewrites images; `image-optimizer.ts` hashes and
-encodes them; `concurrency.ts` bounds the CPU-bound work.
+encodes them; `image-store.ts` / `image-sidecar.ts` keep encoded variants
+between runs; `concurrency.ts` bounds the CPU-bound work.
 
 Two compiler-level details are worth knowing. **Shiki grammars load lazily**:
 the highlighter starts with none, and each post's fences are scanned
@@ -183,6 +185,18 @@ never touch `public/` directly — the compiler owns that.
   the cores, since libvips already multithreads a single operation).
   `SOC_IMAGE_CONCURRENCY` overrides it; see
   `infrastructure/compiler/concurrency.ts`.
+- Encoded variants are kept in a persistent, content-addressed **image store**
+  at `node_modules/.cache/sudo-overclock/images/<encoder>/` (`image-store.ts`),
+  keyed by the same hash ([ADR-011](../decisions/ADR-011-build-caching.md)).
+  Each entry holds the variants plus a `<hash>.json` sidecar (formats, fallback
+  extension, width, height), so an unchanged image is copied into
+  `public/posts/<slug>/` with no decode or encode. `<encoder>` is the `sharp` +
+  libvips version, so an upgrade starts a fresh store without changing URLs.
+  Writes are atomic (temp file + rename, sidecar last); a corrupt or incomplete
+  entry is a miss. Entries unused for 30 days and other encoder directories are
+  pruned at the end of each compile. Store failures only warn. The root is
+  injected through `CompileOptions.imageCacheDir` (`scripts/compile.ts` sets it;
+  `null` disables it).
 
 The intrinsic dimensions reserve layout space so images are CLS-free **before
 hydration and without JavaScript**; `PostImages` (a client component) wraps the

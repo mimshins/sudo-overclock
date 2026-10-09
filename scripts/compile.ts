@@ -3,7 +3,8 @@
  *
  * Run via `pnpm compile`. Compiles `modules/blog/content/raw/**` into
  * `modules/blog/content/compiled/index.ts` and copies referenced image assets
- * into `public/posts/<slug>/`.
+ * into `public/posts/<slug>/`, reusing encoded images from the persistent store
+ * in `node_modules/.cache/sudo-overclock/images/`.
  */
 
 import { resolve } from "node:path";
@@ -16,6 +17,10 @@ const options = {
   rawDir: resolve(projectRoot, "src/modules/blog/content/raw"),
   compiledDir: resolve(projectRoot, "src/modules/blog/content/compiled"),
   publicDir: resolve(projectRoot, "public"),
+  imageCacheDir: resolve(
+    projectRoot,
+    "node_modules/.cache/sudo-overclock/images",
+  ),
 };
 
 const compiledPosts = await compileAll(options);

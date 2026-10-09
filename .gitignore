@@ -74,6 +74,10 @@ web_modules/
 # Next.js build output
 .next
 out
+next-env.d.ts
+
+# wireit task cache
+.wireit/
 
 # Nuxt.js build / generate output
 .nuxt

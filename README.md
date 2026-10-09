@@ -97,17 +97,17 @@ pnpm format
 ```
 
 > `public/posts/` and `src/modules/blog/content/compiled/` are generated and
-> gitignored; both are produced on every `pnpm build` via the `prebuild` hook.
+> gitignored; `pnpm build` compiles them first whenever their inputs changed.
 
 ## Continuous Integration
 
-Three GitHub Actions workflows live in `.github/workflows/`:
+Two GitHub Actions workflows live in `.github/workflows/`:
 
-- **`ci.yml`** — on every push/PR to `main`: oxlint + oxfmt check, unit tests,
-  and a production build; on PRs, also checks for a changeset.
-- **`deploy.yml`** — on every push to `main`: production build (with
-  `NEXT_PUBLIC_SITE_URL` set to the canonical domain) and deploy to GitHub Pages
-  via `actions/deploy-pages`.
+- **`ci.yml`** — on every push/PR: lint (oxlint, stylelint, oxfmt), tests, and a
+  production build (with `NEXT_PUBLIC_SITE_URL` set to the canonical domain); on
+  `main`, deploys the built `out/` to GitHub Pages; on PRs, checks for a
+  changeset; weekly, a clean build with no caches. Tasks are cached with wireit
+  (see [`docs/runbook.md`](./docs/runbook.md#task-caching-wireit)).
 - **`release.yml`** — on every push to `main`: keeps the changesets "version
   packages" PR up to date; merging it tags `vX.Y.Z` and creates a GitHub Release
   with the changelog. See

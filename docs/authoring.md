@@ -261,8 +261,9 @@ pnpm compile
 pnpm dev
 ```
 
-`pnpm build` runs `pnpm compile` automatically via the `prebuild` hook, and CI
-does the same, so generated content never needs to be committed.
+`pnpm build` runs `pnpm compile` first whenever the markdown, its assets, or the
+compiler changed, and CI does the same, so generated content never needs to be
+committed.
 
 ## Publishing
 

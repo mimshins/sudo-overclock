@@ -56,6 +56,26 @@ on 2026-10-09.
 - **Layout:** `tags.module.css` / `tag.module.css` lack the ≤640px
   `padding-inline` rule; prose has no measure cap (`--container-prose` unused).
 
+## Review follow-ups (nits from the 2026-10-09 review)
+
+- Image store: orphaned `<hash>.<uuid>.tmp` files are only pruned when their
+  whole entry is stale (`entryKey` groups them with the sidecar); two concurrent
+  compiles can make one prune remove a file the other just saved (only a later
+  miss).
+- CI: the image-store cache key hashes all of `content/raw/**`; key it on image
+  files + the `sharp` version instead. Manual redeploy (`workflow_dispatch`) no
+  longer deploys; allow the deploy job on `workflow_dispatch` from `main`.
+- `Leader`: `{...rest}` after `data-slot` lets callers override the slot; the
+  Patterns table says "lowercase label" while the CSS uppercases it.
+- Docs: RFC-004 does not link back to ADR-004 and cites gitignored `.ai/specs/`;
+  RFC-001 and RFC-008 phrase the supersession differently; ADR-008 §4 describes
+  the pre-wireit hook (superseded by ADR-011); `design-system.md` variant
+  example uses names that differ from `tag.module.css`; `.changeset/README.md`
+  suggests empty changesets for docs/CI that need none; the README tech stack
+  omits wireit, stylelint, and changesets; `oxfmt.config.ts` exempts the
+  agent/skill files without saying why (single-line frontmatter for tool
+  compatibility).
+
 ## Open questions
 
 Resolved by ADR-010 (2026-10-09): 16px root, `Leader` primitive, 404 with

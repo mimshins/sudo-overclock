@@ -171,7 +171,7 @@ root), `src/shared/` (domain-free primitives), and `src/modules/<name>/`
 
 ```sh
 pnpm dev              # local preview
-pnpm build            # compile content (prebuild) + static export
+pnpm build            # compile content (when stale) + static export
 pnpm compile          # raw markdown -> compiled content
 pnpm test             # unit/integration tests
 pnpm check:lint       # oxlint + stylelint + oxfmt check (pre-push runs it)

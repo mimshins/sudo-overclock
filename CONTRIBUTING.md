@@ -35,9 +35,10 @@ pnpm format        # auto-fix formatting
 ```
 
 `pnpm install` sets `git config core.hooksPath .githooks`. The versioned
-[`.githooks/pre-push`](./.githooks/pre-push) compiles content if it is missing,
-then runs `pnpm check:lint` and `pnpm test`, and aborts the push on failure.
-Bypass only in an emergency with `git push --no-verify`; CI runs the same gates.
+[`.githooks/pre-push`](./.githooks/pre-push) runs `pnpm check:lint` and
+`pnpm test` (wireit compiles content first when it is stale and skips checks
+whose inputs are unchanged) and aborts the push on failure. Bypass only in an
+emergency with `git push --no-verify`; CI runs the same gates.
 
 ## Project structure
 

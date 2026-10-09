@@ -21,7 +21,11 @@ import type { Element, Parent, Root } from "hast";
 import { imageSizeFromFile } from "image-size/fromFile";
 import { visit } from "unist-util-visit";
 
-import { prepareImage, type PreparedImage } from "./image-optimizer.ts";
+import {
+  prepareImage,
+  type PreparedImage,
+  type PrepareImageOptions,
+} from "./image-optimizer.ts";
 
 type ImageDimensions = {
   readonly width: number;
@@ -66,6 +70,8 @@ type AssetContext = {
   readonly slug: string;
   /** Absolute path to the Next.js `public/` directory. */
   readonly publicDir: string;
+  /** Image encoder and store; defaults to sharp with no store. */
+  readonly images?: PrepareImageOptions;
 };
 
 const EXTERNAL_SRC_PATTERN = /^(?:https?:)?\/\/|^data:|^#|^\/|^mailto:/u;
@@ -148,7 +154,12 @@ const processImage = async (
 
   await mkdir(targetDir, { recursive: true });
 
-  const prepared = await prepareImage(absoluteSource, targetDir, baseName);
+  const prepared = await prepareImage(
+    absoluteSource,
+    targetDir,
+    baseName,
+    context.images,
+  );
 
   if (prepared.kind === "picture") {
     parent.children[index] = createPictureNode(node, slug, prepared);

@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 # pre-push: run the local quality gate before code leaves the machine.
 # Installed by `pnpm install` (prepare: git config core.hooksPath .githooks).
+# wireit compiles content first when its inputs changed and skips any check
+# whose inputs are unchanged since it last passed.
 # Emergency bypass: `git push --no-verify` (CI still runs the same gates).
 set -euo pipefail
 
 cd "$(git rev-parse --show-toplevel)"
-
-if [ ! -f src/modules/blog/content/compiled/index.ts ]; then
-  echo "pre-push: compiled content missing; running pnpm compile..."
-  pnpm compile
-fi
 
 echo "pre-push: running pnpm check:lint and pnpm test..."
 if ! pnpm check:lint || ! pnpm test; then

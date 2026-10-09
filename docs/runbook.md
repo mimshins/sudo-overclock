@@ -9,8 +9,26 @@ Commands, local workflow, troubleshooting, and release for sudo-overclock.
 
 Run `pnpm install` once after cloning: besides dependencies, its `prepare`
 script points git at the versioned hooks (`core.hooksPath=.githooks`). The
-`pre-push` hook compiles content only when `content/compiled/index.ts` is
-missing, then runs `pnpm check:lint` and `pnpm test`; a failure aborts the push.
+`pre-push` hook runs `pnpm check:lint` and `pnpm test`; a failure aborts the
+push.
+
+### Task caching (wireit)
+
+`compile`, `build`, `test`, and the `check:*` scripts run through
+[wireit](https://github.com/google/wireit)
+([ADR-011](../decisions/ADR-011-build-caching.md)). Each declares its input
+`files` and `output` in `package.json`; wireit skips a script whose inputs (plus
+lockfile, Node version, and platform) are unchanged since it last succeeded, and
+restores its output from `.wireit/` instead of re-running. `build` and
+`check:lint:oxlint` depend on `compile`, so content is compiled only when the
+markdown, its assets, or the compiler changed.
+
+- Force a fresh run: `rm -rf .wireit && pnpm build`. (`WIREIT_CACHE=none` only
+  stops restoring cached output; a script whose inputs are unchanged is still
+  skipped.)
+- Clear the task cache: `rm -rf .wireit` (it has no size limit).
+- When adding a file a script reads, make sure a `files` glob covers it — a
+  missing glob means a stale skip.
 
 ## Commands
 
@@ -18,8 +36,8 @@ missing, then runs `pnpm check:lint` and `pnpm test`; a failure aborts the push.
 | ------------------------------ | --------------------------------------------------------------------------------------------- |
 | `pnpm dev`                     | Start the Next.js dev server.                                                                 |
 | `pnpm compile`                 | Compile `content/raw/**` → `content/compiled/index.ts`; optimize assets into `public/posts/`. |
-| `pnpm build`                   | `prebuild` runs `pnpm compile`, then Next.js static export to `out/`.                         |
-| `pnpm test`                    | Unit/integration tests (`tsx --test src/**/*.test.ts`).                                       |
+| `pnpm build`                   | `pnpm compile` (when stale), then Next.js static export to `out/`.                            |
+| `pnpm test`                    | Unit/integration tests (`tsx --test 'src/**/*.test.ts'`).                                     |
 | `pnpm check:lint`              | `oxlint` + `stylelint` + `oxfmt --check`. Run before committing (pre-push runs it).           |
 | `pnpm format`                  | Auto-fix (`oxfmt --write` + `oxlint --fix` + `stylelint --fix`).                              |
 | `pnpm author:new <slug>`       | Scaffold a draft in `content/drafts/<slug>/`.                                                 |
@@ -36,7 +54,8 @@ pnpm compile && pnpm dev
 
 `content/compiled/` and `public/posts/` are generated and gitignored. Never edit
 them by hand. `pnpm compile` deletes `public/posts/` before rewriting, so stale
-assets do not accumulate.
+assets do not accumulate; unchanged images are restored from the image store in
+`node_modules/.cache/sudo-overclock/images/` instead of being re-encoded.
 
 ## Writing and publishing a post
 
@@ -61,9 +80,12 @@ body rules.
 
 ## Deployment
 
-Hosting is GitHub Pages. `.github/workflows/ci.yml` lints, tests, and builds on
-every push and PR; `.github/workflows/deploy.yml` builds and deploys the static
-export on every push to `main`. A commit to `main` is a deploy.
+Hosting is GitHub Pages. One workflow, `.github/workflows/ci.yml`, runs a
+`quality` job (lint, format, styles, tests) and a `build` job on every push and
+PR; on a push to `main` the build uploads `out/` and a `deploy` job publishes
+that artifact. A commit to `main` is a deploy. CI restores the wireit task
+cache, the compiler image store, and `.next/cache`; a weekly scheduled run
+builds with no caches at all to catch a stale cache.
 
 CI sets `NEXT_PUBLIC_SITE_URL=https://sudo-overclock.space`; the build uses
 root-relative paths for the custom-domain apex.
@@ -126,13 +148,26 @@ missing assets before publish.
 
 ### `pnpm compile` is slow, or image encoding fails
 
-`pnpm compile` transcodes every local raster image to AVIF and WebP via `sharp`
-(a native `devDependency`), so it is CPU-bound — larger posts take longer.
-Encoding concurrency is derived from the host's core count; set
-`SOC_IMAGE_CONCURRENCY=<n>` to override it (useful on constrained CI runners).
-If `sharp` cannot decode or encode a file, the compiler warns on stderr and
-copies the original under a hashed name instead of failing; check that the asset
-is a valid image.
+Only new or changed images are encoded (AVIF and WebP via `sharp`, a native
+`devDependency`); everything else is copied from the image store. Encoding is
+CPU-bound, so a post with many new images takes longer. Encoding concurrency is
+derived from the host's core count; set `SOC_IMAGE_CONCURRENCY=<n>` to override
+it (useful on constrained CI runners). If `sharp` cannot decode or encode a
+file, the compiler warns on stderr and copies the original under a hashed name
+instead of failing; check that the asset is a valid image.
+
+### Clearing the image store
+
+The store prunes itself (entries unused for 30 days, old `sharp`/libvips
+versions). To force every image to re-encode — after changing encoder settings
+without changing the transform parameters, or to rule out a bad cached variant:
+
+```sh
+rm -rf node_modules/.cache/sudo-overclock/images && pnpm compile
+```
+
+A fresh `pnpm install` that recreates `node_modules/` clears it too. URLs never
+change: filenames hash the source bytes, not the encoded output.
 
 ### A replaced post image still looks old
 

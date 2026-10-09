@@ -29,23 +29,22 @@
     "changesets:check": "changeset status --since=origin/main",
     "release": "changeset publish",
     "prepare": "git config core.hooksPath .githooks || true",
-    "test": "tsx --test src/**/*.test.ts",
-    "compile": "tsx scripts/compile.ts",
+    "test": "wireit",
+    "compile": "wireit",
     "author:new": "tsx scripts/author/new.ts",
     "author:preflight": "tsx scripts/author/preflight.ts",
     "author:publish": "tsx scripts/author/publish.ts",
     "brand:icons": "tsx scripts/brand/render-apple-icon.ts",
-    "prebuild": "pnpm compile",
-    "build": "next build",
+    "build": "wireit",
     "dev": "next dev",
     "format:fmt": "oxfmt --write",
     "format:lint": "oxlint --fix",
-    "format": "run-p format:fmt format:lint format:style",
-    "check:format": "oxfmt --check",
-    "check:lint": "run-p check:lint:oxlint check:lint:style check:format",
-    "check:lint:oxlint": "oxlint",
     "format:style": "stylelint \"src/**/*.css\" --fix",
-    "check:lint:style": "stylelint \"src/**/*.css\""
+    "format": "run-p format:fmt format:lint format:style",
+    "check:format": "wireit",
+    "check:lint": "wireit",
+    "check:lint:oxlint": "wireit",
+    "check:lint:style": "wireit"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^1.0.1",
@@ -79,7 +78,8 @@
     "tsx": "^4.23.13",
     "typescript": "^7.0.2",
     "unified": "^11.0.5",
-    "unist-util-visit": "^5.1.0"
+    "unist-util-visit": "^5.1.0",
+    "wireit": "^0.14.13"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -87,5 +87,94 @@
     "next": "^16.3.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
+  },
+  "wireit": {
+    "compile": {
+      "command": "tsx scripts/compile.ts",
+      "files": [
+        "scripts/compile.ts",
+        "src/modules/blog/infrastructure/compiler/**",
+        "!src/modules/blog/infrastructure/compiler/**/*.test.ts",
+        "src/modules/blog/content/raw/**",
+        "tsconfig.json"
+      ],
+      "output": [
+        "src/modules/blog/content/compiled/**",
+        "public/posts/**"
+      ]
+    },
+    "build": {
+      "command": "next build",
+      "dependencies": [
+        "compile"
+      ],
+      "files": [
+        "src/**",
+        "scripts/**",
+        "public/**",
+        "!public/posts/**",
+        "*.config.{ts,mjs,js}",
+        "tsconfig.json",
+        ".env*"
+      ],
+      "output": [
+        "out/**"
+      ],
+      "env": {
+        "NEXT_PUBLIC_SITE_URL": {
+          "external": true
+        }
+      }
+    },
+    "test": {
+      "command": "tsx --test 'src/**/*.test.ts'",
+      "files": [
+        "src/**",
+        "scripts/**",
+        "tsconfig.json"
+      ],
+      "output": []
+    },
+    "check:lint": {
+      "dependencies": [
+        "check:lint:oxlint",
+        "check:lint:style",
+        "check:format"
+      ]
+    },
+    "check:lint:oxlint": {
+      "command": "oxlint",
+      "dependencies": [
+        "compile"
+      ],
+      "files": [
+        "**/*.{ts,tsx,mts,cts,js,mjs,cjs}",
+        "!.next/**",
+        "!out/**",
+        "oxlint.config.ts",
+        "tsconfig.json",
+        ".gitignore"
+      ],
+      "output": []
+    },
+    "check:lint:style": {
+      "command": "stylelint \"src/**/*.css\"",
+      "files": [
+        "src/**/*.css",
+        "stylelint.config.mjs"
+      ],
+      "output": []
+    },
+    "check:format": {
+      "command": "oxfmt --check",
+      "files": [
+        "**/*",
+        "!.next/**",
+        "!out/**",
+        "!public/posts/**",
+        "!src/modules/blog/content/compiled/**"
+      ],
+      "output": []
+    }
   }
 }

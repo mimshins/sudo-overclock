@@ -16,9 +16,13 @@ contribution flow: [`CONTRIBUTING.md`](../../CONTRIBUTING.md).
   directly.
 - Verify: `pnpm check:lint` + `pnpm test`; `pnpm build` when the compiler,
   content, or app changed.
-- `pnpm install` sets `core.hooksPath=.githooks`; `pre-push` compiles if the
-  compiled content is missing, then lints and tests. Never bypass with
-  `--no-verify` unless the author asks.
+- `pnpm install` sets `core.hooksPath=.githooks`; `pre-push` runs
+  `pnpm check:lint` and `pnpm test`. Never bypass with `--no-verify` unless the
+  author asks.
+- Scripts are wireit tasks with declared `files`/`output`; a file a script reads
+  must be covered by its `files` globs or the task will skip stale. Force a
+  fresh run with `rm -rf .wireit` (`WIREIT_CACHE=none` alone still skips
+  unchanged scripts).
 - Code, public-asset, build-config, or dependency changes carry a changeset
   (`pnpm changesets:create`; `pnpm changesets:empty` if internal). Posts and
   docs do not. Bump rules: `docs/runbook.md#release`

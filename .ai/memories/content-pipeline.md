@@ -13,7 +13,8 @@ and [`docs/authoring.md`](../../docs/authoring.md). Orientation:
 
 - `pnpm compile` (`scripts/compile.ts` → `infrastructure/compiler/compile.ts`)
   wipes and regenerates `public/posts/` and `content/compiled/` on every run.
-  `pnpm build` runs it through `prebuild`.
+  `pnpm build` and `check:lint:oxlint` depend on it through wireit, which skips
+  it when inputs are unchanged (`package.json` → `wireit`).
 - Type-aware `oxlint` imports the compiled module, so lint needs a prior compile
   (CI compiles first).
 - Image encoding (sharp) dominates compile time.
