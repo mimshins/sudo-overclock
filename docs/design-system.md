@@ -35,18 +35,19 @@ Every UI change ends with the [conformance checklist](#conformance-checklist).
 All tokens live in [`src/app/globals.css`](../src/app/globals.css) — the only
 file that may contain raw values (hex, rgb, px sizes, durations).
 
-| Layer           | Where                      | Holds                                                                                     | Who may reference it                              |
-| --------------- | -------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| 1. Primitives   | `:root` (+ dark overrides) | Raw values: hue ramps, surfaces, type scale, motion, focus, z, containers                 | Only layer 2 and `globals.css` base styles        |
-| 2. Semantics    | `:root` (+ dark overrides) | Roles: foreground, background, border, phosphor, status, `on-*`, shiki                    | Components (CSS Modules)                          |
-| 3. Tailwind map | `@theme inline`            | Re-exports layers 1–2 under Tailwind names; the only home of spacing, radius, breakpoints | Components, for `--spacing-*` / `--radius-*` only |
+| Layer           | Where                                   | Holds                                                                                     | Who may reference it                              |
+| --------------- | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| 1. Primitives   | `:root` (dark) + `[data-theme="light"]` | Raw values: hue ramps, surfaces, type scale, motion, focus, z, containers                 | Only layer 2 and `globals.css` base styles        |
+| 2. Semantics    | `:root` (dark) + `[data-theme="light"]` | Roles: foreground, background, border, phosphor, status, `on-*`, shiki                    | Components (CSS Modules)                          |
+| 3. Tailwind map | `@theme inline`                         | Re-exports layers 1–2 under Tailwind names; the only home of spacing, radius, breakpoints | Components, for `--spacing-*` / `--radius-*` only |
 
 Rules:
 
 - Components reference **semantic** tokens (`--color-foreground-secondary`),
   never primitives (`--color-neutral-700`) and never hex.
-- A dark-theme override is written in **both** dark blocks
-  (`:root[data-theme="dark"]` and the `prefers-color-scheme: dark` media block).
+- `:root` holds the dark values; a light override goes in the one
+  `:root[data-theme="light"]` block of the same layer. There is no media-query
+  copy to keep in sync — the boot script always sets the attribute.
 - New tokens follow the existing names: `--color-<role>[-state]`,
   `--color-on-<role>`, `--typography-<role>-size|leading|weight`,
   `--duration-*`, `--easing-*`, `--z-<n>`, `--container-*`. Component-local
@@ -175,12 +176,35 @@ it.
 
 ## Theme
 
-The shipped site is **dark-only**: the boot script in `src/app/layout.tsx` pins
-`data-theme="dark"` before paint. Light values exist in `:root` (the default
-layer) but are not reachable with JavaScript on and fail contrast. Design and
-verify in dark. A paper-CRT light theme is proposed in
-[RFC-010](../rfcs/active/RFC-010-paper-crt-light-theme.md); until it is accepted
-and shipped, do not design for light.
+Two themes ([ADR-014](../decisions/ADR-014-paper-crt-light-theme.md)):
+
+- **Dark** — phosphor on near-black. The base `:root` tokens and the no-JS
+  default.
+- **Light (paper-CRT)** — ink on green-bar paper. One
+  `:root[data-theme="light"]` block per layer remaps surfaces to the `paper`
+  ramp, phosphor to a deep ink green (`--color-phosphor-950`, so small phosphor
+  text keeps 4.5:1), the glow to a faint single-layer ink halo, and the CRT
+  effects to softer strengths.
+
+`src/app/theme.ts` holds the boot script (stored choice, else
+`prefers-color-scheme`, else dark; set before paint) and the `ThemeToggle` in
+the header (`[ light ]`, `aria-pressed`, remembered; follows the OS until the
+reader chooses). Theme changes are a `data-theme` attribute swap — CSS does the
+rest; `PhosphorField` re-reads its colors on the swap.
+
+Rules:
+
+- Design and verify every change in **both** themes, at desktop and ≤ 640px.
+- New tokens get a light override whenever their dark value would not hold on
+  paper; never branch on the theme in components.
+- `src/app/theme-contrast.test.ts` resolves the tokens of both themes from
+  `globals.css` and fails when text, phosphor and status text, selection, focus,
+  borders, filled-button text, or code-highlight tokens fall under their WCAG
+  targets. Add a pair there for every new foreground/background role.
+- Code blocks on paper carry green-bar bands (`--color-code-band`, one band
+  every other line); on dark the token is transparent.
+- Text selection is inverse video in both themes (`--color-selection-background`
+  / `--color-selection-foreground`).
 
 ## Layout
 
@@ -286,7 +310,8 @@ Compose the standard page pattern (leader, glowing `h1`, narrow column); add
       JS.
 - [ ] Focus-visible ring intact; contrast targets met; accessible names contain
       visible text; state exposed.
-- [ ] Verified at desktop and ≤ 640px, in the dark theme.
+- [ ] Verified at desktop and ≤ 640px, in the dark **and** light themes; the
+      theme contrast test passes.
 - [ ] New tokens/variants/components documented here and in `components.md`.
 
 ## Known deviations
@@ -307,8 +332,6 @@ fix removes its entry here in the same change.
   sizes, the 404 art's unitless `line-height: 1`.
 - **Copy-pasted patterns:** the glow recipe (3 places), post title and prose
   headings re-implementing `Heading`.
-- **Accessibility:** hover-mode `PhosphorField` still animates under reduced
-  motion.
 - **Fonts:** JetBrains Mono loads from the Google Fonts CDN (not self-hosted);
   the RTL stack names `Vazirmatn`, which is never loaded.
 - **`color-mix` tints:** glass panels, translucent borders, and the image sheen
@@ -330,5 +353,5 @@ root; box-drawing leaders through `Leader`; scanlines and one-shot glitch on the
 404 page; distinct status hues for status only; imagery per
 [`imagery.md`](./imagery.md); stylelint enforcement.
 
-Open: the paper-CRT light theme
-([RFC-010](../rfcs/active/RFC-010-paper-crt-light-theme.md)).
+The paper-CRT light theme:
+[ADR-014](../decisions/ADR-014-paper-crt-light-theme.md).

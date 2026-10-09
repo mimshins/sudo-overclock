@@ -40,3 +40,4 @@ Current-state behavior belongs in [`docs/`](../docs/); proposals belong in
 | [011](./ADR-011-build-caching.md)                  | Content-addressed build caching                                       | Accepted | [009](../rfcs/archived/RFC-009-build-caching.md)                  |
 | [012](./ADR-012-release-gated-code-deploys.md)     | Release-gated code deploys, continuous posts                          | Accepted | —                                                                 |
 | [013](./ADR-013-component-testing.md)              | Component testing with Vitest and Testing Library                     | Accepted | [011](../rfcs/archived/RFC-011-component-testing.md)              |
+| [014](./ADR-014-paper-crt-light-theme.md)          | Paper-CRT light theme                                                 | Accepted | [010](../rfcs/archived/RFC-010-paper-crt-light-theme.md)          |

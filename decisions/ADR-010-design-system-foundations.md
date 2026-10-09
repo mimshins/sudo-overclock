@@ -5,7 +5,7 @@
 - **Topic:** design
 - **RFC:** waived by the author, who decided each option directly in a design
   review on 2026-10-09 (options below). The light theme is proposed separately
-  in [RFC-010](../rfcs/active/RFC-010-paper-crt-light-theme.md).
+  in [RFC-010](../rfcs/archived/RFC-010-paper-crt-light-theme.md).
 
 ## Context
 

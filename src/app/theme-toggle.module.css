@@ -1,0 +1,4 @@
+.toggle[aria-pressed="true"] {
+  --button-color: var(--color-phosphor-text);
+  --button-hover-color: var(--color-phosphor-text);
+}

@@ -33,8 +33,8 @@ const PhosphorField = ({
 
   useEffect(() => {
     const canvas = canvasRef.current;
-
     let session: PhosphorSession | null = null;
+
     if (canvas !== null) {
       try {
         session = new PhosphorSession(canvas, src ?? null, glowOnHover);
@@ -43,10 +43,21 @@ const PhosphorField = ({
       }
     }
 
-    if (session !== null) session.start();
+    const themeObserver = new MutationObserver(() => {
+      session?.refreshColors();
+    });
+
+    if (session !== null) {
+      session.start();
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+      });
+    }
 
     return () => {
-      if (session !== null) session.stop();
+      themeObserver.disconnect();
+      session?.stop();
     };
   }, [src, glowOnHover]);
 

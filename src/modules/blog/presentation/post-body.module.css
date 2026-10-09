@@ -221,6 +221,13 @@
   font-family: var(--font-mono);
   font-size: 0.875rem;
   line-height: 1.55;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--color-code-band) 0 1lh,
+    transparent 1lh 2lh
+  );
+  background-origin: content-box;
+  background-attachment: local;
 }
 
 .prose :global(pre code) {

@@ -44,6 +44,11 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  margin-inline-start: auto;
+}
+
+.themeToggle {
+  flex-shrink: 0;
 }
 
 .link {
@@ -134,6 +139,12 @@
 
   .menuButton {
     display: inline-flex;
+    order: 2;
+  }
+
+  .themeToggle {
+    order: 1;
+    margin-inline-start: auto;
   }
 
   .nav {

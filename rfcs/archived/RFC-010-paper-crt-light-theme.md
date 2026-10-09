@@ -1,6 +1,6 @@
 # RFC-010 — Paper-CRT Light Theme
 
-- **Status:** Accepted
+- **Status:** Implemented
 - **Date:** 2026-10-09
 - **Supersedes:** —
 - **Superseded by:** —
@@ -97,3 +97,10 @@ Scope of the work once accepted:
 
 Sequencing: implemented after RFC-011, so the second theme lands on a tested
 component base.
+
+## Resolution
+
+Implemented on 2026-10-09; recorded in
+[ADR-014](../../decisions/ADR-014-paper-crt-light-theme.md). From the palette
+study the author chose the green-bar ground (B, including green-bar bands on
+code listings) and the halo as shown (single layer, about 28%).

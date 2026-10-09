@@ -91,20 +91,20 @@ are architectural. UI work starts from a design brief
 
 ## Knowledge maintenance
 
-| If you change...                             | Review...                                                                                                           |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| layers, module shape, imports, aliases       | `docs/architecture.md`, `oxlint.config.ts`, `.ai/memories/architecture.md`                                          |
-| the compiler or generated output             | `docs/architecture.md#content-pipeline`, `docs/authoring.md`, `docs/runbook.md`, `.ai/memories/content-pipeline.md` |
-| the authoring CLI, stages, or post templates | `docs/authoring.md`, `docs/runbook.md`, `.ai/skills/post-authoring/`                                                |
-| tokens, typography, color, motion, layout    | `docs/design-system.md`, `docs/design-language.md`, `src/app/globals.css`                                           |
-| images, illustrations, icons, backgrounds    | `docs/imagery.md`, `docs/design-system.md`                                                                          |
-| a component (new, variant, slot)             | `docs/components.md`, `docs/design-system.md`                                                                       |
-| scripts, CI, deploy, hooks                   | `docs/runbook.md`, `README.md`, `CONTRIBUTING.md`, `.ai/memories/development-workflow.md`                           |
-| tests or test tooling                        | `docs/architecture.md#testing-strategy`, `vitest.config.ts`, `docs/components.md#testing-a-component`               |
-| a dependency                                 | an ADR for runtime `dependencies`; `README.md` tech stack                                                           |
-| releases, versioning, changesets             | `docs/runbook.md#release`, `.changeset/config.json`, ADR-009                                                        |
-| a shipped RFC                                | its ADR, `rfcs/README.md` and `decisions/README.md` indexes                                                         |
-| the AI layer (skills, agents, adapters)      | `.ai/README.md`, this file, `CONTRIBUTING.md#working-with-ai-agents`                                                |
+| If you change...                             | Review...                                                                                                                       |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| layers, module shape, imports, aliases       | `docs/architecture.md`, `oxlint.config.ts`, `.ai/memories/architecture.md`                                                      |
+| the compiler or generated output             | `docs/architecture.md#content-pipeline`, `docs/authoring.md`, `docs/runbook.md`, `.ai/memories/content-pipeline.md`             |
+| the authoring CLI, stages, or post templates | `docs/authoring.md`, `docs/runbook.md`, `.ai/skills/post-authoring/`                                                            |
+| tokens, typography, color, motion, layout    | `docs/design-system.md`, `docs/design-language.md`, `src/app/globals.css` (both theme blocks), `src/app/theme-contrast.test.ts` |
+| images, illustrations, icons, backgrounds    | `docs/imagery.md`, `docs/design-system.md`                                                                                      |
+| a component (new, variant, slot)             | `docs/components.md`, `docs/design-system.md`                                                                                   |
+| scripts, CI, deploy, hooks                   | `docs/runbook.md`, `README.md`, `CONTRIBUTING.md`, `.ai/memories/development-workflow.md`                                       |
+| tests or test tooling                        | `docs/architecture.md#testing-strategy`, `vitest.config.ts`, `docs/components.md#testing-a-component`                           |
+| a dependency                                 | an ADR for runtime `dependencies`; `README.md` tech stack                                                                       |
+| releases, versioning, changesets             | `docs/runbook.md#release`, `.changeset/config.json`, ADR-009                                                                    |
+| a shipped RFC                                | its ADR, `rfcs/README.md` and `decisions/README.md` indexes                                                                     |
+| the AI layer (skills, agents, adapters)      | `.ai/README.md`, this file, `CONTRIBUTING.md#working-with-ai-agents`                                                            |
 
 ## Where Things Live
 

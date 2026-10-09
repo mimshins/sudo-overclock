@@ -11,6 +11,7 @@ import {
   TWITTER_HANDLE,
 } from "./site.ts";
 import { SkipLink } from "./skip-link.tsx";
+import { THEME_INIT_SCRIPT } from "./theme.ts";
 
 import "./globals.css";
 
@@ -57,15 +58,6 @@ export const metadata = {
     creator: TWITTER_HANDLE,
   },
 };
-
-// Dark-only: pin the CRT theme regardless of system preference.
-const THEME_INIT_SCRIPT = `(() => {
-  try {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  } catch (_) {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  }
-})();`;
 
 const themeScriptProp = { __html: THEME_INIT_SCRIPT } as const;
 

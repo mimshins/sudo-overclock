@@ -59,14 +59,15 @@ compiled-content adapter into the application services and exports
 
 ### App shell — `src/app/`
 
-| Component    | Kind   | Role                                                        |
-| ------------ | ------ | ----------------------------------------------------------- |
-| `SiteHeader` | client | Brand, primary nav, responsive menu (Esc closes + refocus)  |
-| `SiteFooter` | server | Copyright, ASCII tagline, social links                      |
-| `LinkButton` | client | `Button` rendered `as={Link}` (functions can't cross RSC)   |
-| `CoverImage` | server | Book cover image for the reading list                       |
-| `NotFound`   | server | 404 page (`not-found.tsx`); exported as `404.html`          |
-| `SkipLink`   | server | "skip to content" link to `#main` (`data-slot="skip-link"`) |
+| Component     | Kind   | Role                                                                                     |
+| ------------- | ------ | ---------------------------------------------------------------------------------------- |
+| `SiteHeader`  | client | Brand, primary nav, responsive menu (Esc closes + refocus)                               |
+| `SiteFooter`  | server | Copyright, ASCII tagline, social links                                                   |
+| `LinkButton`  | client | `Button` rendered `as={Link}` (functions can't cross RSC)                                |
+| `CoverImage`  | server | Book cover image for the reading list                                                    |
+| `NotFound`    | server | 404 page (`not-found.tsx`); exported as `404.html`                                       |
+| `SkipLink`    | server | "skip to content" link to `#main` (`data-slot="skip-link"`)                              |
+| `ThemeToggle` | client | `[ light ]` toggle (`aria-pressed`); stores the choice, follows the OS until one is made |
 
 ### `Leader`
 
@@ -159,10 +160,11 @@ expect(onToggle).toHaveBeenCalledOnce();
 
 ## Theming
 
-The site is dark-only: an inline boot script in `src/app/layout.tsx` pins
-`data-theme="dark"` before paint. Tokens live in `src/app/globals.css`
-(primitives and semantic roles in `:root`, Tailwind names in `@theme inline`).
-The single accent is phosphor green (`--color-phosphor`). Components consume
-semantic tokens; hex values belong in `globals.css` only. The token inventory,
-patterns, and extension rules are in [`design-system.md`](./design-system.md);
-props that currently have no effect are listed under its _Known deviations_.
+The site has a dark and a light (paper-CRT) theme: the boot script from
+`src/app/theme.ts` sets `data-theme` before paint and `ThemeToggle` switches it.
+Tokens live in `src/app/globals.css` (primitives and semantic roles in `:root`,
+Tailwind names in `@theme inline`). The single accent is phosphor green
+(`--color-phosphor`). Components consume semantic tokens; hex values belong in
+`globals.css` only. The token inventory, patterns, and extension rules are in
+[`design-system.md`](./design-system.md); props that currently have no effect
+are listed under its _Known deviations_.

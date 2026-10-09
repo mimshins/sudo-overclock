@@ -23,11 +23,10 @@ issues below remain.
 Anchored to symbols and selectors, not line numbers; verified against the code
 on 2026-10-09.
 
-- **Accessibility:** hover-mode `PhosphorField` animates under reduced motion
-  (`phosphor-field-hover.ts`).
-- **Contrast:** `--color-foreground-muted` / `--color-border-primary` are 2.2:1;
-  muted text is used by `.count` in `tags.module.css` and by
-  `Caption variant="muted"`.
+- **Contrast (dark only):** `--color-foreground-muted` /
+  `--color-border-primary` are 2.2:1 (the theme contrast test lists the border
+  as a known deviation); muted text is used by `.count` in `tags.module.css` and
+  by `Caption variant="muted"`.
 - **`data-slot` missing:** `PostHeader` title `<h1>` and description `<p>`
   (`post-header.tsx`); `PostList` card internals; `SiteHeader` and `SiteFooter`
   internals; route page wrappers (`src/app/**/page.tsx`); `CoverImage`.
@@ -67,7 +66,7 @@ on 2026-10-09.
 
 Resolved by ADR-010 (2026-10-09): 16px root, `Leader` primitive, 404 with
 scanlines/glitch, status hues, stylelint (colors + durations), the image-sheen
-duration token. Open: the light theme (RFC-010).
+duration token. The light theme shipped with ADR-014.
 
 ## To promote on resolution
 

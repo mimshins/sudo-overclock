@@ -54,4 +54,11 @@
   font-size: var(--pre-font-size);
   line-height: var(--pre-line-height);
   color: var(--pre-color);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--color-code-band) 0 1lh,
+    transparent 1lh 2lh
+  );
+  background-origin: content-box;
+  background-attachment: local;
 }

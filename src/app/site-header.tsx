@@ -13,6 +13,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { ThemeToggle } from "./theme-toggle.tsx";
+
 import styles from "./site-header.module.css";
 
 const NAV_LINKS = [
@@ -137,6 +139,7 @@ const SiteHeader = () => {
             onNavigate={close}
           />
         </nav>
+        <ThemeToggle className={styles.themeToggle} />
       </div>
     </header>
   );

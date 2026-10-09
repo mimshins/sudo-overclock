@@ -73,11 +73,14 @@ silently redefining the identity; identity decisions are ADRs
 
 ## Theme System
 
-The site ships **dark** (phosphor on near-black). An inline boot script pins
-`data-theme="dark"` on `<html>` before paint. Token swapping happens in CSS only
-— no React state for theming primitives. Light values still exist in the token
-layers; a paper-CRT light theme is proposed in
-[RFC-010](../rfcs/active/RFC-010-paper-crt-light-theme.md).
+Two themes, one identity. **Dark** is phosphor on near-black — the screen
+glowing in a dark room, and the default. **Light** is paper-CRT — the same
+terminal printed on green-bar listing paper: deep ink green instead of emitted
+light, a faint ink halo instead of glow, and pointillism drawn as ink dots.
+First visits follow the reader's OS; the `[ light ]` toggle in the header
+overrides and is remembered. Token swapping happens in CSS only — no React state
+for theming primitives. Details:
+[`design-system.md#theme`](./design-system.md#theme).
 
 ## Asset Notes
 

@@ -21,6 +21,11 @@ import {
 import { HoverAnimator } from "./phosphor-field-hover.ts";
 import { loadImage, sampleImage } from "./phosphor-field-image.ts";
 import {
+  fieldRender,
+  inkFromLuminance,
+  type FieldRender,
+} from "./phosphor-field-ink.ts";
+import {
   buildLevelColors,
   renderNeutralRows,
 } from "./phosphor-field-render.ts";
@@ -28,15 +33,18 @@ import { StaticAnimator } from "./phosphor-field-reveal.ts";
 
 const MAX_DPR = 2;
 
+const INK_GAIN = 2.4;
+
 class PhosphorSession {
   private readonly canvas: HTMLCanvasElement;
   private readonly context: CanvasRenderingContext2D;
   private readonly baseLayer: HTMLCanvasElement;
   private readonly baseContext: CanvasRenderingContext2D;
   private readonly container: HTMLElement;
-  private readonly base: Rgb;
-  private readonly phosphor: Rgb;
-  private readonly levelColors: readonly string[];
+  private base: Rgb;
+  private phosphor: Rgb;
+  private levelColors: readonly string[];
+  private render: FieldRender;
   private readonly reducedQuery: MediaQueryList;
   private readonly observer: ResizeObserver;
   private readonly src: string | null;
@@ -72,6 +80,7 @@ class PhosphorSession {
     this.base = resolveToken("--color-foreground-tertiary", FALLBACK_BASE);
     this.phosphor = phosphor;
     this.levelColors = buildLevelColors(this.base, phosphor);
+    this.render = fieldRender();
     this.baseLayer = document.createElement("canvas");
     const baseContext = this.baseLayer.getContext("2d");
     if (baseContext === null) {
@@ -97,12 +106,22 @@ class PhosphorSession {
   start(): void {
     this.layout();
     this.observer.observe(this.container);
+    this.reducedQuery.addEventListener("change", this.onReducedChange);
+  }
+
+  refreshColors(): void {
+    this.phosphor = resolveToken("--color-phosphor", FALLBACK_PHOSPHOR);
+    this.base = resolveToken("--color-foreground-tertiary", FALLBACK_BASE);
+    this.levelColors = buildLevelColors(this.base, this.phosphor);
+    this.render = fieldRender();
+    this.dropHover();
+    this.layout();
   }
 
   stop(): void {
     this.disposed = true;
-    this.hover?.stop();
-    this.hover = null;
+    this.reducedQuery.removeEventListener("change", this.onReducedChange);
+    this.dropHover();
     this.animator?.stop();
     this.animator = null;
     this.observer.disconnect();
@@ -125,11 +144,22 @@ class PhosphorSession {
 
     this.rebuildField();
 
-    if (this.glowOnHover) {
+    if (this.glowOnHover && !this.reduced) {
       this.startInteractive();
     } else {
+      this.dropHover();
       this.startStatic();
     }
+  }
+
+  private readonly onReducedChange = (event: MediaQueryListEvent): void => {
+    this.reduced = event.matches;
+    this.layout();
+  };
+
+  private dropHover(): void {
+    this.hover?.stop();
+    this.hover = null;
   }
 
   private startInteractive(): void {
@@ -223,7 +253,13 @@ class PhosphorSession {
       height: gridRows,
       data,
     };
-    this.field = createDotField(this.width, this.height, IMAGE_STYLE, source);
+    const field = createDotField(this.width, this.height, IMAGE_STYLE, source);
+
+    if (field !== null && this.render === "ink") {
+      inkFromLuminance(field, this.phosphor, INK_GAIN);
+    }
+
+    this.field = field;
   }
 }
 

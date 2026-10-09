@@ -50,15 +50,21 @@ other three are drawn in.
   dots (`IMAGE_STYLE`) or draws a procedural dithered field
   (`PROCEDURAL_STYLE`). Use it for page backgrounds instead of showing a picture
   directly.
+- On the light theme the same sources render as **ink on paper**: every dot
+  takes the ink color (`--color-phosphor`) and its opacity follows the source
+  pixel's luminance, so light becomes ink and dark stays bare paper
+  (`--phosphor-field-render: ink`; overall weight via
+  `--phosphor-field-ink-strength`). No separate light-graded assets.
 - Static pointillist illustrations follow the same rules: one ink, round or
-  square dots, pitch between 3 and 8 px at display size, dark ground.
+  square dots, pitch between 3 and 8 px at display size, on the theme's ground.
 - Leave quiet zones where text sits; a background must never compete with the
   column it sits behind.
 
 ### Duo-color
 
-- **Ground:** the page background (`--color-background`, near-black). **Ink:**
-  phosphor (`--color-phosphor` family). That is the whole palette.
+- **Ground:** the page background (`--color-background`: near-black on dark,
+  green-bar paper on light). **Ink:** phosphor (`--color-phosphor` family —
+  bright on dark, deep ink green on light). That is the whole palette.
 - Tonal range comes from the technique (dither, dot density, line weight), or
   from steps of the **same** phosphor ramp — never from a second hue.
 - A neutral ink (the `--color-foreground-*` greys) may replace phosphor for
@@ -68,8 +74,9 @@ other three are drawn in.
 - Status hues (rust, amber, cyan) are for UI status, not illustration.
 - Glow is allowed as the ink's halo (as on headings); no drop shadows, no
   lighting effects, no gradients between colors.
-- Inline SVG uses `currentColor` or the CSS tokens so the art follows the theme;
-  raster art is graded to the ground and ink values in `globals.css`.
+- Inline SVG uses `currentColor` or the CSS tokens so the art follows the theme
+  in both modes; raster art that cannot follow the theme (a fixed PNG) must read
+  on both grounds or ship as SVG instead.
 
 ### Abstract
 

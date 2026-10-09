@@ -29,13 +29,19 @@ const globalProperties = matchesOf(
 
 const cssModules = files.filter(path => path.endsWith(".module.css"));
 
+const readAnywhere = matchesOf(
+  [...cssModules, join(SRC, "app/globals.css")]
+    .map(path => stripComments(readFileSync(path, "utf8")))
+    .join("\n"),
+  /var\(\s*(--[\w-]+)/gu,
+);
+
 const unreadLocalProperties = (path: string): string[] => {
   const css = stripComments(readFileSync(path, "utf8"));
   const set = matchesOf(css, /(--[\w-]+)\s*:/gu);
-  const read = matchesOf(css, /var\(\s*(--[\w-]+)/gu);
 
   return [...set]
-    .filter(name => !globalProperties.has(name) && !read.has(name))
+    .filter(name => !globalProperties.has(name) && !readAnywhere.has(name))
     .map(name => `${rel(path)} ${name}`);
 };
 
@@ -64,7 +70,7 @@ const missingClasses = (componentPath: string): string[] => {
 };
 
 describe("CSS module contract", () => {
-  it("reads every local custom property a module sets", () => {
+  it("reads every custom property a module sets somewhere", () => {
     const unread = cssModules.flatMap(path => unreadLocalProperties(path));
 
     expect(unread).toEqual([]);
