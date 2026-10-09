@@ -44,4 +44,5 @@ Current-state behavior belongs in [`docs/`](../docs/); proposals belong in
 | [015](./ADR-015-readability-pass.md)                     | Readability pass: type weight, leaders, chips, glass                   | Accepted | —                                                                 |
 | [016](./ADR-016-design-drift-cleanup.md)                 | Design drift cleanup: type, border, size tokens; self-hosted text face | Accepted | —                                                                 |
 | [017](./ADR-017-frontmatter-and-dependency-overrides.md) | Front matter on `yaml`; overrides for vulnerable transitive deps       | Accepted | —                                                                 |
+| [018](./ADR-018-og-share-cards.md)                       | Per-route share cards as `og.png` route handlers                       | Accepted | —                                                                 |
 | [019](./ADR-019-touch-rolling-swell.md)                  | Rolling swell on touch screens                                         | Accepted | —                                                                 |

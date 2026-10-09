@@ -2,15 +2,14 @@ import { Heading } from "@repo/shared/ui/heading";
 import { Leader } from "@repo/shared/ui/leader";
 import { PhosphorField } from "@repo/shared/ui/phosphor-field";
 
+import { pageMetadata } from "../metadata.ts";
+import { PAGES } from "../pages.ts";
 import { NOW_READING, READ, type Book } from "./books.ts";
 import { CoverImage } from "./cover-image.tsx";
 
 import styles from "./reading.module.css";
 
-export const metadata = {
-  title: "reading — sudo-overclock",
-  description: "Technical books on the desk of @mimshins.",
-};
+export const metadata = pageMetadata(PAGES.reading);
 
 const initials = (title: string): string =>
   title
@@ -104,7 +103,7 @@ const ReadingPage = () => (
       src="/reading/bg.jpg"
       glowOnHover={false}
     />
-    <Leader>reading.md</Leader>
+    <Leader>{PAGES.reading.leader}</Leader>
     <Heading
       as="h1"
       size="h1"

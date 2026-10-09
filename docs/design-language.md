@@ -96,11 +96,14 @@ primitives. Details: [`design-system.md#theme`](./design-system.md#theme).
   16×16 inline SVG on the pixel grid, single accent color. No emoji in chrome.
 - **Display face** — undefined medium (SIL OFL-1.1), self-hosted unmodified at
   `src/app/fonts/undefined-medium.woff2` with its license at
-  `public/fonts/undefined-medium/OFL.txt`. It is a pixel face (0.1em cell,
-  single weight), so display text must use the 10px-grid sizes in `globals.css`,
-  `letter-spacing: 0`, and `-webkit-font-smoothing: none`. Subsetting or
-  modifying it would trigger the Reserved Font Name and is not allowed without a
-  new decision (see [ADR-007](../decisions/ADR-007-display-typeface.md)).
+  `public/fonts/undefined-medium/OFL.txt`. The upstream TTF sits beside it,
+  unmodified, only for the build-time share cards (Satori cannot read woff2);
+  both report version 1.300 with the same unique ID. It is a pixel face (0.1em
+  cell, single weight), so display text must use the 10px-grid sizes in
+  `globals.css`, `letter-spacing: 0`, and `-webkit-font-smoothing: none`.
+  Subsetting or modifying it would trigger the Reserved Font Name and is not
+  allowed without a new decision (see
+  [ADR-007](../decisions/ADR-007-display-typeface.md)).
 - **Brand mark** — the wordmark is a typed lockup (`> sudo-overclock`), not an
   illustrated logo. The standalone `soc-assembled-logo.svg` is the two-line
   lockup; the favicon (`src/app/icon.svg`) is the `s` monogram plus a block

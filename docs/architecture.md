@@ -289,6 +289,36 @@ belong in `globals.css` only.
 Next.js is configured for Static Site Generation (SSG). All blog content is
 pre-rendered at build time.
 
+### Page metadata and share cards
+
+Every route builds its metadata with `pageMetadata` / `articleMetadata`
+(`src/app/metadata.ts`): title, description, `alternates.canonical`, and a full
+`openGraph` + `twitter` set. Next.js merges metadata shallowly — a page's
+`openGraph` replaces the layout's — so pages never hand-write those objects.
+Paths are normalised to a leading and trailing slash. Each route with a path
+points `og:image` at its own card, `<path>og.png`; pages without a path (404)
+fall back to the home card. The route table in `src/app/pages.ts` holds each
+static page's path, title, Leader label, description, and card background once,
+for both the page and its card; `postPath` / `tagPath` build the dynamic paths
+with the segment percent-encoded (tags are free text).
+
+Cards are `og.png/route.tsx` route handlers (`force-static`, like `feed.xml`)
+that call `renderOgCard` (`src/app/og-card.tsx`). They are plain route handlers
+rather than `opengraph-image.tsx` files because a static export writes those
+without a file extension, which GitHub Pages serves as
+`application/octet-stream` ([ADR-018](../decisions/ADR-018-og-share-cards.md)).
+The pure parts live in `shared/lib/`: `dot-painter.ts` paints the dot layer into
+an RGBA buffer from a `DotStyle` (the live field's styles satisfy it, so the
+card passes them with its overrides), and `css-tokens.ts` resolves `:root`
+custom properties from stylesheet text (`var()` substitution, simple `calc()`).
+`src/app/og-theme.ts` reads `globals.css` and maps the dark tokens the card
+draws, including `--display-glow` and `--display-strike`; `og-card.tsx` sets the
+text with next/og using build-only TTF copies of the two faces in
+`src/app/fonts/` (Satori cannot read woff2) and loads the theme, fonts, and each
+background's dot layer once per build worker. A new route adds an entry to
+`pages.ts` and an `og.png/route.tsx` beside its `page.tsx`. Look and rules:
+[`imagery.md`](./imagery.md#share-cards-open-graph).
+
 ## Comments
 
 Code explains itself through names and structure; comments are the exception.

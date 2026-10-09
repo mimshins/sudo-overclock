@@ -1,5 +1,6 @@
 import { blogServices } from "@repo/modules/blog/presentation/blog-module";
 
+import { tagPath } from "../pages.ts";
 import {
   CONTENT_REVISION,
   SITE_DESCRIPTION,
@@ -27,7 +28,7 @@ const GET = (): Response => {
       `- [${post.title}](${SITE_URL}/blog/posts/${post.slug}/): ${post.description}`,
   );
 
-  const tagLines = tags.map(tag => `- [${tag}](${SITE_URL}/blog/tags/${tag}/)`);
+  const tagLines = tags.map(tag => `- [${tag}](${SITE_URL}${tagPath(tag)})`);
 
   const lines = [
     `# ${SITE_NAME}`,

@@ -183,3 +183,9 @@ Bundled font: [undefined medium](https://undefined-medium.com) by Andi Rueckel,
 licensed under the SIL Open Font License 1.1. The font ships unmodified with its
 license at
 [`public/fonts/undefined-medium/OFL.txt`](./public/fonts/undefined-medium/OFL.txt).
+The share-card renderer also reads build-only, unmodified upstream TTFs of
+undefined medium and
+[JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) Bold v2.304 (SIL
+OFL 1.1, license at
+[`src/app/fonts/jetbrains-mono-ofl.txt`](./src/app/fonts/jetbrains-mono-ofl.txt));
+they are never served to readers.

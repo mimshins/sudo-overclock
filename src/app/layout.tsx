@@ -3,15 +3,10 @@ import { JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
+import { pageMetadata } from "./metadata.ts";
 import { SiteFooter } from "./site-footer.tsx";
 import { SiteHeader } from "./site-header.tsx";
-import {
-  AUTHOR_NAME,
-  SITE_DESCRIPTION,
-  SITE_NAME,
-  SITE_URL,
-  TWITTER_HANDLE,
-} from "./site.ts";
+import { AUTHOR_NAME, SITE_NAME, SITE_URL } from "./site.ts";
 import { SkipLink } from "./skip-link.tsx";
 import { THEME_INIT_SCRIPT } from "./theme.ts";
 
@@ -58,27 +53,11 @@ const monoFont = JetBrains_Mono({
 });
 
 export const metadata = {
+  ...pageMetadata({}),
   metadataBase: new URL(SITE_URL),
-  title: {
-    default: SITE_NAME,
-  },
-  description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
   authors: [{ name: AUTHOR_NAME }],
   creator: AUTHOR_NAME,
-  openGraph: {
-    type: "website",
-    siteName: SITE_NAME,
-    locale: "en_US",
-    title: {
-      default: SITE_NAME,
-    },
-    description: SITE_DESCRIPTION,
-  },
-  twitter: {
-    card: "summary",
-    creator: TWITTER_HANDLE,
-  },
 };
 
 const themeScriptProp = { __html: THEME_INIT_SCRIPT } as const;

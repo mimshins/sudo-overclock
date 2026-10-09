@@ -3,8 +3,12 @@ import { Leader } from "@repo/shared/ui/leader";
 import { PhosphorField } from "@repo/shared/ui/phosphor-field";
 
 import { LinkButton } from "./link-button.tsx";
+import { pageMetadata } from "./metadata.ts";
+import { PAGES } from "./pages.ts";
 
 import styles from "./page.module.css";
+
+export const metadata = pageMetadata(PAGES.home);
 
 const HomePage = () => (
   <main
@@ -13,7 +17,7 @@ const HomePage = () => (
     data-slot="home"
   >
     <PhosphorField />
-    <Leader>home.sh</Leader>
+    <Leader>{PAGES.home.leader}</Leader>
     <Heading
       as="h1"
       size="h1"

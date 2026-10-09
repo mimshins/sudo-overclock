@@ -4,12 +4,12 @@ import { Leader } from "@repo/shared/ui/leader";
 import { Tag } from "@repo/shared/ui/tag";
 import Link from "next/link";
 
+import { pageMetadata } from "../../metadata.ts";
+import { PAGES, tagPath } from "../../pages.ts";
+
 import styles from "./tags.module.css";
 
-export const metadata = {
-  title: "tags — sudo-overclock",
-  description: "All tags across blog posts.",
-};
+export const metadata = pageMetadata(PAGES.tags);
 
 const TagItem = ({ tag }: { readonly tag: string }) => {
   const count = blogServices.listPostsByTag(tag).length;
@@ -21,7 +21,7 @@ const TagItem = ({ tag }: { readonly tag: string }) => {
       data-slot="tag-index-item"
     >
       <Link
-        href={`/blog/tags/${tag}/`}
+        href={tagPath(tag)}
         className={styles.link}
         data-slot="tags-link"
       >
@@ -46,7 +46,7 @@ const TagsPage = () => {
       className={styles.main}
       data-slot="tags"
     >
-      <Leader>tags.md</Leader>
+      <Leader>{PAGES.tags.leader}</Leader>
       <Heading
         as="h1"
         size="h1"

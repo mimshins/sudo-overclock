@@ -129,6 +129,35 @@ material**, not finished imagery:
   something that flashes. Respect `prefers-reduced-motion` for any motion added
   in the UI.
 
+## Share cards (Open Graph)
+
+Every route has a 1200 × 630 card at `<path>og.png`, rendered at build time
+(`src/app/og-card.tsx`, see
+[`architecture.md`](./architecture.md#page-metadata-and-share-cards)). Cards are
+pointillist and duo-color like the page they share:
+
+- **Dots:** the route's `public/<route>/bg.jpg` drawn with the live field's
+  `IMAGE_STYLE` (2–4 px dots, sampled colour with grain) with two card
+  overrides, because cards are seen as thumbnails: a 5 px pitch instead of 4,
+  and the sampled tone lifted ×1.5. Home, which has no source, gets
+  `PROCEDURAL_STYLE`'s neutral dither with heavier dots (2–3 px instead of 1–2,
+  opacity 0.14–0.40 instead of 0.10–0.32) and one frozen hover patch stepped
+  toward phosphor. Posts and tag pages use the blog source. The overrides live
+  next to the styles they extend in `src/app/og-card.tsx`.
+- **Quiet zone:** the text block (left, lower two thirds) keeps ~18 % of its
+  dots — thinned by density, never by an overlay or gradient.
+- **Text:** the page's Leader label on the phosphor plate, the title in the
+  display face with `--display-strike` and `--display-glow` (80 px; 60/50 px for
+  long post titles, on the 10 px grid), posts add `date · N min read`, then the
+  wordmark (double-strike only: the title is the card's one glow) and the
+  canonical URL.
+- **Colour and glow:** the dark theme only (share previews have no theme), read
+  from `globals.css` at build time, `var()` and `calc()` resolved — the card
+  holds no hex values or glow recipe of its own.
+
+A new background source changes its cards automatically; rebuild and look at
+`out/<route>/og.png`.
+
 ## File conventions
 
 | Kind                         | Format                   | Where                                  |
@@ -138,6 +167,7 @@ material**, not finished imagery:
 | Post photos/screenshots      | JPEG/PNG source          | `content/raw/<slug>/`                  |
 | Page background sources      | JPEG, 1536 × 1024        | `public/<route>/bg.jpg`                |
 | Product images (book covers) | JPEG, 2:3                | `public/reading/`                      |
+| Share cards (generated)      | PNG, 1200 × 630          | `<route>/og.png/route.tsx` → `out/`    |
 
 Name files in kebab-case by content (`raft-log-replication.svg`), not by
 sequence (`p1.png`).

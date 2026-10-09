@@ -4,6 +4,9 @@ import { Heading } from "@repo/shared/ui/heading";
 import { Leader } from "@repo/shared/ui/leader";
 import { notFound } from "next/navigation";
 
+import { pageMetadata } from "../../../metadata.ts";
+import { tagEntry } from "../../../pages.ts";
+
 import styles from "./tag.module.css";
 
 type TagPageProps = {
@@ -15,10 +18,7 @@ export const generateStaticParams = () =>
 
 export const generateMetadata = async ({ params }: TagPageProps) => {
   const { tag } = await params;
-  return {
-    title: `${tag} — sudo-overclock`,
-    description: `Blog posts tagged "${tag}".`,
-  };
+  return pageMetadata(tagEntry(tag));
 };
 
 const TagPage = async ({ params }: TagPageProps) => {
@@ -33,7 +33,7 @@ const TagPage = async ({ params }: TagPageProps) => {
       className={styles.main}
       data-slot="tag"
     >
-      <Leader>tag: {tag}</Leader>
+      <Leader>{tagEntry(tag).leader}</Leader>
       <Heading
         as="h1"
         size="h1"

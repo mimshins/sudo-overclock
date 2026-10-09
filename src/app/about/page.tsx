@@ -2,12 +2,12 @@ import { Heading } from "@repo/shared/ui/heading";
 import { Leader } from "@repo/shared/ui/leader";
 import { PhosphorField } from "@repo/shared/ui/phosphor-field";
 
+import { pageMetadata } from "../metadata.ts";
+import { PAGES } from "../pages.ts";
+
 import styles from "./about.module.css";
 
-export const metadata = {
-  title: "about — sudo-overclock",
-  description: "About Mostafa Shamsitabar.",
-};
+export const metadata = pageMetadata(PAGES.about);
 
 type HistoryEntry = {
   readonly period: string;
@@ -140,7 +140,7 @@ const AboutPage = () => (
       src="/about/bg.jpg"
       glowOnHover={false}
     />
-    <Leader>about.md</Leader>
+    <Leader>{PAGES.about.leader}</Leader>
     <Heading
       as="h1"
       size="h1"

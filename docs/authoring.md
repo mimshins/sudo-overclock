@@ -221,6 +221,11 @@ tags:
 ---
 ```
 
+`title`, `date`, `description`, `tags`, and `author` also fill the post's Open
+Graph and Twitter tags (`og:type` `article`), and `title`, `date`, and reading
+time are drawn onto its share card at `/blog/posts/<slug>/og.png` — see
+[`imagery.md`](./imagery.md#share-cards-open-graph).
+
 Slugs are derived from the `slug` field, falling back to the file name, and
 lower-cased with runs of non-alphanumerics collapsed to `-`
 (`src/modules/blog/infrastructure/compiler/slug.ts`).

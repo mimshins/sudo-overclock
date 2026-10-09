@@ -1,6 +1,7 @@
 import { blogServices } from "@repo/modules/blog/presentation/blog-module";
 import type { MetadataRoute } from "next";
 
+import { tagPath } from "./pages.ts";
 import { SITE_URL } from "./site.ts";
 
 export const dynamic = "force-static";
@@ -23,7 +24,7 @@ const sitemap = (): MetadataRoute.Sitemap => {
     }));
 
   const tagRoutes: MetadataRoute.Sitemap = blogServices.listTags().map(tag => ({
-    url: `${SITE_URL}/blog/tags/${tag}/`,
+    url: `${SITE_URL}${tagPath(tag)}`,
     lastModified: now,
   }));
 

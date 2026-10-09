@@ -3,13 +3,14 @@ import { Heading } from "@repo/shared/ui/heading";
 import { Leader } from "@repo/shared/ui/leader";
 
 import { LinkButton } from "./link-button.tsx";
+import { pageMetadata } from "./metadata.ts";
 
 import styles from "./not-found.module.css";
 
-export const metadata = {
-  title: "404 — sudo-overclock",
+export const metadata = pageMetadata({
+  title: "404",
   description: "Page not found.",
-};
+});
 
 const ART = [
   "██╗  ██╗ ██████╗ ██╗  ██╗",

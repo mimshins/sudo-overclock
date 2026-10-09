@@ -6,6 +6,9 @@ import { PostImages } from "@repo/modules/blog/presentation/post-images";
 import { TableOfContents } from "@repo/modules/blog/presentation/table-of-contents";
 import { notFound } from "next/navigation";
 
+import { articleMetadata } from "../../../metadata.ts";
+import { postPath } from "../../../pages.ts";
+
 import styles from "./post.module.css";
 
 type PostPageProps = {
@@ -21,10 +24,14 @@ export const generateMetadata = async ({ params }: PostPageProps) => {
 
   if (post === null) return {};
 
-  return {
-    title: `${post.frontmatter.title} — sudo-overclock`,
+  return articleMetadata({
+    title: post.frontmatter.title,
     description: post.frontmatter.description,
-  };
+    path: postPath(slug),
+    publishedTime: post.frontmatter.date,
+    author: post.frontmatter.author,
+    tags: post.frontmatter.tags,
+  });
 };
 
 const PostPage = async ({ params }: PostPageProps) => {
