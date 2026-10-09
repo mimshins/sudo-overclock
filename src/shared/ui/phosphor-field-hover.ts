@@ -3,25 +3,41 @@
  *
  * Owns the pointer listeners, the growing hover wave, per-dot state easing,
  * the random pop-in reveal, the wobble refresh cadence, and the lit-layer
- * paint on top of the (session-provided) neutral offscreen layer.
+ * paint on top of the (session-provided) neutral offscreen layer. Without a
+ * hovering pointer (touch screens) the glow follows the rolling swell in
+ * `phosphor-field-ambient.ts` instead.
  */
 
 import {
+  stepAmbient,
+  type AmbientState,
+} from "@repo/shared/ui/phosphor-field-ambient";
+import {
   WAVE_FADE_RATE,
   WAVE_GROWTH_RATE,
+  hoverTarget,
   stepField,
   type DotField,
+  type DotTarget,
+  type HoverSource,
   type Rgb,
-} from "./phosphor-field-core.ts";
-import { renderLitLayer, renderNeutralLayer } from "./phosphor-field-render.ts";
+} from "@repo/shared/ui/phosphor-field-core";
+import {
+  renderLitLayer,
+  renderNeutralLayer,
+} from "@repo/shared/ui/phosphor-field-render";
 import {
   REVEAL_FRAMES,
   createRandomReveal,
   revealStep,
   type RevealState,
-} from "./phosphor-field-reveal.ts";
+} from "@repo/shared/ui/phosphor-field-reveal";
 
 const BASE_REFRESH_INTERVAL = 0.05;
+
+const FINE_POINTER = "(hover: hover) and (pointer: fine)";
+
+const NO_SOURCES: readonly HoverSource[] = [];
 
 type HoverAnimatorOptions = {
   readonly canvas: HTMLCanvasElement;
@@ -30,6 +46,8 @@ type HoverAnimatorOptions = {
   readonly base: Rgb;
   readonly phosphor: Rgb;
   readonly levelColors: readonly string[];
+  /** Swell state owned by the session so rebuilds continue it seamlessly. */
+  readonly ambient: AmbientState;
   /** Blit the offscreen neutral layer onto the visible canvas. */
   readonly onPaint: () => void;
 };
@@ -43,10 +61,13 @@ class HoverAnimator {
   private readonly levelColors: readonly string[];
   private readonly onPaint: () => void;
   private readonly reducedQuery: MediaQueryList;
+  private readonly pointerQuery: MediaQueryList;
   private field: DotField | null = null;
   private width = 0;
   private height = 0;
   private reduced: boolean;
+  private readonly ambient: AmbientState;
+  private swell = false;
   private reveal: RevealState | null = null;
   private hoverX: number | null = null;
   private hoverY: number | null = null;
@@ -62,12 +83,20 @@ class HoverAnimator {
     this.base = options.base;
     this.phosphor = options.phosphor;
     this.levelColors = options.levelColors;
+    this.ambient = options.ambient;
     this.onPaint = options.onPaint;
     this.reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     this.reduced = this.reducedQuery.matches;
+    this.pointerQuery = window.matchMedia(FINE_POINTER);
   }
 
-  start(field: DotField | null, width: number, height: number): void {
+  /** `reveal` pops the dots in at random; otherwise they show at once. */
+  start(
+    field: DotField | null,
+    width: number,
+    height: number,
+    reveal: boolean,
+  ): void {
     this.stop();
     this.field = field;
     this.width = width;
@@ -79,7 +108,7 @@ class HoverAnimator {
 
     this.baseContext.clearRect(0, 0, width, height);
     this.reveal =
-      field !== null && !this.reduced
+      field !== null && reveal && !this.reduced
         ? createRandomReveal(field.state.length, field.active, field.blocked)
         : null;
     if (field !== null && this.reveal === null) {
@@ -87,10 +116,8 @@ class HoverAnimator {
     }
     if (field === null) return;
 
-    window.addEventListener("pointermove", this.onPointerMove, {
-      passive: true,
-    });
-    window.addEventListener("pointerleave", this.onPointerLeave);
+    this.followPointer(this.pointerQuery.matches);
+    this.pointerQuery.addEventListener("change", this.onPointerChange);
     this.reducedQuery.addEventListener("change", this.onReducedChange);
 
     this.last = performance.now();
@@ -100,9 +127,45 @@ class HoverAnimator {
   stop(): void {
     if (this.frame !== 0) cancelAnimationFrame(this.frame);
     this.frame = 0;
+    this.unfollowPointer();
+    this.pointerQuery.removeEventListener("change", this.onPointerChange);
+    this.reducedQuery.removeEventListener("change", this.onReducedChange);
+  }
+
+  private followPointer(fine: boolean): void {
+    this.unfollowPointer();
+    this.hoverX = null;
+    this.hoverY = null;
+
+    this.swell = !fine;
+    if (this.swell) return;
+
+    window.addEventListener("pointermove", this.onPointerMove, {
+      passive: true,
+    });
+    window.addEventListener("pointerleave", this.onPointerLeave);
+  }
+
+  private unfollowPointer(): void {
     window.removeEventListener("pointermove", this.onPointerMove);
     window.removeEventListener("pointerleave", this.onPointerLeave);
-    this.reducedQuery.removeEventListener("change", this.onReducedChange);
+  }
+
+  private glowTarget(dt: number): DotTarget {
+    if (this.swell) {
+      return stepAmbient(this.ambient, dt, this.width, this.height);
+    }
+    return hoverTarget(this.hoverSources(dt));
+  }
+
+  private hoverSources(dt: number): readonly HoverSource[] {
+    if (this.hoverX !== null && this.hoverY !== null) {
+      this.wave = Math.min(1, this.wave + dt * WAVE_GROWTH_RATE);
+      return [{ x: this.hoverX, y: this.hoverY, wave: this.wave }];
+    }
+
+    this.wave = Math.max(0, this.wave - dt * WAVE_FADE_RATE);
+    return NO_SOURCES;
   }
 
   private paintNeutral(now: number): void {
@@ -138,6 +201,9 @@ class HoverAnimator {
   private readonly onReducedChange = (event: MediaQueryListEvent): void => {
     this.reduced = event.matches;
   };
+  private readonly onPointerChange = (event: MediaQueryListEvent): void => {
+    this.followPointer(event.matches);
+  };
 
   private readonly tick = (now: number): void => {
     const dt = Math.min(0.05, (now - this.last) / 1000);
@@ -153,12 +219,7 @@ class HoverAnimator {
     const revealPending = reveal !== null && reveal.index < reveal.total;
     const mask = this.reveal?.mask ?? null;
 
-    if (this.hoverX !== null && this.hoverY !== null) {
-      this.wave = Math.min(1, this.wave + dt * WAVE_GROWTH_RATE);
-    } else {
-      this.wave = Math.max(0, this.wave - dt * WAVE_FADE_RATE);
-    }
-    stepField(field, dt, this.wave, this.hoverX, this.hoverY);
+    stepField(field, dt, this.glowTarget(dt));
 
     let refresh = false;
     if (field.wobble > 0) {

@@ -1,8 +1,33 @@
-import type { DotField, Rgb } from "./phosphor-field-core.ts";
+import type { DotField, Rgb } from "@repo/shared/ui/phosphor-field-core";
 
 type FieldRender = "emit" | "ink";
 
+const FALLBACK_BASE: Rgb = [140, 140, 140];
+const FALLBACK_PHOSPHOR: Rgb = [0, 255, 156];
+
 const RENDER_PROPERTY = "--phosphor-field-render";
+
+const parseRgb = (value: string): Rgb | null => {
+  const match = /(\d+),\s*(\d+),\s*(\d+)/u.exec(value);
+  if (match === null) return null;
+  return [Number(match[1]), Number(match[2]), Number(match[3])];
+};
+
+const resolveToken = (name: string, fallback: Rgb): Rgb => {
+  if (typeof document === "undefined") return fallback;
+
+  const probe = document.createElement("span");
+  probe.style.color = `var(${name})`;
+  probe.style.position = "fixed";
+  probe.style.opacity = "0";
+  probe.style.pointerEvents = "none";
+  document.body.append(probe);
+
+  const color = getComputedStyle(probe).color;
+  probe.remove();
+
+  return parseRgb(color) ?? fallback;
+};
 
 const fieldRender = (): FieldRender =>
   getComputedStyle(document.documentElement)
@@ -36,5 +61,12 @@ const inkFromLuminance = (field: DotField, ink: Rgb, gain: number): void => {
   }
 };
 
-export { fieldRender, inkFromLuminance, RENDER_PROPERTY };
+export {
+  FALLBACK_BASE,
+  FALLBACK_PHOSPHOR,
+  fieldRender,
+  inkFromLuminance,
+  RENDER_PROPERTY,
+  resolveToken,
+};
 export type { FieldRender };

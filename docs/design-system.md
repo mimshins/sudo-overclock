@@ -187,7 +187,11 @@ mark).
   globally in `globals.css`; **JS/canvas motion must check the media query
   itself** (as `PhosphorField` does) and stop animating, not just shorten.
 - Loading affordances (the image sheen, `--duration-loading`) are the only
-  allowed long-running animation and must stop under reduced motion.
+  allowed long-running animation and must stop under reduced motion. The one
+  exception is the background itself: `PhosphorField`'s slow drift and, on touch
+  screens, its rolling swell (one slow crest sweeping across every few seconds,
+  never a flicker). Both stop under reduced motion
+  ([ADR-019](../decisions/ADR-019-touch-rolling-swell.md)).
 - Glitch is one-shot: `.glitch-on-hover` (on hover) and `.glitch-once` (on first
   render) play `@keyframes glitch` over `--duration-normal` with `steps(2)`.
 
@@ -258,19 +262,19 @@ Rules:
 
 ## Patterns
 
-| Pattern          | How it is built today                                                                                                       | Rule                                                                                                         |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| ASCII affordance | Bracketed lowercase labels: `[ home ]`, `[ read the blog ]`, `[ copy ]` → `[ copied ]`                                      | All actions and nav links; lowercase; one space inside brackets                                              |
-| Leader           | `Leader` primitive: `──── name.md ────` — rules in tertiary ink, the label a bold phosphor tab (`--color-on-phosphor`)      | Page and section heads (`as="h2"` for sections); filename-style label, written lowercase (CSS uppercases it) |
-| Floating button  | Soft `Button` (`variant="soft"`): frosted raised fill, no border; hover frosts with the tint; pressed is inverse video      | Bracketed actions that sit on content or the field (CTAs, sort, `[ copy ]`); bars stay text-only             |
-| Prompt glyph     | `>` before the brand and the active TOC item                                                                                | Marks "current"/"command"; `aria-hidden`                                                                     |
-| Tag chip         | `Tag`: borderless pill with the floating button's frosted fill and hover; the active chip is inverse video (`aria-pressed`) | Filters and taxonomy only                                                                                    |
-| Glitch           | Button hover chromatic shift; `.glitch-once` / `.glitch-on-hover` utilities                                                 | Button hover, the 404 heading, future hero/header moments; one-shot, never looping                           |
-| Scanlines        | `.scanlines` utility (`::after` gradient overlay, `--scanline-*`)                                                           | Hero and error surfaces only (today: 404); never behind long-form reading                                    |
-| Glow             | `Heading glow` (headings), `.phosphor-glow` utility (other text)                                                            | Emphasis on one element per view; never on body text or long-form reading                                    |
-| Glass panel      | Post cards, about/reading panels: `--color-glass-surface` (90% elevated) + `--glass-filter`; dividers use `--color-divider` | Use the tokens; never mix your own translucency                                                              |
-| Phosphor field   | `PhosphorField` canvas: procedural (home) or image-sampled (blog/about/reading)                                             | Background only; one per page; `glowOnHover` only where the page is mostly empty                             |
-| Code             | `CodeBlock` / Shiki frames on `--color-background-elevated`, soft `[ copy ]` button (inverse once copied)                   | Every fence has a language                                                                                   |
+| Pattern          | How it is built today                                                                                                         | Rule                                                                                                         |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| ASCII affordance | Bracketed lowercase labels: `[ home ]`, `[ read the blog ]`, `[ copy ]` → `[ copied ]`                                        | All actions and nav links; lowercase; one space inside brackets                                              |
+| Leader           | `Leader` primitive: `──── name.md ────` — rules in tertiary ink, the label a bold phosphor tab (`--color-on-phosphor`)        | Page and section heads (`as="h2"` for sections); filename-style label, written lowercase (CSS uppercases it) |
+| Floating button  | Soft `Button` (`variant="soft"`): frosted raised fill, no border; hover frosts with the tint; pressed is inverse video        | Bracketed actions that sit on content or the field (CTAs, sort, `[ copy ]`); bars stay text-only             |
+| Prompt glyph     | `>` before the brand and the active TOC item                                                                                  | Marks "current"/"command"; `aria-hidden`                                                                     |
+| Tag chip         | `Tag`: borderless pill with the floating button's frosted fill and hover; the active chip is inverse video (`aria-pressed`)   | Filters and taxonomy only                                                                                    |
+| Glitch           | Button hover chromatic shift; `.glitch-once` / `.glitch-on-hover` utilities                                                   | Button hover, the 404 heading, future hero/header moments; one-shot, never looping                           |
+| Scanlines        | `.scanlines` utility (`::after` gradient overlay, `--scanline-*`)                                                             | Hero and error surfaces only (today: 404); never behind long-form reading                                    |
+| Glow             | `Heading glow` (headings), `.phosphor-glow` utility (other text)                                                              | Emphasis on one element per view; never on body text or long-form reading                                    |
+| Glass panel      | Post cards, about/reading panels: `--color-glass-surface` (90% elevated) + `--glass-filter`; dividers use `--color-divider`   | Use the tokens; never mix your own translucency                                                              |
+| Phosphor field   | `PhosphorField` canvas: procedural (home) or image-sampled (blog/about/reading); touch screens get a rolling swell, not hover | Background only; one per page; `glowOnHover` only where the page is mostly empty                             |
+| Code             | `CodeBlock` / Shiki frames on `--color-background-elevated`, soft `[ copy ]` button (inverse once copied)                     | Every fence has a language                                                                                   |
 
 Seven shared primitives (`Blockquote`, `CodeBlock`, `InlineCode`, `Kbd`, `Lead`,
 `List`, `Paragraph`) are currently unused by the app because post prose styles

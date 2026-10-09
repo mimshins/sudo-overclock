@@ -36,10 +36,29 @@ context/DI wired in `app/`).
 | `CodeBlock`         | `language`, `filename`                                                                                                         | Framed `<pre>` with optional header chips                                          |
 | `Blockquote`        | `cite`                                                                                                                         | Quote with a phosphor marker (`aria-hidden`) and nesting support                   |
 | `List` / `ListItem` | `ordered`, `tight`, `as`                                                                                                       | `ul`/`ol` and `li` wrappers; both polymorphic                                      |
-| `PhosphorField`     | `src`, `glowOnHover`                                                                                                           | Client canvas dot field (procedural or image)                                      |
+| `PhosphorField`     | `src`, `glowOnHover`                                                                                                           | Client canvas dot field (procedural or image); see notes below                     |
 
 All primitives are polymorphic where it makes sense and expose a
 `data-slot="<name>"` hook.
+
+`PhosphorField` notes:
+
+- **`src`** is preloaded from the document head (`react-dom` `preload`) and
+  decoded once per page load; remounts (client navigation, theme changes) reuse
+  the decoded image and its grid samples.
+- **Resizes** are coalesced (150ms settle). A container that only gets shorter
+  at the same width (a mobile toolbar sliding in) skips the rebuild and crops
+  the existing field with `object-fit: cover`; any other change rebuilds at the
+  new size. A real rebuild keeps every surviving dot in place (dot traits are
+  seeded by grid position) and never replays the pop-in reveal, which plays once
+  per mount.
+- **`glowOnHover`** follows a fine hovering pointer
+  (`(hover: hover) and (pointer: fine)`). Elsewhere (touch screens) a rolling
+  swell lights the dots instead: a bending crest sweeps across the field about
+  every 7.5s, each dot lights within its own reach of the crest, and the usual
+  easing leaves an afterglow. The swell belongs to the session, so resizes and
+  theme changes continue it rather than restarting it. Reduced motion turns both
+  off.
 
 ### Blog components — `src/modules/blog/presentation/`
 

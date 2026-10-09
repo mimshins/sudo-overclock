@@ -7,8 +7,8 @@
  * neutral layer at a low cadence so each dot's wave offset moves.
  */
 
-import type { DotField, Rgb } from "./phosphor-field-core.ts";
-import { renderNeutralRows } from "./phosphor-field-render.ts";
+import type { DotField, Rgb } from "@repo/shared/ui/phosphor-field-core";
+import { renderNeutralRows } from "@repo/shared/ui/phosphor-field-render";
 
 const REFRESH_INTERVAL = 0.05;
 const REVEAL_FRAMES = 24;
@@ -63,6 +63,8 @@ type StaticAnimatorOptions = {
   readonly width: number;
   readonly height: number;
   readonly base: Rgb;
+  /** Pop the dots in at random; otherwise they show at once. */
+  readonly reveal: boolean;
   /** Called after each repaint so the caller can blit the base layer. */
   readonly onPaint: () => void;
 };
@@ -81,18 +83,16 @@ class StaticAnimator {
   private baseAccum = 0;
 
   constructor(options: StaticAnimatorOptions) {
-    const { context, field, width, height, base, onPaint } = options;
+    const { context, field, width, height, base, reveal, onPaint } = options;
     this.context = context;
     this.field = field;
     this.width = width;
     this.height = height;
     this.base = base;
     this.onPaint = onPaint;
-    this.reveal = createRandomReveal(
-      field.state.length,
-      field.active,
-      field.blocked,
-    );
+    this.reveal = reveal
+      ? createRandomReveal(field.state.length, field.active, field.blocked)
+      : null;
   }
 
   start(): void {

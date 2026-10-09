@@ -8,7 +8,7 @@
  * Both add a slow sinusoidal wobble to each dot position.
  */
 
-import type { DotField, Rgb } from "./phosphor-field-core.ts";
+import type { DotField, Rgb } from "@repo/shared/ui/phosphor-field-core";
 
 const STEP_COUNT = 6;
 

@@ -6,6 +6,7 @@ import {
   IMAGE_STYLE,
   PROCEDURAL_STYLE,
   createDotField,
+  hoverTarget,
   stepField,
   type DotField,
 } from "./phosphor-field-core.ts";
@@ -46,6 +47,22 @@ describe("createDotField", () => {
     assert.deepEqual(Array.from(a.active), Array.from(b.active));
     assert.deepEqual(Array.from(a.blocked), Array.from(b.blocked));
     assert.deepEqual(Array.from(a.radius), Array.from(b.radius));
+  });
+
+  it("keeps each surviving dot's traits when the field is resized", () => {
+    const narrow = createDotField(160, 80, PROCEDURAL_STYLE, null)!;
+    const wide = createDotField(320, 120, PROCEDURAL_STYLE, null)!;
+
+    for (let row = 0; row < narrow.rows; row += 1) {
+      for (let col = 0; col < narrow.cols; col += 1) {
+        const a = row * narrow.cols + col;
+        const b = row * wide.cols + col;
+        assert.equal(narrow.active[a], wide.active[b]);
+        assert.equal(narrow.size[a], wide.size[b]);
+        assert.equal(narrow.offsetX[a], wide.offsetX[b]);
+        assert.equal(narrow.radius[a], wide.radius[b]);
+      }
+    }
   });
 
   it("stays within the configured grid for procedural dots", () => {
@@ -148,7 +165,7 @@ describe("stepField", () => {
     assert.ok(lit !== -1 && blocked !== -1);
 
     const [px, py] = dotCenter(field, lit);
-    stepField(field, 10, 1, px, py);
+    stepField(field, 10, hoverTarget([{ x: px, y: py, wave: 1 }]));
 
     assert.equal(field.state[lit], 1);
     assert.equal(field.state[blocked], 0);

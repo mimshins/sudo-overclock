@@ -1,4 +1,6 @@
 /** PhosphorField core — pure dot-field generation and hover easing. No DOM. */
+import { mulberry32 } from "@repo/shared/lib/random";
+
 export type Rgb = readonly [number, number, number];
 
 export type FieldStyle = {
@@ -47,6 +49,19 @@ export type DotField = {
   readonly fill: string[] | null;
 };
 
+/**
+ * Whether the dot at (x, y) should light: 1 lights it, 0 lets it decay. `reach`
+ * is the dot's own jittered radius, so edges dither.
+ */
+export type DotTarget = (x: number, y: number, reach: number) => number;
+
+/** A point that lights the dots within `wave` × each dot's radius of it. */
+export type HoverSource = {
+  readonly x: number;
+  readonly y: number;
+  readonly wave: number;
+};
+
 /** Raw RGBA pixels (stride 4) of a source image at dot-grid resolution. */
 export type ImageSource = {
   readonly width: number;
@@ -59,8 +74,7 @@ const FALL_RATE = 2.4;
 const WAVE_GROWTH_RATE = 2.8;
 const WAVE_FADE_RATE = 1.6;
 
-const FALLBACK_BASE: Rgb = [140, 140, 140];
-const FALLBACK_PHOSPHOR: Rgb = [0, 255, 156];
+const FIELD_SEED = 0x5eed;
 
 /** Look of the home page field: sparse dithered neutral mask. */
 export const PROCEDURAL_STYLE: FieldStyle = {
@@ -94,38 +108,16 @@ export const IMAGE_STYLE: FieldStyle = {
   wobble: 1.2,
 };
 
-const mulberry32 = (seed: number) => {
-  let a = seed >>> 0;
-  return (): number => {
-    a += 0x6d2b79f5;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-};
-
-const parseRgb = (value: string): Rgb | null => {
-  const match = /(\d+),\s*(\d+),\s*(\d+)/u.exec(value);
-  if (match === null) return null;
-  return [Number(match[1]), Number(match[2]), Number(match[3])];
-};
-
-const resolveToken = (name: string, fallback: Rgb): Rgb => {
-  if (typeof document === "undefined") return fallback;
-
-  const probe = document.createElement("span");
-  probe.style.color = `var(${name})`;
-  probe.style.position = "fixed";
-  probe.style.opacity = "0";
-  probe.style.pointerEvents = "none";
-  document.body.append(probe);
-
-  const color = getComputedStyle(probe).color;
-  probe.remove();
-
-  return parseRgb(color) ?? fallback;
-};
+/**
+ * Each cell draws its traits from a generator seeded by its grid position, so a
+ * resized field keeps every dot that survives the resize exactly in place.
+ */
+const cellRandom = (col: number, row: number): (() => number) =>
+  mulberry32(
+    Math.imul(col + 1, 0x9e3779b1) ^
+      Math.imul(row + 1, 0x85ebca6b) ^
+      FIELD_SEED,
+  );
 
 /**
  * Sample a dot's cell colour into rgb/fill. `image` is the cover-cropped photo
@@ -186,7 +178,6 @@ const allocateField = (count: number, sampled: boolean): FieldBuffers => ({
 
 const populateField = (
   buffers: FieldBuffers,
-  random: () => number,
   style: FieldStyle,
   image: ImageSource | null,
   cols: number,
@@ -204,6 +195,7 @@ const populateField = (
   } = buffers;
 
   for (let i = 0; i < buffers.state.length; i += 1) {
+    const random = cellRandom(i % cols, Math.trunc(i / cols));
     if (random() < style.skip) continue;
 
     active[i] = 1;
@@ -240,7 +232,7 @@ const createDotField = (
   if (count === 0) return null;
 
   const buffers = allocateField(count, image !== null);
-  populateField(buffers, mulberry32(0x5eed), style, image, cols);
+  populateField(buffers, style, image, cols);
 
   return {
     cols,
@@ -251,13 +243,22 @@ const createDotField = (
   };
 };
 
-const stepField = (
-  field: DotField,
-  dt: number,
-  wave: number,
-  hoverX: number | null,
-  hoverY: number | null,
-): void => {
+const NO_TARGET: DotTarget = () => 0;
+
+const hoverTarget = (sources: readonly HoverSource[]): DotTarget =>
+  sources.length === 0
+    ? NO_TARGET
+    : (x, y, reach) => {
+        for (const source of sources) {
+          const dx = source.x - x;
+          const dy = source.y - y;
+          const radius = reach * source.wave;
+          if (dx * dx + dy * dy <= radius * radius) return 1;
+        }
+        return 0;
+      };
+
+const stepField = (field: DotField, dt: number, target: DotTarget): void => {
   const { cols, active, blocked, state } = field;
 
   for (let i = 0; i < state.length; i += 1) {
@@ -268,26 +269,17 @@ const stepField = (
     const px = col * field.pitch + field.offsetX[i]!;
     const py = row * field.pitch + field.offsetY[i]!;
 
-    let target = 0;
-    if (hoverX !== null && hoverY !== null) {
-      const dx = hoverX - px;
-      const dy = hoverY - py;
-      const reach = field.radius[i]! * wave;
-      if (dx * dx + dy * dy <= reach * reach) target = 1;
-    }
-
-    const rate = target === 1 ? RISE_RATE : FALL_RATE;
-    const next = state[i]! + (target - state[i]!) * Math.min(1, rate * dt);
+    const goal = target(px, py, field.radius[i]!);
+    const rate = goal === 1 ? RISE_RATE : FALL_RATE;
+    const next = state[i]! + (goal - state[i]!) * Math.min(1, rate * dt);
     state[i] = next < 0.002 ? 0 : next > 0.998 ? 1 : next;
   }
 };
 
 export {
-  FALLBACK_BASE,
-  FALLBACK_PHOSPHOR,
   WAVE_FADE_RATE,
   WAVE_GROWTH_RATE,
   createDotField,
-  resolveToken,
+  hoverTarget,
   stepField,
 };

@@ -5,35 +5,45 @@
  * controllers: a HoverAnimator when `glowOnHover` (home, random pop-in reveal
  * + pointer glow + drift) or a StaticAnimator when off (blog, random pop-in
  * + drift, no glow).
+ *
+ * Resizes are coalesced and cheap: a container that only gets shorter at the
+ * same width (a mobile browser's toolbar sliding in) skips the rebuild and
+ * crops the bitmap via `object-fit`, and a rebuild never replays the pop-in.
  */
 
+import { createAmbient } from "@repo/shared/ui/phosphor-field-ambient";
 import {
-  FALLBACK_BASE,
-  FALLBACK_PHOSPHOR,
   IMAGE_STYLE,
   PROCEDURAL_STYLE,
   createDotField,
-  resolveToken,
   type DotField,
-  type ImageSource,
   type Rgb,
-} from "./phosphor-field-core.ts";
-import { HoverAnimator } from "./phosphor-field-hover.ts";
-import { loadImage, sampleImage } from "./phosphor-field-image.ts";
+} from "@repo/shared/ui/phosphor-field-core";
+import { HoverAnimator } from "@repo/shared/ui/phosphor-field-hover";
 import {
+  requestImage,
+  sampleImage,
+  type CachedImage,
+} from "@repo/shared/ui/phosphor-field-image";
+import {
+  FALLBACK_BASE,
+  FALLBACK_PHOSPHOR,
   fieldRender,
   inkFromLuminance,
+  resolveToken,
   type FieldRender,
-} from "./phosphor-field-ink.ts";
+} from "@repo/shared/ui/phosphor-field-ink";
 import {
   buildLevelColors,
   renderNeutralRows,
-} from "./phosphor-field-render.ts";
-import { StaticAnimator } from "./phosphor-field-reveal.ts";
+} from "@repo/shared/ui/phosphor-field-render";
+import { StaticAnimator } from "@repo/shared/ui/phosphor-field-reveal";
 
 const MAX_DPR = 2;
 
 const INK_GAIN = 2.4;
+
+const RESIZE_SETTLE_MS = 150;
 
 class PhosphorSession {
   private readonly canvas: HTMLCanvasElement;
@@ -47,9 +57,9 @@ class PhosphorSession {
   private render: FieldRender;
   private readonly reducedQuery: MediaQueryList;
   private readonly observer: ResizeObserver;
-  private readonly src: string | null;
-  private readonly image: HTMLImageElement | null = null;
+  private readonly image: CachedImage | null;
   private readonly glowOnHover: boolean;
+  private readonly ambient = createAmbient();
   private reduced: boolean;
   private dpr = 1;
   private field: DotField | null = null;
@@ -57,8 +67,9 @@ class PhosphorSession {
   private animator: StaticAnimator | null = null;
   private width = 0;
   private height = 0;
-  private imageReady = false;
   private imageFailed = false;
+  private revealed = false;
+  private resizeTimer = 0;
   private disposed = false;
 
   constructor(
@@ -74,7 +85,6 @@ class PhosphorSession {
     this.canvas = canvas;
     this.context = context;
     this.container = container;
-    this.src = src;
     this.glowOnHover = glowOnHover;
     const phosphor = resolveToken("--color-phosphor", FALLBACK_PHOSPHOR);
     this.base = resolveToken("--color-foreground-tertiary", FALLBACK_BASE);
@@ -90,17 +100,21 @@ class PhosphorSession {
     this.reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     this.reduced = this.reducedQuery.matches;
     this.observer = new ResizeObserver(() => {
-      this.layout();
+      this.scheduleResize();
     });
-    if (src !== null) this.image = this.attachImage(src);
+    this.image = src === null ? null : this.attachImage(src);
   }
 
-  private attachImage(src: string): HTMLImageElement {
-    return loadImage(src, (success: boolean): void => {
-      this.imageReady = success;
-      this.imageFailed = !success;
-      if (!this.disposed) this.layout();
-    });
+  private attachImage(src: string): CachedImage {
+    const entry = requestImage(src);
+    if (entry.image() === null) void this.awaitImage(entry);
+    return entry;
+  }
+
+  private async awaitImage(entry: CachedImage): Promise<void> {
+    const image = await entry.ready;
+    this.imageFailed = image === null;
+    if (!this.disposed) this.layout();
   }
 
   start(): void {
@@ -120,6 +134,7 @@ class PhosphorSession {
 
   stop(): void {
     this.disposed = true;
+    this.cancelResize();
     this.reducedQuery.removeEventListener("change", this.onReducedChange);
     this.dropHover();
     this.animator?.stop();
@@ -127,8 +142,30 @@ class PhosphorSession {
     this.observer.disconnect();
   }
 
+  private cancelResize(): void {
+    window.clearTimeout(this.resizeTimer);
+    this.resizeTimer = 0;
+  }
+
+  private scheduleResize(): void {
+    window.clearTimeout(this.resizeTimer);
+    this.resizeTimer = window.setTimeout(
+      this.onResizeSettled,
+      RESIZE_SETTLE_MS,
+    );
+  }
+
+  private readonly onResizeSettled = (): void => {
+    this.resizeTimer = 0;
+    const width = this.container.clientWidth;
+    const height = this.container.clientHeight;
+    if (width === this.width && height <= this.height) return;
+    this.layout();
+  };
+
   private layout(): void {
     if (this.disposed) return;
+    this.cancelResize();
 
     this.dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
     this.width = this.container.clientWidth;
@@ -144,11 +181,14 @@ class PhosphorSession {
 
     this.rebuildField();
 
+    const reveal = !this.revealed && this.field !== null;
+    if (reveal) this.revealed = true;
+
     if (this.glowOnHover && !this.reduced) {
-      this.startInteractive();
+      this.startInteractive(reveal);
     } else {
       this.dropHover();
-      this.startStatic();
+      this.startStatic(reveal);
     }
   }
 
@@ -162,7 +202,7 @@ class PhosphorSession {
     this.hover = null;
   }
 
-  private startInteractive(): void {
+  private startInteractive(reveal: boolean): void {
     this.hover ??= new HoverAnimator({
       canvas: this.canvas,
       context: this.context,
@@ -170,14 +210,15 @@ class PhosphorSession {
       base: this.base,
       phosphor: this.phosphor,
       levelColors: this.levelColors,
+      ambient: this.ambient,
       onPaint: (): void => {
         this.composite();
       },
     });
-    this.hover.start(this.field, this.width, this.height);
+    this.hover.start(this.field, this.width, this.height, reveal);
   }
 
-  private startStatic(): void {
+  private startStatic(reveal: boolean): void {
     this.animator?.stop();
     this.animator = null;
     this.baseContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -208,6 +249,7 @@ class PhosphorSession {
       width: this.width,
       height: this.height,
       base: this.base,
+      reveal,
       onPaint: (): void => {
         this.composite();
       },
@@ -225,7 +267,7 @@ class PhosphorSession {
   }
 
   private rebuildField(): void {
-    if (this.src === null || this.imageFailed) {
+    if (this.image === null || this.imageFailed) {
       this.field = createDotField(
         this.width,
         this.height,
@@ -235,25 +277,16 @@ class PhosphorSession {
       return;
     }
 
-    if (!this.imageReady || this.image === null) {
-      this.field = null;
-      return;
-    }
-
-    const gridCols = Math.max(1, Math.ceil(this.width / IMAGE_STYLE.pitch));
-    const gridRows = Math.max(1, Math.ceil(this.height / IMAGE_STYLE.pitch));
-    const data = sampleImage(this.image, gridCols, gridRows);
-    if (data === null) {
-      this.field = null;
-      return;
-    }
-
-    const source: ImageSource = {
-      width: gridCols,
-      height: gridRows,
-      data,
-    };
-    const field = createDotField(this.width, this.height, IMAGE_STYLE, source);
+    const source = sampleImage(
+      this.image,
+      this.width,
+      this.height,
+      IMAGE_STYLE.pitch,
+    );
+    const field =
+      source === null
+        ? null
+        : createDotField(this.width, this.height, IMAGE_STYLE, source);
 
     if (field !== null && this.render === "ink") {
       inkFromLuminance(field, this.phosphor, INK_GAIN);

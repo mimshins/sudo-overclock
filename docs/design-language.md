@@ -60,7 +60,11 @@ silently redefining the identity; identity decisions are ADRs
    like screen refreshes, not jelly. **All motion respects
    `prefers-reduced-motion: reduce`** — CSS animations and transitions are
    neutralized by an `@media` block in `globals.css`, and JS/canvas motion
-   checks the media query itself. Static glow is not motion and stays.
+   checks the media query itself. Static glow is not motion and stays. The one
+   exception is the background `PhosphorField`: its slow drift and, on touch
+   screens, its rolling swell are continuous, eased motion
+   ([ADR-019](../decisions/ADR-019-touch-rolling-swell.md)). It applies to the
+   background field only and still stops under reduced motion.
 
 ## Component Conventions
 

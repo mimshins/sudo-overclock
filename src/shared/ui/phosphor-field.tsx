@@ -7,13 +7,14 @@
  * No `src` keeps the procedural home-page look; passing a `src` turns the
  * field into a pointillist sampling of that photo (blog page). Set
  * `glowOnHover` to false to render the field statically without the pointer
- * light-up.
+ * light-up. The `src` is preloaded from the document head so the photo is
+ * usually decoded by the time the canvas mounts.
  */
 
 import { cx } from "@repo/shared/lib/cx";
+import { PhosphorSession } from "@repo/shared/ui/phosphor-field-session";
 import { useEffect, useRef } from "react";
-
-import { PhosphorSession } from "./phosphor-field-session.ts";
+import { preload } from "react-dom";
 
 import styles from "./phosphor-field.module.css";
 
@@ -30,6 +31,8 @@ const PhosphorField = ({
   glowOnHover = true,
 }: PhosphorFieldProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  if (src !== undefined) preload(src, { as: "image" });
 
   useEffect(() => {
     const canvas = canvasRef.current;
