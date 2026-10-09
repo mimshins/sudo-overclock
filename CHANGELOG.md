@@ -1,5 +1,30 @@
 # sudo-overclock
 
+## 0.3.0
+
+### Minor Changes
+
+- [`aa4168a`](https://github.com/mimshins/sudo-overclock/commit/aa4168a7373c91d1caeca35d33068371312d9ad0) Thanks [@mimshins](https://github.com/mimshins)! - Give every page its own Open Graph and Twitter metadata (title, description,
+  canonical URL, `article` details for posts) and a build-time 1200×630 share card
+  at `<path>og.png`, drawn as phosphor dots from the page's background.
+  Tag links in pages, the sitemap, and `llms.txt` are now percent-encoded, so a
+  tag with a reserved character such as `#` keeps its URL intact.
+
+- [`1e2cc82`](https://github.com/mimshins/sudo-overclock/commit/1e2cc829a0d4c1c9420be0f39c973033d7b61db4) Thanks [@mimshins](https://github.com/mimshins)! - Make the phosphor background cheaper and touch-aware. Resizing no longer
+  rebuilds the whole field. Bursts are coalesced, a container that only gets
+  shorter (a mobile toolbar sliding in) keeps its dots, and a real rebuild keeps
+  the surviving dots in place without replaying the pop-in. Background photos are
+  preloaded and decoded once per visit, so navigating back or switching theme
+  reuses them. On touch screens, where there is no hover, a slow phosphor swell
+  now rolls across the background instead.
+
+### Patch Changes
+
+- [`8a965b2`](https://github.com/mimshins/sudo-overclock/commit/8a965b2fd61bf61f0a76743f1c9bded71ab44782) Thanks [@mimshins](https://github.com/mimshins)! - Give the about and reading pages backgrounds of their own, both generated
+  procedurally: a phosphor fingerprint mid-scan (`whoami`) for about, and an open
+  book with the line being read in inverse video for reading. The blog
+  background is re-encoded at less than half its previous size.
+
 ## 0.2.1
 
 ### Patch Changes
