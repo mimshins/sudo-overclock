@@ -222,6 +222,16 @@ runtime JS for the highlight itself.
   reset; not for utility classes.
 - **CSS Modules** — primary styling solution for components.
 - **BaseUI** — component library for UI primitives.
+- **Vendor prefixes are generated, never hand-written.** The Next build runs
+  every stylesheet (CSS Modules included) through Lightning CSS against the
+  `browserslist` targets pinned in `package.json`: Next's own "baseline widely
+  available" defaults, kept in step by `src/app/browser-targets.test.ts`, which
+  fails after a Next upgrade moves them so the change is a deliberate edit.
+  Write standard properties only; stylelint (`property-no-vendor-prefix`,
+  `value-no-vendor-prefix`) rejects hand-written prefixes, except non-standard
+  properties with no unprefixed form (`-webkit-font-smoothing`). No
+  autoprefixer: Tailwind's PostCSS plugin skips files without Tailwind at-rules,
+  and the build already prefixes the rest.
 
 ### Token Naming
 

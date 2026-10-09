@@ -9,7 +9,6 @@
   border: var(--border-width-thin) solid transparent;
   border-radius: var(--radius-full);
   background-color: var(--tag-background);
-  -webkit-backdrop-filter: var(--glass-filter);
   backdrop-filter: var(--glass-filter);
   font-family: var(--font-mono);
   font-size: var(--text-caption);

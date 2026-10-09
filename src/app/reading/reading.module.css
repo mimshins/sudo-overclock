@@ -43,7 +43,6 @@
   border: var(--border-width-thin) solid var(--color-border-primary);
   border-radius: var(--radius-none);
   background-color: var(--color-glass-surface);
-  -webkit-backdrop-filter: var(--glass-filter);
   backdrop-filter: var(--glass-filter);
   padding: var(--spacing-md);
 }

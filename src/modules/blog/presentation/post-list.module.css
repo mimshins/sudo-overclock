@@ -22,7 +22,6 @@
   border: var(--border-width-thin) solid var(--card-border-color);
   border-radius: var(--radius-none);
   background-color: var(--card-background);
-  -webkit-backdrop-filter: var(--glass-filter);
   backdrop-filter: var(--glass-filter);
   color: var(--color-foreground);
   text-decoration: none;

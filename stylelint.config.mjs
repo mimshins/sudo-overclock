@@ -14,6 +14,15 @@ const COLOR_FUNCTIONS = [
 /** @type {import("stylelint").Config} */
 export default {
   rules: {
+    "property-no-vendor-prefix": [
+      true,
+      {
+        ignoreProperties: ["font-smoothing", "osx-font-smoothing"],
+        message: property =>
+          `Hand-written "${property}" — the build adds vendor prefixes from the browserslist targets (docs/architecture.md#styling-strategy).`,
+      },
+    ],
+    "value-no-vendor-prefix": true,
     "color-no-hex": true,
     "color-named": "never",
     "function-disallowed-list": [...COLOR_FUNCTIONS, "color-mix"],

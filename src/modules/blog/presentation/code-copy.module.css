@@ -16,7 +16,6 @@
   border: 0;
   border-radius: var(--radius-none);
   background-color: var(--code-copy-background);
-  -webkit-backdrop-filter: var(--glass-filter);
   backdrop-filter: var(--glass-filter);
   font-family: var(--font-mono);
   font-size: var(--text-caption);

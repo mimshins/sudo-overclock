@@ -29,7 +29,6 @@
   border-radius: var(--radius-none);
   border: var(--border-width-thin) solid var(--button-border-color);
   background-color: var(--button-background);
-  -webkit-backdrop-filter: var(--button-backdrop);
   backdrop-filter: var(--button-backdrop);
   cursor: pointer;
   color: var(--button-color);
