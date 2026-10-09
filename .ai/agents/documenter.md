@@ -35,7 +35,7 @@ description: Use when a request or idea must become a spec, RFC, or ADR, or when
 - **Input:** a rough request, an idea, or a change whose knowledge needs
   syncing.
 - **Handoff:** the spec/RFC/ADR to the author for agreement; once agreed, to the
-  implementer.
+  implementer (or designer for UI work).
 
 ## Expected outputs
 

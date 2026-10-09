@@ -14,7 +14,8 @@
   );
   background-size: 200% 100%;
   background-repeat: no-repeat;
-  animation: post-image-sheen 1.6s var(--easing-standard) infinite;
+  animation: post-image-sheen var(--duration-loading) var(--easing-standard)
+    infinite;
 }
 
 .frame[data-loaded],

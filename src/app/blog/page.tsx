@@ -1,6 +1,7 @@
 import { blogServices } from "@repo/modules/blog/presentation/blog-module";
 import { PostFilter } from "@repo/modules/blog/presentation/post-filter";
 import { Heading } from "@repo/shared/ui/heading";
+import { Leader } from "@repo/shared/ui/leader";
 import { PhosphorField } from "@repo/shared/ui/phosphor-field";
 
 import styles from "./blog.module.css";
@@ -24,14 +25,7 @@ const BlogPage = () => {
         src="/blog/bg.jpg"
         glowOnHover={false}
       />
-      <div
-        className={styles.leader}
-        data-slot="leader"
-      >
-        <span className={styles.leaderDash}>&mdash;&mdash;</span>
-        <span className={styles.leaderText}>blog.md</span>
-        <span className={styles.leaderDash}>&mdash;&mdash;</span>
-      </div>
+      <Leader>blog.md</Leader>
       <Heading
         as="h1"
         size="h1"

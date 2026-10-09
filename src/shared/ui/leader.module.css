@@ -1,0 +1,30 @@
+.leader {
+  --leader-size: var(--typography-caption-size);
+  --leader-font-weight: var(--typography-caption-weight);
+  --leader-letter-spacing: 0.15em;
+  --leader-label-color: var(--color-phosphor);
+  --leader-rule-color: var(--color-foreground-muted);
+
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-family: var(--typography-typeface-mono);
+  font-size: var(--leader-size);
+  font-weight: var(--leader-font-weight);
+  letter-spacing: var(--leader-letter-spacing);
+  text-transform: uppercase;
+}
+
+/*
+ * Box-drawing rules join cell to cell only without tracking, so the rule
+ * drops the label's letter-spacing.
+ */
+.rule {
+  color: var(--leader-rule-color);
+  letter-spacing: 0;
+}
+
+.label {
+  color: var(--leader-label-color);
+}

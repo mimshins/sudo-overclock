@@ -24,7 +24,7 @@ identity. Human orientation is [README.md](../../README.md); do not restate it.
 ## Where knowledge lives
 
 - Current behavior and rules: [`docs/`](../../docs/) — architecture, design
-  language, components, authoring, runbook.
+  language, design system, components, authoring, runbook.
 - Why: [`decisions/`](../../decisions/README.md) (ADRs). Proposals:
   [`rfcs/`](../../rfcs/README.md).
 - AI layer (this directory's parent): orientation, skills, agents, templates.

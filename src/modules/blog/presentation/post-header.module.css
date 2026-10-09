@@ -4,24 +4,6 @@
   border-bottom: 1px solid var(--color-border-primary);
 }
 
-.leader {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  font-size: var(--typography-caption-size);
-  color: var(--color-foreground-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-}
-
-.leaderDash {
-  color: var(--color-foreground-muted);
-}
-
-.leaderText {
-  color: var(--color-phosphor);
-}
-
 .title {
   margin: var(--spacing-sm) 0 var(--spacing-xs);
   font-family: var(--font-display);

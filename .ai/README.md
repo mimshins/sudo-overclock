@@ -15,7 +15,7 @@ layer and never contain content.
 
 | Location                | Holds                                               | Test question                                                        |
 | ----------------------- | --------------------------------------------------- | -------------------------------------------------------------------- |
-| `docs/`                 | current behavior, rules, procedures                 | Would a human need it with no AI tooling?                            |
+| `docs/`                 | current behavior, rules, design system, procedures  | Would a human need it with no AI tooling?                            |
 | `decisions/`            | accepted decisions and why (ADRs)                   | Does it record _why_ something was decided?                          |
 | `rfcs/`                 | proposals (`active/`) and closed ones (`archived/`) | Is it proposed, not yet decided?                                     |
 | `.ai/memories/`         | short, present-state orientation for agents         | Does it help an agent decide, without being a contract or procedure? |
@@ -57,6 +57,8 @@ Load only what the task needs.
 
 - [`post-authoring`](./skills/post-authoring/SKILL.md) — run one assisted stage
   of the writing pipeline.
+- [`design-a-feature`](./skills/design-a-feature/SKILL.md) — design UI from the
+  design system and check conformance.
 - [`write-an-rfc`](./skills/write-an-rfc/SKILL.md) — route RFC vs. ADR vs. spec;
   RFC → ADR → archive.
 - [`knowledge-drift-sync`](./skills/knowledge-drift-sync/SKILL.md) — reconcile
@@ -64,15 +66,18 @@ Load only what the task needs.
 
 ### Agents (`agents/`)
 
-Typical flow: documenter (spec/RFC) → implementer → **author review** → reviewer
-(on request) → commit (only when the author asks). Posts: editor ↔ author.
+Typical flow: documenter (spec/RFC) → designer (UI brief, when there is UI) →
+implementer → **author review** → reviewer (on request) → commit (only when the
+author asks). Posts: editor ↔ author.
 
 - [`documenter.md`](./agents/documenter.md) — requests → specs, RFCs, ADRs;
   keeps knowledge in sync.
+- [`designer.md`](./agents/designer.md) — guardian of the design language and
+  design system.
 - [`implementer.md`](./agents/implementer.md) — code + tests to the spec; stops
   for review.
-- [`reviewer.md`](./agents/reviewer.md) — architecture and drift check on
-  request.
+- [`reviewer.md`](./agents/reviewer.md) — architecture, design-system, and drift
+  check on request.
 - [`editor.md`](./agents/editor.md) — lead editor for posts; never takes over
   the voice.
 

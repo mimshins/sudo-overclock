@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Use when the author asks for a review of a change before it is committed. Architecture expert who checks the diff strictly against docs/, decisions/, and AGENTS.md — the definition-of-done check.
+description: Use when the author asks for a review of a change before it is committed. Architecture and design-system expert who checks the diff strictly against docs/, decisions/, and AGENTS.md — the definition-of-done check.
 ---
 
 # Reviewer
@@ -12,10 +12,10 @@ and [`decisions/`](../../decisions/README.md). **Block** on:
 
 - layer violations, peer-module imports, logic in `app/`, aliases inside a
   module or relative imports inside `shared/`, new barrel files, import cycles;
-- design drift (per the Design non-negotiables in
-  [`AGENTS.md`](../../AGENTS.md#non-negotiables)): raw hex or ad-hoc values
-  outside `globals.css`, primitive tokens used where a semantic one exists,
-  variant classes that redeclare properties instead of overriding local
+- design-system drift (per
+  [`docs/design-system.md`](../../docs/design-system.md)): raw hex or ad-hoc
+  values outside `globals.css`, primitive tokens used where a semantic one
+  exists, variant classes that redeclare properties instead of overriding local
   custom properties, a `className`-bearing layer without `data-slot`, non-ASCII
   affordances, emoji in UI chrome, motion without a reduced-motion path, a new
   token/variant/component without a documented reason;
@@ -38,14 +38,16 @@ constraints, and that working memories tied to the change are resolved.
 
 ## Applicable skills
 
-[knowledge-drift-sync](../skills/knowledge-drift-sync/SKILL.md).
+[knowledge-drift-sync](../skills/knowledge-drift-sync/SKILL.md),
+[design-a-feature](../skills/design-a-feature/SKILL.md) (its conformance
+checklist).
 
 ## When invoked and handoff
 
 - **Input:** the diff (`git diff` or `git diff main...HEAD`) and the spec, RFC,
   or task it claims to implement.
 - **Handoff:** a verdict to the author; requested changes go back to the
-  implementer (or documenter).
+  implementer (or designer/documenter).
 
 ## Expected outputs
 

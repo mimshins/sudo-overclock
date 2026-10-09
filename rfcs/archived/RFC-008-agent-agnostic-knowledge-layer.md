@@ -76,7 +76,9 @@ template with a definition of done.
 **Amended on acceptance (2026-10-09, by the author):** RFC-001 is marked
 Implemented with a backfilled ADR-001; a new runtime `dependencies` entry
 requires an ADR; the pre-push hook compiles only when compiled content is
-missing.
+missing. The design-system work requested at the same time (a designer role,
+`docs/design-system.md`, a `design-a-feature` skill) is recorded separately in
+[ADR-010](../../decisions/ADR-010-design-system-foundations.md).
 
 ## Consequences
 

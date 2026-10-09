@@ -40,10 +40,12 @@
     "dev": "next dev",
     "format:fmt": "oxfmt --write",
     "format:lint": "oxlint --fix",
-    "format": "run-p format:fmt format:lint",
+    "format": "run-p format:fmt format:lint format:style",
     "check:format": "oxfmt --check",
-    "check:lint": "run-p check:lint:oxlint check:format",
-    "check:lint:oxlint": "oxlint"
+    "check:lint": "run-p check:lint:oxlint check:lint:style check:format",
+    "check:lint:oxlint": "oxlint",
+    "format:style": "stylelint \"src/**/*.css\" --fix",
+    "check:lint:style": "stylelint \"src/**/*.css\""
   },
   "devDependencies": {
     "@changesets/changelog-github": "^1.0.1",
@@ -72,6 +74,7 @@
     "sharp": "^0.35.4",
     "shiki": "^4.4.3",
     "shx": "^0.4.0",
+    "stylelint": "^17.16.0",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2",

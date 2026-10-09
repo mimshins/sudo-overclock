@@ -26,10 +26,16 @@ _Interfaces, types, ports, or boundaries introduced or changed._
 
 _Schema, frontmatter, content pipeline, or generated-output changes._
 
-## 6. Business Logic / Domain Rules
+## 6. UI / Design (if applicable)
+
+_Which tokens and primitives the feature uses, and any new token, variant, or
+component it needs — each justified against the extension rules in
+`docs/design-system.md`. Run the design conformance checklist there._
+
+## 7. Business Logic / Domain Rules
 
 _Core logic, constraints, error handling._
 
-## 7. Risks & Alternatives (if applicable)
+## 8. Risks & Alternatives (if applicable)
 
 _What could go wrong, and the options considered._

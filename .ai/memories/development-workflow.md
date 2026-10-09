@@ -11,7 +11,8 @@ Commands and troubleshooting: [`docs/runbook.md`](../../docs/runbook.md). The
 contribution flow: [`CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
 - Route the change: architectural or trade-off → spec + RFC
-  ([write-an-rfc](../skills/write-an-rfc/SKILL.md)); otherwise implement
+  ([write-an-rfc](../skills/write-an-rfc/SKILL.md)); UI → design brief
+  ([design-a-feature](../skills/design-a-feature/SKILL.md)); otherwise implement
   directly.
 - Verify: `pnpm check:lint` + `pnpm test`; `pnpm build` when the compiler,
   content, or app changed.

@@ -6,6 +6,7 @@
  */
 
 import { Caption } from "@repo/shared/ui/caption";
+import { Leader } from "@repo/shared/ui/leader";
 
 import type { Post } from "../domain/post.ts";
 
@@ -20,14 +21,7 @@ const PostHeader = ({ post }: PostHeaderProps) => (
     className={styles.header}
     data-slot="post-header"
   >
-    <div
-      className={styles.leader}
-      data-slot="leader"
-    >
-      <span className={styles.leaderDash}>&mdash;&mdash;</span>
-      <span className={styles.leaderText}>{post.frontmatter.slug}.md</span>
-      <span className={styles.leaderDash}>&mdash;&mdash;</span>
-    </div>
+    <Leader>{post.frontmatter.slug}.md</Leader>
     <h1 className={styles.title}>{post.frontmatter.title}</h1>
     <div
       className={styles.meta}

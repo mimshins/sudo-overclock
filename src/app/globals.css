@@ -18,8 +18,9 @@
    resolve through `--color-*`. Never inline hex.
 
    Design language: CRT-phosphor, ASCII-chrome, monospace, cyberpunk.
-   Single typeface (JetBrains Mono), monochrome palette, single phosphor
-   accent (#00ff9c), pixel-precise layout, snap motion. See AGENTS.md.
+   Two faces (JetBrains Mono text, undefined medium display), neutral palette
+   with one phosphor accent (#00ff9c), pixel-precise layout, snap motion.
+   See docs/design-language.md and docs/design-system.md.
    ============================================================================ */
 
 /* ----------------------------------------------------------------------------
@@ -112,7 +113,7 @@
   --color-backdrop-overlay: rgb(10 10 10 / 0.55);
 
   /* === TYPOGRAPHY (TYPEFACES) ============================================= */
-  /* Single family: JetBrains Mono everywhere (prose + UI). */
+  /* Text face: JetBrains Mono (prose, UI, code, h3-h6). */
   --typography-typeface-rtl:
     "JetBrains Mono", "Vazirmatn", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, monospace;
@@ -129,7 +130,8 @@
     Consolas, monospace;
 
   /* === TYPOGRAPHY (SCALE) ================================================= */
-  /* Smaller than the original — body 0.875rem reads sharper in CRT context. */
+  /* rem sizes resolve against the browser-default 16px root; body text is
+     body1 (15px), applied on <body>. */
   /* Display sizes use undefined medium, a pixel-grid face (0.1em cell) with a
      single weight. Sizes MUST stay multiples of 10px to render crisp, and
      leading 1.4 keeps the 1.4em content box on integer pixels. h1/h2 are the
@@ -196,6 +198,7 @@
   --duration-fast: 80ms;
   --duration-normal: 120ms;
   --duration-slow: 150ms;
+  --duration-loading: 1600ms;
   --easing-standard: ease-out;
   --easing-emphasized: ease-out;
 
@@ -291,6 +294,7 @@
   --color-foreground-muted: var(--color-neutral-400);
   --color-background: var(--color-surface-base);
   --color-background-elevated: var(--color-surface-secondary);
+  --color-background-raised: var(--color-surface-tertiary);
 
   /* Border */
   --color-border-primary: var(--color-neutral-200);
@@ -398,8 +402,8 @@
   --color-info-text-tertiary: var(--color-info-400);
   --color-info-text-muted: var(--color-info-200);
 
-  /* Brand → phosphor (back-compat alias for token names like "brand" used in
-     existing CSS). New code should reference `--color-phosphor-*`. */
+  /* Brand → phosphor. Legacy alias, unused by components; do not adopt.
+     Reference `--color-phosphor-*` instead. */
   --color-brand: var(--color-phosphor-500);
   --color-brand-hover: var(--color-phosphor-400);
   --color-brand-active: var(--color-phosphor-300);
@@ -417,6 +421,7 @@
   --color-foreground-muted: var(--color-neutral-700);
   --color-background: var(--color-surface-base);
   --color-background-elevated: var(--color-surface-secondary);
+  --color-background-raised: var(--color-surface-tertiary);
 
   --color-border-primary: var(--color-neutral-700);
   --color-border-secondary: var(--color-neutral-800);
@@ -467,6 +472,7 @@
     --color-foreground-muted: var(--color-neutral-700);
     --color-background: var(--color-surface-base);
     --color-background-elevated: var(--color-surface-secondary);
+    --color-background-raised: var(--color-surface-tertiary);
 
     --color-border-primary: var(--color-neutral-700);
     --color-border-secondary: var(--color-neutral-800);
@@ -589,6 +595,7 @@
   --color-foreground-muted: var(--color-foreground-muted);
   --color-background: var(--color-background);
   --color-background-elevated: var(--color-background-elevated);
+  --color-background-raised: var(--color-background-raised);
 
   --color-border-primary: var(--color-border-primary);
   --color-border-secondary: var(--color-border-secondary);
@@ -770,8 +777,6 @@
 @layer base {
   html {
     font-family: var(--typography-typeface-ltr);
-    font-size: var(--typography-body1-size);
-    line-height: var(--typography-body1-leading);
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -789,6 +794,8 @@
   }
 
   body {
+    font-size: var(--typography-body1-size);
+    line-height: var(--typography-body1-leading);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -826,7 +833,8 @@
     font-family: var(--typography-typeface-mono);
   }
 
-  /* Reduced motion: kill phosphor-glow text-shadow, glitch, scanline drift. */
+  /* Reduced motion: neutralize every CSS animation (glitch, sheen) and
+     transition. Static glow and scanlines are not motion and stay. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -842,8 +850,8 @@
 /* ----------------------------------------------------------------------------
    CRT UTILITIES — applied via class on any container.
 
-   .scanlines   — repeating-linear-gradient overlay, fixed to viewport.
-                  Use on hero/header surfaces for the 'tube' feel.
+   .scanlines   — repeating-linear-gradient overlay covering the container.
+                  Use on hero/404 surfaces for the 'tube' feel.
 
    .noise       — inline SVG turbulence rendered as background-image.
                   Use on hero or entire app shell for film-grain texture.
@@ -851,8 +859,9 @@
    .phosphor-glow — text-shadow with phosphor glow. Use sparingly on
                   h1/h2 and accent copy.
 
-   .glitch      — one-shot clip-path displacement (~120ms). Triggered
-                  explicitly via class addition (e.g. on hover). Never
+   .glitch-once / .glitch-on-hover
+                — one-shot clip-path displacement (@keyframes glitch,
+                  --duration-normal), on first render or on hover. Never
                   used as a looping animation.
    ---------------------------------------------------------------------------- */
 @layer utilities {
@@ -934,8 +943,9 @@
     }
   }
 
+  .glitch-once,
   .glitch-on-hover:hover {
-    animation: glitch 120ms steps(2, end) 1;
+    animation: glitch var(--duration-normal) steps(2, end) 1;
   }
 }
 

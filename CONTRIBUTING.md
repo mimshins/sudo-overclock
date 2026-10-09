@@ -16,6 +16,9 @@ participating, you are expected to uphold it.
 - Architectural or design changes follow the spec-driven workflow in
   [`AGENTS.md`](./AGENTS.md): a spec, an RFC when there are real alternatives,
   and an ADR once it ships. Routine changes, small fixes, and copy edits do not.
+- UI changes start from [`docs/design-system.md`](./docs/design-system.md) and
+  must stay inside the identity in
+  [`docs/design-language.md`](./docs/design-language.md).
 
 ## Development setup
 
@@ -27,7 +30,7 @@ pnpm dev           # start the dev server
 pnpm compile       # raw markdown -> generated content
 pnpm build         # production static export (runs compile first)
 pnpm test          # unit/integration tests
-pnpm check:lint    # oxlint + oxfmt check
+pnpm check:lint    # oxlint + stylelint + oxfmt check
 pnpm format        # auto-fix formatting
 ```
 
@@ -93,13 +96,14 @@ agents are defined once in [`.ai/skills/`](./.ai/skills/) and
 
 | Tool           | Finds instructions / skills / agents                          | Invoke a role                                             |
 | -------------- | ------------------------------------------------------------- | --------------------------------------------------------- |
-| Claude Code    | `CLAUDE.md` → `AGENTS.md`; `.claude/skills`, `.claude/agents` | "use the reviewer agent" or `@agent-reviewer`             |
-| OpenCode       | `AGENTS.md`; `.opencode/skills`, `.opencode/agents`           | `@reviewer`                                               |
-| Codex / others | `AGENTS.md`; `.agents/skills`                                 | "Act as the reviewer defined in `.ai/agents/reviewer.md`" |
+| Claude Code    | `CLAUDE.md` → `AGENTS.md`; `.claude/skills`, `.claude/agents` | "use the designer agent" or `@agent-designer`             |
+| OpenCode       | `AGENTS.md`; `.opencode/skills`, `.opencode/agents`           | `@designer`                                               |
+| Codex / others | `AGENTS.md`; `.agents/skills`                                 | "Act as the designer defined in `.ai/agents/designer.md`" |
 
-Roles: **documenter** (spec/RFC/ADR), **implementer** (code + tests),
-**reviewer** (architecture and drift check, on request), **editor** (post
-stages). A typical change: documenter → implementer → your review → reviewer
+Roles: **documenter** (spec/RFC/ADR), **designer** (UI brief and design-system
+guardian), **implementer** (code + tests), **reviewer** (architecture,
+design-system, and drift check, on request), **editor** (post stages). A typical
+change: documenter → designer (if UI) → implementer → your review → reviewer
 (optional). **Agents never stage, commit, or push unless you ask.**
 
 ## Commit messages

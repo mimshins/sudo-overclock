@@ -1,6 +1,7 @@
 import { blogServices } from "@repo/modules/blog/presentation/blog-module";
 import { PostList } from "@repo/modules/blog/presentation/post-list";
 import { Heading } from "@repo/shared/ui/heading";
+import { Leader } from "@repo/shared/ui/leader";
 import { notFound } from "next/navigation";
 
 import styles from "./tag.module.css";
@@ -32,14 +33,7 @@ const TagPage = async ({ params }: TagPageProps) => {
       className={styles.main}
       data-slot="tag"
     >
-      <div
-        className={styles.leader}
-        data-slot="leader"
-      >
-        <span className={styles.leaderDash}>&mdash;&mdash;</span>
-        <span className={styles.leaderText}>tag: {tag}</span>
-        <span className={styles.leaderDash}>&mdash;&mdash;</span>
-      </div>
+      <Leader>tag: {tag}</Leader>
       <Heading
         as="h1"
         size="h1"

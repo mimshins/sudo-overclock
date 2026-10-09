@@ -1,5 +1,6 @@
 import { blogServices } from "@repo/modules/blog/presentation/blog-module";
 import { Heading } from "@repo/shared/ui/heading";
+import { Leader } from "@repo/shared/ui/leader";
 import { Tag } from "@repo/shared/ui/tag";
 import Link from "next/link";
 
@@ -39,14 +40,7 @@ const TagsPage = () => {
       className={styles.main}
       data-slot="tags"
     >
-      <div
-        className={styles.leader}
-        data-slot="leader"
-      >
-        <span className={styles.leaderDash}>&mdash;&mdash;</span>
-        <span className={styles.leaderText}>tags.md</span>
-        <span className={styles.leaderDash}>&mdash;&mdash;</span>
-      </div>
+      <Leader>tags.md</Leader>
       <Heading
         as="h1"
         size="h1"

@@ -12,8 +12,9 @@ description: Use when writing or changing TypeScript, React, CSS, compiler, or s
 - Keep the layer rules and non-negotiables in [`AGENTS.md`](../../AGENTS.md) and
   [`docs/architecture.md`](../../docs/architecture.md); wire concrete adapters
   only in the composition root.
-- Build UI from existing tokens and primitives (`src/app/globals.css`,
-  `docs/components.md`, `docs/design-language.md`).
+- Build UI from existing tokens and primitives per
+  [`docs/design-system.md`](../../docs/design-system.md); a new token, variant,
+  or component goes through the designer first.
 - Own tests: new behavior ships with tests (`*.test.ts` beside the code).
 - Run the [knowledge-drift-sync](../skills/knowledge-drift-sync/SKILL.md) skill
   before handing off.
@@ -34,7 +35,8 @@ description: Use when writing or changing TypeScript, React, CSS, compiler, or s
 ## Applicable skills
 
 [knowledge-drift-sync](../skills/knowledge-drift-sync/SKILL.md),
-[write-an-rfc](../skills/write-an-rfc/SKILL.md) (when a trade-off
+[design-a-feature](../skills/design-a-feature/SKILL.md) (to read a design
+brief), [write-an-rfc](../skills/write-an-rfc/SKILL.md) (when a trade-off
 appears).
 
 ## When invoked and handoff

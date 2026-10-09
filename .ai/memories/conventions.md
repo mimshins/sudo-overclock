@@ -7,9 +7,9 @@ last-verified: 2026-10-09
 
 # Conventions
 
-The rules are in [`AGENTS.md`](../../AGENTS.md#non-negotiables) and
-[`docs/architecture.md`](../../docs/architecture.md#naming). The practical
-reminders:
+The rules are in [`AGENTS.md`](../../AGENTS.md#non-negotiables),
+[`docs/architecture.md`](../../docs/architecture.md#naming), and
+[`docs/design-system.md`](../../docs/design-system.md). The practical reminders:
 
 - Files kebab-case, component identifiers PascalCase; a component is
   `<name>.tsx` + co-located `<name>.module.css`; no barrel files.

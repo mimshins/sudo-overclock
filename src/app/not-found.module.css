@@ -1,0 +1,81 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  padding: var(--spacing-xl);
+  gap: var(--spacing-md);
+}
+
+.title {
+  margin: 0;
+  text-align: center;
+}
+
+.body {
+  width: 100%;
+  max-width: var(--container-narrow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.art {
+  max-width: 100%;
+}
+
+/*
+ * Block glyphs only join vertically when each line box is exactly one em.
+ */
+.artText {
+  --art-leading: 1;
+
+  margin: 0;
+  font-family: var(--typography-typeface-mono);
+  font-size: var(--typography-body2-size);
+  line-height: var(--art-leading);
+  letter-spacing: 0;
+  color: var(--color-phosphor);
+}
+
+.terminal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  text-align: center;
+}
+
+.line {
+  --line-color: var(--color-foreground-secondary);
+
+  margin: 0;
+  font-family: var(--typography-typeface-mono);
+  font-size: var(--typography-body2-size);
+  line-height: var(--typography-body2-leading);
+  color: var(--line-color);
+}
+
+.hint {
+  --line-color: var(--color-foreground-tertiary);
+}
+
+.prompt {
+  color: var(--color-phosphor);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding-inline: var(--spacing-md);
+  }
+}

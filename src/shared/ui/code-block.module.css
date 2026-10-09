@@ -1,6 +1,6 @@
 .frame {
   --block-border: 1px solid var(--color-border-primary);
-  --block-background: var(--color-surface-secondary);
+  --block-background: var(--color-background-elevated);
 
   border: var(--block-border);
   background-color: var(--block-background);
@@ -10,7 +10,7 @@
 .header {
   --header-size: var(--text-caption);
   --header-line-height: var(--leading-caption);
-  --header-background: var(--color-surface-tertiary);
+  --header-background: var(--color-background-raised);
   --header-color: var(--color-foreground-tertiary);
   --header-font-family: var(--font-mono);
 

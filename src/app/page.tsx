@@ -1,20 +1,10 @@
 import { Heading } from "@repo/shared/ui/heading";
+import { Leader } from "@repo/shared/ui/leader";
 import { PhosphorField } from "@repo/shared/ui/phosphor-field";
 
 import { LinkButton } from "./link-button.tsx";
 
 import styles from "./page.module.css";
-
-const HomeLeader = () => (
-  <div
-    className={styles.leader}
-    data-slot="leader"
-  >
-    <span className={styles.leaderDash}>&mdash;&mdash;</span>
-    <span className={styles.leaderText}>home.sh</span>
-    <span className={styles.leaderDash}>&mdash;&mdash;</span>
-  </div>
-);
 
 const HomePage = () => (
   <main
@@ -23,7 +13,7 @@ const HomePage = () => (
     data-slot="home"
   >
     <PhosphorField />
-    <HomeLeader />
+    <Leader>home.sh</Leader>
     <Heading
       as="h1"
       size="h1"

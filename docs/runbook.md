@@ -20,8 +20,8 @@ missing, then runs `pnpm check:lint` and `pnpm test`; a failure aborts the push.
 | `pnpm compile`                 | Compile `content/raw/**` → `content/compiled/index.ts`; optimize assets into `public/posts/`. |
 | `pnpm build`                   | `prebuild` runs `pnpm compile`, then Next.js static export to `out/`.                         |
 | `pnpm test`                    | Unit/integration tests (`tsx --test src/**/*.test.ts`).                                       |
-| `pnpm check:lint`              | `oxlint` + `oxfmt --check`. Run before committing.                                            |
-| `pnpm format`                  | Auto-fix formatting (`oxfmt --write` + `oxlint --fix`).                                       |
+| `pnpm check:lint`              | `oxlint` + `stylelint` + `oxfmt --check`. Run before committing (pre-push runs it).           |
+| `pnpm format`                  | Auto-fix (`oxfmt --write` + `oxlint --fix` + `stylelint --fix`).                              |
 | `pnpm author:new <slug>`       | Scaffold a draft in `content/drafts/<slug>/`.                                                 |
 | `pnpm author:preflight <slug>` | Validate a draft; non-zero exit on failure.                                                   |
 | `pnpm author:publish <slug>`   | Move a ready draft to `content/raw/<slug>/`.                                                  |

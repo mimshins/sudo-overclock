@@ -1,0 +1,68 @@
+---
+description:
+  Code that violates docs/design-system.md, found by the 2026-10-09 design
+  audit. Work list for fixing it; promote fixes into docs and delete entries as
+  they land.
+status: active
+related: docs/design-system.md#known-deviations
+created: 2026-10-09
+---
+
+# Design-system drift
+
+## Context
+
+A read-only audit of `globals.css`, every CSS Module, and the UI components
+(2026-10-09, commit 228d806) compared the code to `docs/design-language.md`,
+`docs/components.md`, and `docs/architecture.md`. The doc-side contradictions
+were fixed or listed as open decisions in `docs/design-system.md`; the code-side
+issues below remain.
+
+## Findings (code fixes, smallest first)
+
+Anchored to symbols and selectors, not line numbers; verified against the code
+on 2026-10-09.
+
+- **Bugs (no-op props):** `Button` size classes set `--button-padding-*`,
+  `--button-font-size`, `--button-line-height` but `.button` never reads them
+  (`button.module.css`); `Lead` sets `--lead-size`, never read
+  (`lead.module.css`); `Caption` references a missing `styles.uppercase`
+  (`caption.tsx`); `ListItem` hard-codes `"li"` and leaks `as` into the DOM
+  (`list.tsx`). RFC-011 wave 3 covers these.
+- **Accessibility:** both home CTAs pass `ariaLabel="read more"`
+  (`src/app/page.tsx`); the `PostFilter` sort button hides its state; `CodeCopy`
+  has no live region for `[ copied ]`; filter tags lack `aria-pressed`; the TOC
+  caption renders when the TOC is empty; hover-mode `PhosphorField` animates
+  under reduced motion (`phosphor-field-hover.ts`). RFC-011 wave 4 covers the
+  first four.
+- **Contrast:** `--color-foreground-muted` / `--color-border-primary` are 2.2:1;
+  muted text is used by `.count` in `tags.module.css` and by
+  `Caption variant="muted"`.
+- **`data-slot` missing:** `PostHeader` title `<h1>` and description `<p>`
+  (`post-header.tsx`); `CodeBlock` inner `<pre>`; `PostList` card internals;
+  `TableOfContents` links; `CodeCopy` wrapper and button; `SiteHeader` and
+  `SiteFooter` internals; route page wrappers (`src/app/**/page.tsx`);
+  `CoverImage`; the skip link in `layout.tsx`.
+- **State classes declaring properties:** `.link:hover` / `.active` in
+  `site-header.module.css` and `table-of-contents.module.css`; the copied state
+  in `code-copy.module.css`; card hover in `post-list.module.css`.
+- **Duplication → primitives:** the glow recipe in `post-header.module.css`
+  (`.title`) and `post-body.module.css` (`h1`) instead of `Heading glow` /
+  `.phosphor-glow`; code font size/leading duplicated between
+  `code-block.module.css` (`.pre`) and `post-body.module.css` (`pre`).
+- **Missing tokens:** letter-spacing, generic font weights, border widths, a
+  glass-panel recipe (removes the `color-mix` exemptions in
+  `stylelint.config.mjs`). Adding them unlocks stylelint length rules.
+- **Layout:** `tags.module.css` / `tag.module.css` lack the ≤640px
+  `padding-inline` rule; prose has no measure cap (`--container-prose` unused).
+
+## Open questions
+
+Resolved by ADR-010 (2026-10-09): 16px root, `Leader` primitive, 404 with
+scanlines/glitch, status hues, stylelint (colors + durations), the image-sheen
+duration token. Open: the light theme (RFC-010).
+
+## To promote on resolution
+
+Each fix updates `docs/design-system.md` (remove it from Known deviations) and
+`docs/components.md`; identity decisions become ADRs.

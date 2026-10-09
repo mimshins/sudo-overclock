@@ -1,4 +1,5 @@
 import { Heading } from "@repo/shared/ui/heading";
+import { Leader } from "@repo/shared/ui/leader";
 import { PhosphorField } from "@repo/shared/ui/phosphor-field";
 
 import styles from "./about.module.css";
@@ -32,17 +33,6 @@ const HISTORY: readonly HistoryEntry[] = [
   },
 ];
 
-const SectionHead = ({ label }: { readonly label: string }) => (
-  <h2
-    className={styles.blockHead}
-    data-slot="about-section-head"
-  >
-    <span className={styles.blockDash}>&mdash;&mdash;</span>
-    <span className={styles.blockLabel}>{label}</span>
-    <span className={styles.blockDash}>&mdash;&mdash;</span>
-  </h2>
-);
-
 const WhoAmI = () => (
   <section
     className={styles.panel}
@@ -63,7 +53,7 @@ const Now = () => (
     className={styles.panel}
     data-slot="about-now"
   >
-    <SectionHead label="now" />
+    <Leader as="h2">now</Leader>
     <p className={styles.current}>
       founding engineer
       <span className={styles.accent}> @ interaverse</span>
@@ -77,7 +67,7 @@ const History = () => (
     className={styles.panel}
     data-slot="about-history"
   >
-    <SectionHead label="history" />
+    <Leader as="h2">history</Leader>
     <ul
       className={styles.history}
       data-slot="about-history-list"
@@ -109,14 +99,7 @@ const AboutPage = () => (
       src="/about/bg.jpg"
       glowOnHover={false}
     />
-    <div
-      className={styles.leader}
-      data-slot="leader"
-    >
-      <span className={styles.leaderDash}>&mdash;&mdash;</span>
-      <span className={styles.leaderText}>about.md</span>
-      <span className={styles.leaderDash}>&mdash;&mdash;</span>
-    </div>
+    <Leader>about.md</Leader>
     <Heading
       as="h1"
       size="h1"

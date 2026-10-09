@@ -12,9 +12,10 @@
       compiler, content, or app changed.
 - [ ] Layer rules hold (no peer-module imports, inner layers never import outer
       ones, no new barrel files).
-- [ ] UI uses semantic tokens only (no raw values outside `globals.css`),
-      `data-slot` on every `className` layer, ASCII affordances, focus-visible
-      and reduced-motion handled.
+- [ ] UI follows [`docs/design-system.md`](../docs/design-system.md): semantic
+      tokens only (no raw values outside `globals.css`), `data-slot` on every
+      `className` layer, ASCII affordances, focus-visible and reduced-motion
+      handled; new tokens/variants/components are documented.
 - [ ] Docs match the change (`docs/`, `README.md`, `CONTRIBUTING.md`) —
       knowledge drift sync done.
 - [ ] Shipped RFCs have an ADR in `decisions/` and are moved to

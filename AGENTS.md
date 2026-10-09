@@ -37,8 +37,8 @@ overrides accepted knowledge.
 ## Spec-Driven Development
 
 For an **architectural or design change** — one that alters module boundaries,
-the content pipeline, cross-cutting patterns, major dependencies, or otherwise
-involves meaningful trade-offs:
+the content pipeline, cross-cutting patterns, major dependencies, the design
+system's foundations, or otherwise involves meaningful trade-offs:
 
 1. **Require a spec.** Ask the author for one (or draft it for the author to
    edit) from [`.ai/templates/spec.md`](./.ai/templates/spec.md), in
@@ -54,7 +54,8 @@ in a design review); the ADR then records the waiver and the options that were
 considered.
 
 Routine implementation, small changes, and bug fixes need no spec unless they
-are architectural.
+are architectural. UI work starts from a design brief
+([design-a-feature](./.ai/skills/design-a-feature/SKILL.md)).
 
 ## Mandatory Actions
 
@@ -64,6 +65,11 @@ are architectural.
   `content/drafts/<slug>/`; never write to `content/raw/`, `content/compiled/`,
   or `public/` by hand. During editorial, **propose diffs and inline notes —
   never silently rewrite the author's prose**, and never publish.
+- **Hold the design line.** UI follows
+  [`docs/design-language.md`](./docs/design-language.md) (identity) and
+  [`docs/design-system.md`](./docs/design-system.md) (tokens, primitives,
+  patterns, extension rules). A new token, variant, or component is justified
+  and documented in the same change; changing the identity needs an RFC.
 - **Write an RFC before implementing trade-off decisions.** Draft
   `rfcs/active/RFC-NNN-<kebab>.md`. When it ships: fold the current state into
   `docs/`, record `decisions/ADR-NNN-<kebab>.md`, set the RFC to `Implemented`,
@@ -90,8 +96,9 @@ are architectural.
 | layers, module shape, imports, aliases       | `docs/architecture.md`, `oxlint.config.ts`, `.ai/memories/architecture.md`                                          |
 | the compiler or generated output             | `docs/architecture.md#content-pipeline`, `docs/authoring.md`, `docs/runbook.md`, `.ai/memories/content-pipeline.md` |
 | the authoring CLI, stages, or post templates | `docs/authoring.md`, `docs/runbook.md`, `.ai/skills/post-authoring/`                                                |
-| tokens, typography, color, motion, layout    | `docs/design-language.md`, `docs/architecture.md`, `src/app/globals.css`                                            |
-| a component (new, variant, slot)             | `docs/components.md`                                                                                                |
+| tokens, typography, color, motion, layout    | `docs/design-system.md`, `docs/design-language.md`, `src/app/globals.css`                                           |
+| images, illustrations, icons, backgrounds    | `docs/imagery.md`, `docs/design-system.md`                                                                          |
+| a component (new, variant, slot)             | `docs/components.md`, `docs/design-system.md`                                                                       |
 | scripts, CI, deploy, hooks                   | `docs/runbook.md`, `README.md`, `CONTRIBUTING.md`, `.ai/memories/development-workflow.md`                           |
 | a dependency                                 | an ADR for runtime `dependencies`; `README.md` tech stack                                                           |
 | releases, versioning, changesets             | `docs/runbook.md#release`, `.changeset/config.json`, ADR-009                                                        |
@@ -104,7 +111,9 @@ are architectural.
 | --------------------------------------------------- | ------------------------------------------------------ |
 | Architecture, module boundaries, naming, DI, tokens | [`docs/architecture.md`](./docs/architecture.md)       |
 | Visual identity — the phosphor/CRT design language  | [`docs/design-language.md`](./docs/design-language.md) |
+| Design system — tokens, primitives, patterns, rules | [`docs/design-system.md`](./docs/design-system.md)     |
 | Components                                          | [`docs/components.md`](./docs/components.md)           |
+| Imagery & illustration — pixel, dotted, duo-color   | [`docs/imagery.md`](./docs/imagery.md)                 |
 | Content authoring (pipeline + publishing mechanics) | [`docs/authoring.md`](./docs/authoring.md)             |
 | Commands, local workflow, troubleshooting, release  | [`docs/runbook.md`](./docs/runbook.md)                 |
 | Accepted decisions (ADRs)                           | [`decisions/`](./decisions/README.md)                  |
@@ -165,7 +174,7 @@ pnpm dev              # local preview
 pnpm build            # compile content (prebuild) + static export
 pnpm compile          # raw markdown -> compiled content
 pnpm test             # unit/integration tests
-pnpm check:lint       # oxlint + oxfmt check (pre-push runs it)
+pnpm check:lint       # oxlint + stylelint + oxfmt check (pre-push runs it)
 pnpm format           # auto-fix formatting
 pnpm author:new       # scaffold a draft
 pnpm author:preflight # validate a draft

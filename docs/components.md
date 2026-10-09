@@ -29,6 +29,7 @@ context/DI wired in `app/`).
 | `Paragraph`         | `size: body1\|body2`, `variant: default\|muted`                                                                          | Body copy                                      |
 | `Lead`              | `size: subheading1\|subheading2`, `variant: default\|muted\|phosphor`                                                    | Intro/standfirst paragraphs                    |
 | `Caption`           | `variant: default\|muted`, `uppercase`                                                                                   | Small labels                                   |
+| `Leader`            | `as` (default `div`; `h2` for section heads), `children` (label)                                                         | `──── label ────` ASCII section title          |
 | `Tag`               | `active`, `onClick`                                                                                                      | Chip; renders `<button>` when `onClick` is set |
 | `Kbd`               | `variant: default\|phosphor`                                                                                             | Keyboard key                                   |
 | `InlineCode`        | `variant: default\|phosphor`                                                                                             | Inline code snippet                            |
@@ -64,6 +65,43 @@ compiled-content adapter into the application services and exports
 | `SiteFooter` | server | Copyright, ASCII tagline, social links                     |
 | `LinkButton` | client | `Button` rendered `as={Link}` (functions can't cross RSC)  |
 | `CoverImage` | server | Book cover image for the reading list                      |
+| `NotFound`   | server | 404 page (`not-found.tsx`); exported as `404.html`         |
+
+### `Leader`
+
+The ASCII section title from the design language. Renders `──── label ────`: two
+rules of four U+2500 BOX DRAWINGS LIGHT HORIZONTAL characters around the label,
+uppercase caption type, phosphor label, muted rules.
+
+- **Slots:** `leader` (root), `leader-rule` (each rule, `aria-hidden`),
+  `leader-label` (the label — the only text exposed to assistive tech).
+- **Element:** a `div` above a page `h1`; `as="h2"` when it is the heading of a
+  section (about and reading panels).
+- **Styling:** local `--leader-size`, `--leader-font-weight`,
+  `--leader-letter-spacing`, `--leader-label-color`, and `--leader-rule-color`;
+  the rules drop letter-spacing so the box-drawing cells join into one line.
+
+```tsx
+<Leader>about.md</Leader>
+<Leader as="h2">history</Leader>
+```
+
+### 404 page — `src/app/not-found.tsx`
+
+Standard page pattern on `<main id="main">` with the global `.scanlines`
+overlay: `Leader` (`404.log`) → `Heading as="h1" size="h1" glow` with the global
+`.glitch-once` utility (one `@keyframes glitch` run on first render, neutralized
+by the global reduced-motion rule) → a narrow column with:
+
+- a block-letter `404` in a `<pre>` (phosphor, `.phosphor-glow`), wrapped in
+  `role="img"` + `aria-label="404"` so it is announced once instead of glyph by
+  glyph;
+- terminal copy (`$ cd ./this-page` → `no such file or directory`), with the `$`
+  prompt `aria-hidden`;
+- `[ home ]` and `[ read the blog ]` as ghost phosphor `LinkButton`s.
+
+Root `not-found.tsx` also handles unmatched URLs, and the static export writes
+it to `out/404.html`. Next adds `noindex` to it automatically.
 
 ## Building a component
 
@@ -105,8 +143,9 @@ compiled-content adapter into the application services and exports
 ## Theming
 
 The site is dark-only: an inline boot script in `src/app/layout.tsx` pins
-`data-theme="dark"` before paint. Tokens live in the `@theme` block of
-`src/app/globals.css` following Tailwind v4's `--color-*`, `--font-*`,
-`--spacing-*`, `--radius-*`, `--shadow-*` namespaces. The single accent is
-phosphor green (`--color-phosphor`). Components consume tokens directly; hex
-values belong in `globals.css` only.
+`data-theme="dark"` before paint. Tokens live in `src/app/globals.css`
+(primitives and semantic roles in `:root`, Tailwind names in `@theme inline`).
+The single accent is phosphor green (`--color-phosphor`). Components consume
+semantic tokens; hex values belong in `globals.css` only. The token inventory,
+patterns, and extension rules are in [`design-system.md`](./design-system.md);
+props that currently have no effect are listed under its _Known deviations_.

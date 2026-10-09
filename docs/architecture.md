@@ -202,17 +202,19 @@ runtime JS for the highlight itself.
 
 ## Styling Strategy
 
-- **Tailwind CSS** — used ONLY for design tokens and CSS variables, not for
-  utility classes.
+- **Tailwind CSS** — used for design tokens, CSS variables, and its preflight
+  reset; not for utility classes.
 - **CSS Modules** — primary styling solution for components.
 - **BaseUI** — component library for UI primitives.
 
 ### Token Naming
 
-CSS custom properties follow Tailwind v4's token shape and live in the `@theme`
-block in `src/app/globals.css`. The `--color-*`, `--font-*`, `--spacing-*`,
-`--radius-*`, `--shadow-*` namespace mirrors Tailwind's utility API; primitive
-hues use `--color-<hue>-<step>` (e.g. `--color-phosphor-500`).
+CSS custom properties live in `src/app/globals.css` in three layers: primitives
+and semantic roles in `:root` (with dark overrides), re-exported under Tailwind
+v4 names in `@theme inline`, which is also the only home of spacing, radius, and
+breakpoints. Primitive hues use `--color-<hue>-<step>` (e.g.
+`--color-phosphor-500`). The full inventory, naming rules, and extension rules
+are in [`design-system.md`](./design-system.md).
 
 There is no `--token-*` prefix. The token system itself is the single source of
 truth.
@@ -228,9 +230,10 @@ belong in `globals.css` only.
   `src/modules/<x>/presentation/`. App routes live in `src/app/`.
 - Components reference **semantic tokens** (`--color-phosphor`,
   `--color-foreground`) in their CSS Modules. They never inline hex.
-- Variant props (`variant="primary" | "ghost"`) map to CSS Module classes
-  composed with **`clsx`**. Look up the existing `@base-ui/react` usage pattern
-  in `shared/ui/button.tsx` for the template.
+- Variant props (`variant="outlined" | "ghost"`) map to CSS Module classes
+  composed with **`cx`** (`@repo/shared/lib/cx`, a `clsx` wrapper). Look up the
+  existing `@base-ui/react` usage pattern in `shared/ui/button.tsx` for the
+  template.
 - **Variant and size classes override local CSS custom properties — they never
   duplicate property declarations.** The base class declares every property
   exactly once and consumes the local variables; each variant/size class only
@@ -256,13 +259,13 @@ belong in `globals.css` only.
   ```
 
 - **Every HTML layer that exposes a `className` hook carries a
-  `data-slot="<name>"` attribute.** Selectors in CSS Modules use that attribute
-  (e.g. `&[data-slot="leader"]`). Slots make it possible for consumers to reach
-  in via global styles without descending into a component's internals.
+  `data-slot="<name>"` attribute.** Slots give consumers and global styles a
+  stable hook (e.g. `img[data-slot="post-image"]`) without descending into a
+  component's internals.
 - CSS Module imports return `string | undefined` per key (because of
-  `noUncheckedIndexedAccess`). `clsx` accepts `undefined` directly, so **do
-  not** defensively write `styles.foo ?? ""` — pass the value straight into
-  `clsx(styles.foo, …)`.
+  `noUncheckedIndexedAccess`). `cx` accepts `undefined` directly, so **do not**
+  defensively write `styles.foo ?? ""` — pass the value straight into
+  `cx(styles.foo, …)`.
 - Button affordance text uses ASCII brackets: `[ read more ]`, `[ ok ]`.
 
 ## Static Generation

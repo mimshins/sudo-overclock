@@ -8,24 +8,6 @@
   gap: var(--spacing-md);
 }
 
-.leader {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  font-size: var(--typography-caption-size);
-  color: var(--color-foreground-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-}
-
-.leaderDash {
-  color: var(--color-foreground-muted);
-}
-
-.leaderText {
-  color: var(--color-phosphor);
-}
-
 .title {
   text-align: center;
   margin: 0;

@@ -1,4 +1,5 @@
 import { Heading } from "@repo/shared/ui/heading";
+import { Leader } from "@repo/shared/ui/leader";
 import { PhosphorField } from "@repo/shared/ui/phosphor-field";
 
 import { NOW_READING, READ, type Book } from "./books.ts";
@@ -18,17 +19,6 @@ const initials = (title: string): string =>
     .slice(0, 3)
     .map(word => word.charAt(0).toUpperCase())
     .join("");
-
-const SectionHead = ({ label }: { readonly label: string }) => (
-  <h2
-    className={styles.sectionHead}
-    data-slot="reading-section-head"
-  >
-    <span className={styles.sectionDash}>&mdash;&mdash;</span>
-    <span className={styles.sectionLabel}>{label}</span>
-    <span className={styles.sectionDash}>&mdash;&mdash;</span>
-  </h2>
-);
 
 const BookRow = ({ book }: { readonly book: Book }) => (
   <li
@@ -70,7 +60,7 @@ const BookSection = ({
     className={styles.section}
     data-slot="reading-section"
   >
-    <SectionHead label={label} />
+    <Leader as="h2">{label}</Leader>
     <ul
       className={styles.books}
       data-slot="reading-books"
@@ -95,14 +85,7 @@ const ReadingPage = () => (
       src="/reading/bg.jpg"
       glowOnHover={false}
     />
-    <div
-      className={styles.leader}
-      data-slot="leader"
-    >
-      <span className={styles.leaderDash}>&mdash;&mdash;</span>
-      <span className={styles.leaderText}>reading.md</span>
-      <span className={styles.leaderDash}>&mdash;&mdash;</span>
-    </div>
+    <Leader>reading.md</Leader>
     <Heading
       as="h1"
       size="h1"
