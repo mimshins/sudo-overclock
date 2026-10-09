@@ -7,6 +7,8 @@
 
 import { Button } from "@repo/shared/ui/button";
 
+import { CONTENT_REVISION, SITE_VERSION } from "./site.ts";
+
 import styles from "./site-footer.module.css";
 
 const SOCIAL_LINKS = [
@@ -25,7 +27,13 @@ const SiteFooter = () => (
       data-slot="site-footer-inner"
     >
       <span className={styles.copy}>
-        &copy; {new Date().getFullYear()} &middot; sudo-overclock
+        &copy; {new Date().getFullYear()} &middot; sudo-overclock &middot;{" "}
+        <span
+          className={styles.version}
+          data-slot="site-version"
+        >
+          v{SITE_VERSION} &middot; {CONTENT_REVISION}
+        </span>
       </span>
       <span className={styles.ascii}>&mdash; built with phosphor &mdash;</span>
       <nav

@@ -267,9 +267,11 @@ committed.
 
 ## Publishing
 
-Push to `main`. The `ci` workflow lints/tests/builds every push and PR; the
-`deploy` workflow builds and deploys the static export to GitHub Pages on every
-`main` push. A commit to `main` is a deploy.
+Push to `main`. A push that changes posts (`content/raw/`) deploys right away:
+the site is rebuilt from the latest release's code with the posts from `main`
+([ADR-012](../decisions/ADR-012-release-gated-code-deploys.md)). A post that
+relies on unreleased compiler or UI changes goes live with the next release; if
+it does not build against the released code, the deploy fails visibly.
 
 ## Pipeline reference
 

@@ -115,13 +115,20 @@
         "!public/posts/**",
         "*.config.{ts,mjs,js}",
         "tsconfig.json",
-        ".env*"
+        ".env*",
+        "package.json"
       ],
       "output": [
         "out/**"
       ],
       "env": {
         "NEXT_PUBLIC_SITE_URL": {
+          "external": true
+        },
+        "NEXT_PUBLIC_SITE_VERSION": {
+          "external": true
+        },
+        "NEXT_PUBLIC_CONTENT_SHA": {
           "external": true
         }
       }

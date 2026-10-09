@@ -1,6 +1,13 @@
 import { blogServices } from "@repo/modules/blog/presentation/blog-module";
 
-import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "../site.ts";
+import {
+  AUTHOR_NAME,
+  CONTENT_REVISION,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+  SITE_VERSION,
+} from "../site.ts";
 
 export const dynamic = "force-static";
 
@@ -44,6 +51,7 @@ const GET = (): Response => {
     `    <webMaster>${escapeXml(AUTHOR_NAME)}</webMaster>`,
     `    <language>en</language>`,
     `    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>`,
+    `    <generator>${escapeXml(`${SITE_NAME} v${SITE_VERSION} (${CONTENT_REVISION})`)}</generator>`,
     `    ${items}`,
     "  </channel>",
     "</rss>",

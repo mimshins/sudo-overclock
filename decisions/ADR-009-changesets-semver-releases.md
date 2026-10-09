@@ -1,6 +1,7 @@
 # ADR-009 — Semver Releases with Changesets
 
-- **Status:** Accepted
+- **Status:** Accepted; the deploy policy ("deploys stay on every push") is
+  superseded by [ADR-012](./ADR-012-release-gated-code-deploys.md)
 - **Date:** 2026-10-09
 - **Topic:** repository / release
 - **RFC:** waived by the author, who chose the tool and each policy directly on

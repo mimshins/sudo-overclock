@@ -101,17 +101,20 @@ pnpm format
 
 ## Continuous Integration
 
-Two GitHub Actions workflows live in `.github/workflows/`:
+Three GitHub Actions workflows live in `.github/workflows/`:
 
 - **`ci.yml`** — on every push/PR: lint (oxlint, stylelint, oxfmt), tests, and a
-  production build (with `NEXT_PUBLIC_SITE_URL` set to the canonical domain); on
-  `main`, deploys the built `out/` to GitHub Pages; on PRs, checks for a
-  changeset; weekly, a clean build with no caches. Tasks are cached with wireit
-  (see [`docs/runbook.md`](./docs/runbook.md#task-caching-wireit)).
+  production build; on PRs, checks for a changeset; weekly, a clean build with
+  no caches. On `main`, a push that changes posts triggers a deploy. Tasks are
+  cached with wireit (see
+  [`docs/runbook.md`](./docs/runbook.md#task-caching-wireit)).
 - **`release.yml`** — on every push to `main`: keeps the changesets "version
-  packages" PR up to date; merging it tags `vX.Y.Z` and creates a GitHub Release
-  with the changelog. See
-  [`docs/runbook.md#release`](./docs/runbook.md#release).
+  packages" PR up to date; merging it tags `vX.Y.Z`, creates a GitHub Release
+  with the changelog, and deploys the release.
+- **`deploy.yml`** — builds the latest release's code with `main`'s posts (with
+  `NEXT_PUBLIC_SITE_URL` set to the canonical domain) and publishes to GitHub
+  Pages; called by the other two, or run by hand. See
+  [`docs/runbook.md#deployment`](./docs/runbook.md#deployment).
 
 ## Deployment (GitHub Pages)
 

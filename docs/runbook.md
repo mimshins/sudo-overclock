@@ -80,12 +80,26 @@ body rules.
 
 ## Deployment
 
-Hosting is GitHub Pages. One workflow, `.github/workflows/ci.yml`, runs a
-`quality` job (lint, format, styles, tests) and a `build` job on every push and
-PR; on a push to `main` the build uploads `out/` and a `deploy` job publishes
-that artifact. A commit to `main` is a deploy. CI restores the wireit task
-cache, the compiler image store, and `.next/cache`; a weekly scheduled run
-builds with no caches at all to catch a stale cache.
+Hosting is GitHub Pages. **Posts deploy continuously; code deploys with a
+release** ([ADR-012](../decisions/ADR-012-release-gated-code-deploys.md)):
+
+- `.github/workflows/ci.yml` runs a `quality` job (lint, format, styles, tests)
+  and a `build` job on every push and PR. CI restores the wireit task cache, the
+  compiler image store, and `.next/cache`; a weekly scheduled run builds with no
+  caches at all to catch a stale cache.
+- On a push to `main` that changes `src/modules/blog/content/raw/`, CI calls
+  `.github/workflows/deploy.yml`. A push that only changes code deploys nothing.
+- When a release is cut (the version PR is merged), `release.yml` calls the same
+  deploy.
+- `deploy.yml` checks out the latest `vX.Y.Z` tag, replaces
+  `src/modules/blog/content/raw/` with `main`'s, builds, and publishes. Before
+  the first release it builds `main` as is. Run it by hand (_Actions → deploy →
+  Run workflow_) to redeploy.
+
+The footer, the feed's `<generator>`, and `llms.txt` show what is live:
+`v<release version> · <posts commit>`. The build reads them from
+`NEXT_PUBLIC_SITE_VERSION` and `NEXT_PUBLIC_CONTENT_SHA`, defaulting to
+`package.json` and `git rev-parse --short HEAD`.
 
 CI sets `NEXT_PUBLIC_SITE_URL=https://sudo-overclock.space`; the build uses
 root-relative paths for the custom-domain apex.
@@ -94,9 +108,11 @@ root-relative paths for the custom-domain apex.
 
 The site's **code** is versioned with semver and
 [changesets](https://changesets.dev)
-([ADR-009](../decisions/ADR-009-changesets-semver-releases.md)). Deploys are
-independent: every push to `main` deploys, while releases mark versions and
-produce `CHANGELOG.md` and GitHub Releases.
+([ADR-009](../decisions/ADR-009-changesets-semver-releases.md)). A release is
+how code reaches the site: merging the version PR tags it, writes
+`CHANGELOG.md`, creates the GitHub Release, and deploys it
+([ADR-012](../decisions/ADR-012-release-gated-code-deploys.md)). Posts do not
+wait for releases.
 
 ### What gets a changeset
 
@@ -128,8 +144,13 @@ pnpm changesets:status   # inspect pending changesets
 2. The `release` workflow keeps a **"chore(release): version packages"** PR open
    that bumps `package.json` and writes `CHANGELOG.md`
    (`@changesets/changelog-github`: PR links and authors).
-3. Merging that PR tags `vX.Y.Z` and creates the GitHub Release (`pnpm release`
-   → `changeset publish`; the package is private, so nothing goes to npm).
+3. Merging that PR tags `vX.Y.Z`, creates the GitHub Release (`pnpm release` →
+   `changeset publish`; the package is private, so nothing goes to npm), and
+   deploys the release.
+
+Dependabot PRs are exempt from the changeset check (the bot cannot write one);
+their updates ship with the next release. For an update that should ship on its
+own (a security fix), add a `patch` changeset on `main` to open a release.
 
 Requirements: the repository setting _Actions → General → Allow GitHub Actions
 to create and approve pull requests_ must be on. PRs opened by the workflow's

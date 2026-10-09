@@ -1,6 +1,12 @@
 import { blogServices } from "@repo/modules/blog/presentation/blog-module";
 
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "../site.ts";
+import {
+  CONTENT_REVISION,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+  SITE_VERSION,
+} from "../site.ts";
 
 export const dynamic = "force-static";
 
@@ -27,6 +33,8 @@ const GET = (): Response => {
     `# ${SITE_NAME}`,
     "",
     `> ${SITE_DESCRIPTION}`,
+    "",
+    `Version: v${SITE_VERSION} (content ${CONTENT_REVISION})`,
     "",
     "## Pages",
     "",

@@ -28,6 +28,9 @@ contribution flow: [`CONTRIBUTING.md`](../../CONTRIBUTING.md).
   docs do not. Bump rules: `docs/runbook.md#release`
   ([ADR-009](../../decisions/ADR-009-changesets-semver-releases.md)); never
   `major` while on `0.x`.
+- Code reaches the site only through a release (merging the version PR); a push
+  that changes posts deploys them on the latest release's code
+  ([ADR-012](../../decisions/ADR-012-release-gated-code-deploys.md)).
 - Before handing off:
   [knowledge-drift-sync](../skills/knowledge-drift-sync/SKILL.md); resolve
   working memories tied to the change.

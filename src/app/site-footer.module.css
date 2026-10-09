@@ -23,6 +23,11 @@
   letter-spacing: 0.05em;
 }
 
+.version {
+  color: var(--color-foreground-secondary);
+  letter-spacing: 0;
+}
+
 .ascii {
   color: var(--color-foreground-secondary);
 }

@@ -63,8 +63,7 @@ on 2026-10-09.
   compiles can make one prune remove a file the other just saved (only a later
   miss).
 - CI: the image-store cache key hashes all of `content/raw/**`; key it on image
-  files + the `sharp` version instead. Manual redeploy (`workflow_dispatch`) no
-  longer deploys; allow the deploy job on `workflow_dispatch` from `main`.
+  files + the `sharp` version instead.
 - `Leader`: `{...rest}` after `data-slot` lets callers override the slot; the
   Patterns table says "lowercase label" while the CSS uppercases it.
 - Docs: RFC-004 does not link back to ADR-004 and cites gitignored `.ai/specs/`;

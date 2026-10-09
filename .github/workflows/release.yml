@@ -18,6 +18,8 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -51,3 +53,21 @@ jobs:
         env:
           # @changesets/changelog-github reads the token from the environment.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Tags created with the workflow token trigger no other workflow, so
+      # the deploy is called from here when this run cut a release.
+      - name: Detect a new release tag
+        id: tag
+        run: |
+          git fetch --tags --force --quiet
+          echo "tag=$(git tag --points-at HEAD --list 'v*' | head -n 1)" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    name: deploy the release
+    needs: release
+    if: needs.release.outputs.tag != ''
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/deploy.yml
